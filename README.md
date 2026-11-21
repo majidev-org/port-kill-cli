@@ -17,12 +17,12 @@ Stop Googling `lsof` vs `netstat`—just run `pk 3000`.
 
 ### Run without installing (`npx`)
 ```bash
-npx @majidev/port-kill-cli 3000
+npx @majidev-org/port-kill-cli 3000
 ```
 
 ### Install globally for the `pk` shortcut
 ```bash
-npm install -g @majidev/port-kill-cli
+npm install -g @majidev-org/port-kill-cli
 pk 3000
 ```
 
@@ -69,7 +69,7 @@ Ensure your dev port is always free before starting your server:
 ```json
 {
   "scripts": {
-    "predev": "npx @majidev/port-kill-cli 3000",
+    "predev": "npx @majidev-org/port-kill-cli 3000",
     "dev": "next dev"
   }
 }
