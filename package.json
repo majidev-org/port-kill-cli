@@ -1,5 +1,5 @@
 {
-  "name": "@majide-ali-watto/port-kill-cli",
+  "name": "port-reaper",
   "version": "1.0.0",
   "description": "Fast, zero-dependency cross-platform CLI to kill processes on any port (pk 3000)",
   "repository": {
@@ -37,5 +37,6 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "author": "Majid Ali (https://majidev.netlify.app)"
 }
