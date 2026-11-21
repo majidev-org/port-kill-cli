@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import process from 'node:process';
 import { parseArgs } from '../src/args.js';
 import { c } from '../src/colors.js';
@@ -75,8 +75,7 @@ async function main() {
 
   if (opts.help) return printHelp();
   if (opts.version) {
-    const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
-    return console.log(pkg.version);
+    return console.log(createRequire(import.meta.url)('../package.json').version);
   }
 
   // No ports: list everything (--info) or pick interactively; scripts without a TTY get help
