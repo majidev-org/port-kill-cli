@@ -1,14 +1,14 @@
 {
-  "name": "port-reaper",
+  "name": "@majidev/port-kill-cli",
   "version": "1.0.0",
   "description": "Fast, zero-dependency cross-platform CLI to kill processes on any port (pk 3000)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Majid-Ali-Watto/port-kill-cli.git"
+    "url": "git+https://github.com/majidev-org/port-kill-cli.git"
   },
-  "homepage": "https://github.com/Majid-Ali-Watto/port-kill-cli#readme",
+  "homepage": "https://github.com/majidev-org/port-kill-cli#readme",
   "bugs": {
-    "url": "https://github.com/Majid-Ali-Watto/port-kill-cli/issues"
+    "url": "https://github.com/majidev-org/port-kill-cli/issues"
   },
   "type": "module",
   "bin": {

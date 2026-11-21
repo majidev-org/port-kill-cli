@@ -1,6 +1,6 @@
 # Local Development & Testing Guide
 
-Follow these steps to link, run, and test `port-reaper` (`pk`) locally on your machine before publishing to npm.
+Follow these steps to link, run, and test `port-kill-cli` (`pk`) locally on your machine before publishing to npm.
 
 ---
 
@@ -88,7 +88,7 @@ pk             # Should display the help menu
 If you ever want to unlink your local development version (for example, to test installing the live published version from npm):
 
 ```bash
-npm unlink -g port-reaper
+npm unlink -g @majidev/port-kill-cli
 ```
 
 ---

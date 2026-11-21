@@ -1,4 +1,4 @@
-# port-reaper (`pk`)
+# port-kill-cli (`pk`)
 
 A fast, zero-dependency, cross-platform CLI to find and kill processes occupying ports on **Linux**, **macOS**, and **Windows**.
 
@@ -17,12 +17,12 @@ Stop Googling `lsof` vs `netstat`—just run `pk 3000`.
 
 ### Run without installing (`npx`)
 ```bash
-npx port-reaper 3000
+npx @majidev/port-kill-cli 3000
 ```
 
 ### Install globally for the `pk` shortcut
 ```bash
-npm install -g port-reaper
+npm install -g @majidev/port-kill-cli
 pk 3000
 ```
 
@@ -69,7 +69,7 @@ Ensure your dev port is always free before starting your server:
 ```json
 {
   "scripts": {
-    "predev": "npx port-reaper 3000",
+    "predev": "npx @majidev/port-kill-cli 3000",
     "dev": "next dev"
   }
 }
