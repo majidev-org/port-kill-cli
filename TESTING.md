@@ -88,7 +88,7 @@ pk             # Should display the help menu
 If you ever want to unlink your local development version (for example, to test installing the live published version from npm):
 
 ```bash
-npm unlink -g port-kill-cli
+npm unlink -g @majide-ali-watto/port-kill-cli
 ```
 
 ---
