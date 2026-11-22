@@ -10,6 +10,8 @@ Maintainer notes for [port-kill-cli](README.md) (`pk` / `kp`): repository protec
 - Force pushes and branch deletion are blocked, history stays linear, and review conversations must be resolved.
 - Admins are not forced through these rules, so the repository owner can still push release commits (`npm version`) directly. Releases only publish when the tag points at a commit on `main`.
 
+CI ([ci.yml](.github/workflows/ci.yml)) is skipped when a push or pull request only changes Markdown files (`**.md`). Any other file in the change, including `package.json`, `assets/` or a workflow, still runs it. Publishing is unaffected: it runs on version tags, not on file paths. Because the three test checks are required, a pull request that only edits Markdown never receives them and stays blocked for anyone who cannot bypass the rules (admins can, as above). If that ever matters, remove `paths-ignore` from the workflow.
+
 Release tags (`v*`) are protected by a [tag ruleset](https://github.com/majidev-org/port-kill-cli/rules): only repository admins can create them, and nobody can move or delete one. Because a tag push triggers the npm publish, this keeps write-access collaborators from releasing.
 
 Settings: *Settings → Branches* in the [repository](https://github.com/majidev-org/port-kill-cli/settings/branches). See GitHub's [branch protection docs](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches).
