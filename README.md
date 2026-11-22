@@ -22,7 +22,7 @@ Stop Googling `lsof` vs `netstat`—just run `pk 3000` (`kp`, `kill-port` and `p
 - **Process Info:** Displays the exact process name and PID freed.
 - **Multi-Port & Ranges:** Kill single ports, multiple ports, or port ranges in one command.
 - **Docker-Aware:** Ports published by a Docker container are freed with `docker stop` instead of killing Docker's proxy (which would break Docker networking). Remote Docker contexts (`DOCKER_HOST=tcp://…`, `ssh://…`) are ignored, so a container on another machine is never stopped because its port number matches.
-- **Interactive Mode:** Run `pk` with no arguments to see every port in use and pick which ones to free.
+- **Interactive Mode:** Run `pk` with no arguments to see every port in use and tick the ones to free.
 
 ## Requirements
 - [Node.js](https://nodejs.org) 18 or newer.
@@ -107,7 +107,29 @@ Flags can go before or after the ports and can be combined: `pk 3000 -i`, `pk -f
 
 ## Interactive Mode
 
-Running `pk` with no ports lists every port in use and asks which to free:
+Running `pk` with no ports lists every port in use as a checkbox list, so you tick exactly the ones to free:
+
+```text
+Ports in use:
+
+❯ [x] :3000   node (PID 4121)
+  [ ] :5173   node (PID 4188)
+  [x] :8080   Docker container api (a1b2c3d4e5f6)
+
+2/3 selected · space toggle · a all · enter confirm · q cancel
+```
+
+| Key | Action |
+| :--- | :--- |
+| `↑` / `↓` (or `k` / `j`) | Move the cursor |
+| `Space` | Tick or untick the port under the cursor |
+| `a` | Tick all, or untick all if everything is already ticked |
+| `Enter` | Free the ticked ports (nothing ticked = cancel) |
+| `q`, `Esc` or `Ctrl+C` | Cancel without killing anything |
+
+Long lists scroll to fit your terminal. `--force` also applies here (`pk -f`). `pk --info` prints the same list without prompting. With no terminal attached (for example in a script or CI), `pk` prints the help instead of waiting for input.
+
+**Typed prompt:** when raw keypresses are not available (for example output is piped, as in `pk | tee out.txt`), the list is numbered instead and you type your choice:
 
 | Input | Frees |
 | :--- | :--- |
@@ -116,8 +138,6 @@ Running `pk` with no ports lists every port in use and asks which to free:
 | `2-4` | Entries 2 to 4 |
 | `a` or `all` | Every listed entry |
 | Enter (empty) | Nothing, cancels |
-
-`--force` also applies here (`pk -f`). `pk --info` prints the same list without prompting. With no terminal attached (for example in a script or CI), `pk` prints the help instead of waiting for input.
 
 ## Exit Codes & Environment
 

@@ -97,14 +97,15 @@ pk < /dev/null # (or kp < /dev/null) prints the help menu (no interactive prompt
 
 ### Test F: Interactive Mode
 1. Start a dummy server on port `4001`.
-2. Run `pk` (or `kp`) with no arguments. A numbered list of ports in use appears.
-3. Type the number next to `:4001` and press Enter. *Expected:* `✔ Freed port 4001 — killed node (PID <number>)`
-4. Run `pk` (or `kp`) again and press Enter without typing. *Expected:* nothing is killed.
+2. Run `pk` (or `kp`) with no arguments. A checkbox list of ports in use appears.
+3. Move to `:4001` with `↑`/`↓`, press `Space` to tick it (the counter reads `1/N selected`) and press Enter. *Expected:* `✔ Freed port 4001 — killed node (PID <number>)`, and no other port is touched.
+4. Run `pk` (or `kp`) again and press Enter without ticking anything, then once more and press `q`. *Expected:* nothing is killed either time, and the cursor is visible again afterwards.
+5. Typed fallback: run `pk | cat`. A numbered list appears; type the number next to `:4001` and press Enter. *Expected:* same `✔ Freed port 4001 …` result.
 
 ### Test G: Stale Target Is Refused (PID-reuse protection)
 1. Start a dummy server on port `4001`, run `pk` (or `kp`), and **do not answer the prompt yet**.
 2. In another terminal, stop the server: `pk 4001` / `kp 4001` (or `kill <pid>`).
-3. Back in the first terminal, select the `:4001` entry. *Expected:* `✖ Failed to free port 4001 … process is no longer listening on that port (already exited?)`, and nothing else is signalled.
+3. Back in the first terminal, tick the `:4001` entry with `Space` and press Enter. *Expected:* `✖ Failed to free port 4001 … process is no longer listening on that port (already exited?)`, and nothing else is signalled.
 
 ### Test H: Hostile Process Name (terminal injection)
 Linux only. Start a process whose name contains an escape sequence:

@@ -12,7 +12,7 @@ function printHelp() {
 ${c.bold('pk / kp / port-kill / kill-port')} — Cross-platform port cleaner
 
 ${c.bold('Usage:')}
-  pk | kp                                      Pick ports to free from an interactive list
+  pk | kp                                      Tick ports to free from an interactive checklist
   pk | kp <port> [more-ports...] [options]
 
 ${c.bold('Examples:')}  (pk and kp are the same command)
