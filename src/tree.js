@@ -33,25 +33,30 @@ export function readProcessTable() {
 }
 
 /**
- * Decide which processes to signal when freeing a port held by `pid`: the holder and everything under
- * it, or with `withParent` its parent and everything under that. pk itself and the shells and
- * programs above it (the terminal it runs in) are never included, nor anything below them, and
- * `withParent` leaves alone a parent that is init, a shell or a session manager.
+ * Decide which processes to signal when freeing a port held by `pid`, by `scope`:
+ * - 'holder': just the holder (the default)
+ * - 'children': the holder and everything under it
+ * - 'parent': the holder's parent and everything under that
+ * pk itself and the shells and programs above it (the terminal it runs in) are never included, nor
+ * anything below them, and 'parent' leaves alone a parent that is init, a shell or a session manager
+ * (it then falls back to 'children').
  * @param {Map<number, { ppid: number, name: string }>} table
  * @param {number} pid the process holding the port
- * @param {boolean} withParent
+ * @param {'holder' | 'children' | 'parent'} scope
  * @param {number} selfPid pk's own pid
  * @returns {{ pids: number[], parent?: { pid: number, name: string }, note: string }}
  *   pids always starts with the holder; `parent` is set when the parent is among them; `note` says why it was spared
  */
-export function planKill(table, pid, withParent, selfPid) {
+export function planKill(table, pid, scope, selfPid) {
+  if (scope === 'holder') return { pids: [pid], parent: undefined, note: '' };
+
   const mine = new Set();
   for (let p = selfPid; p > 1 && !mine.has(p); p = table.get(p)?.ppid) mine.add(p);
 
   let root = pid;
   let parent;
   let note = '';
-  if (withParent) {
+  if (scope === 'parent') {
     const ppid = table.get(pid)?.ppid;
     const name = table.get(ppid)?.name;
     if (name === undefined) note = 'parent not found';

@@ -85,6 +85,6 @@ function recentListeners() {
 const holdsPort = (t) => recentListeners().some((l) => l.pid === t.pid && l.port === t.port);
 
 /** @returns {Promise<string>} how the target was stopped, for reporting. Async so a sync throw becomes a rejection. */
-export async function freeTarget(t, force, withParent = false) {
-  return t.kind === 'container' ? stopContainer(t.id, force) : killPid(t.pid, force, () => holdsPort(t), withParent);
+export async function freeTarget(t, force, scope = 'holder') {
+  return t.kind === 'container' ? stopContainer(t.id, force) : killPid(t.pid, force, () => holdsPort(t), scope);
 }

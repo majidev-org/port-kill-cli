@@ -30,7 +30,8 @@ ${row('pk --info', 'List every port in use')}
   ${section('OPTIONS')}
 ${flag('-i, --info', 'Inspect only (do not kill)')}
 ${flag('-f, --force', 'Force kill immediately (SIGKILL / taskkill /F / docker kill)')}
-${flag('    --tree', 'Also stop the parent that started it, after asking (not on Windows)')}
+${flag('-c, --children', 'Also stop everything running under it (always so on Windows)')}
+${flag('    --tree', 'Stop its parent and everything under that, after asking (not on Windows)')}
 ${flag('-y, --yes', 'Do not ask before --tree stops a parent')}
 ${flag('-v, --version', 'Show version')}
 ${flag('-h, --help', 'Show this help message')}
@@ -49,7 +50,7 @@ function errorMessage(err) {
 }
 
 /** Free the given targets, reporting each container/process once with all ports it held. */
-async function freeAll(targets, { force, tree, yes }) {
+async function freeAll(targets, { force, children, tree, yes }) {
   if (tree && !yes && !(await confirmParents(targets))) return console.log(c.dim('• Cancelled, nothing was stopped.'));
 
   const groups = new Map();
@@ -59,12 +60,14 @@ async function freeAll(targets, { force, tree, yes }) {
     groups.get(key).ports.push(t.port);
   }
 
+  const scope = tree ? 'parent' : children ? 'children' : 'holder';
+
   // Free everything concurrently (the graceful SIGTERM wait overlaps), but report in port order.
   const entries = [...groups.values()];
   // Stopping a container can take seconds; say what is happening (cleared before the results print).
   const busy = process.stdout.isTTY && targets.length > 0;
   if (busy) process.stdout.write(c.dim(`  Freeing ${targets.length === 1 ? 'port' : `${targets.length} ports`}…`));
-  const outcomes = await Promise.allSettled(entries.map(({ target }) => freeTarget(target, force, tree)));
+  const outcomes = await Promise.allSettled(entries.map(({ target }) => freeTarget(target, force, scope)));
 
   if (busy) process.stdout.write('\r\x1b[2K');
 

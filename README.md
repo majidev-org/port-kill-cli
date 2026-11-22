@@ -22,7 +22,7 @@ Stop Googling `lsof` vs `netstat`—just run `pk 3000` (`kp`, `kill-port` and `p
 ## Features
 - **Zero Dependencies:** Instant startup with `npx`—no bloated `node_modules` tree.
 - **Cross-Platform:** Works seamlessly on Linux (`ss`, falling back to `lsof`), macOS (`lsof`), and Windows (`netstat` / `taskkill`).
-- **Safe & Graceful:** On Linux/macOS sends `SIGTERM` first so servers clean up properly, escalating to `SIGKILL` only if needed. Before every signal it re-checks that the PID still holds the port, so a recycled PID is never killed by mistake. Everything running under the port holder is stopped with it (as `taskkill /T` does on Windows), and `--tree` also stops its parent. Windows has no graceful signal for server processes, so `taskkill /T /F` is always used there.
+- **Safe & Graceful:** On Linux/macOS sends `SIGTERM` first so servers clean up properly, escalating to `SIGKILL` only if needed. Before every signal it re-checks that the PID still holds the port, so a recycled PID is never killed by mistake. By default only the process holding the port is stopped; `--children` adds everything running under it and `--tree` its parent too. Windows has no graceful signal for server processes, so `taskkill /T /F` (the holder and everything under it) is always used there.
 - **Process Info:** Shows the process name and PID, who can reach the port (`all interfaces` or `localhost only`), and on Linux/macOS the owning user and full command line. Docker containers show their image.
 - **Clear Results:** Every freed port says how it was stopped (`SIGTERM (graceful)`, `SIGTERM, then SIGKILL`, `SIGKILL (forced)`, `taskkill /T /F`, `docker stop`) and multi-port runs end with a `Freed 3 of 4 ports` summary.
 - **Multi-Port & Ranges:** Kill single ports, multiple ports, or port ranges in one command. Ports are freed concurrently, so five servers take about half a second, not five times as long. Large ranges print one summary line for the free ports instead of one line each.
@@ -88,7 +88,10 @@ pk 3000 --info            # or: kp 3000 --info
 # Force kill immediately (skips graceful SIGTERM)
 pk 3000 --force           # or: kp 3000 --force
 
-# Also stop the parent that started it, e.g. a helper's app (Linux/macOS). Asks first
+# Also stop everything running under it (Linux/macOS; Windows always does)
+pk 3000 --children        # or: kp 3000 --children
+
+# Stop its parent and everything under that, e.g. a helper's app (Linux/macOS). Asks first
 pk 3000 --tree            # or: kp 3000 --tree
 pk 3000 --tree --yes      # same, without the question (scripts)
 
@@ -151,14 +154,15 @@ Free several ports at once. Each result says how the process was stopped, and a 
 | :--- | :--- | :--- |
 | `--info` | `-i` | Show the process, bind address, owner and command using the port without killing it |
 | `--force` | `-f` | Immediately force-kill the process (`SIGKILL` / `taskkill /F` / `docker kill`) |
-| `--tree` | | Also stop the process's parent and everything under it, for when the port is held by a helper of a larger app. Linux/macOS only. Never stops `pk`'s own terminal, `init`, a shell or a session manager. Docker containers are unaffected. It lists the parents it would stop and asks `[y/N]` first (without a terminal it refuses unless you pass `--yes`) |
+| `--children` | `-c` | Also stop everything running under the process, such as workers behind a server. Linux/macOS only, because `taskkill /T` already does this on Windows |
+| `--tree` | | Stop the process's parent and everything under that (which includes `--children`), for when the port is held by a helper of a larger app. Linux/macOS only. Never stops `pk`'s own terminal, `init`, a shell or a session manager. Docker containers are unaffected. It lists the parents it would stop and asks `[y/N]` first (without a terminal it refuses unless you pass `--yes`) |
 | `--yes` | `-y` | Skip the `--tree` question |
 | `--version` | `-v` | Print the installed version |
 | `--help` | `-h` | Display usage instructions and options |
 
 Flags can go before or after the ports and can be combined: `pk 3000 -i`, `pk -f 3000-3005`.
 
-By default `pk` stops the process that holds the port and everything running under it, not the app that started it. Many apps hold their port in a helper (VS Code's extension host, pgAdmin's server), so the window or app can stay open after its port is freed. `--tree` stops the parent as well, which can close the whole app and lose unsaved work, so it lists the parents and asks before doing it. An unknown flag or an invalid port (`abc`, `99999`, `3005-3000`) prints an error and exits with code `1`.
+By default `pk` stops only the process that holds the port, not what runs under it and not the app that started it. Many apps hold their port in a helper (VS Code's extension host, pgAdmin's server), so the window or app can stay open after its port is freed. `--children` also stops what runs under the holder. `--tree` stops the parent as well, which can close the whole app and lose unsaved work, so it lists the parents and asks before doing it.
 
 ## Interactive Mode
 
@@ -186,7 +190,7 @@ The highlighted row is drawn as a selection bar, the line under the list shows t
 | `Enter` | Free the ticked ports (nothing ticked = cancel) |
 | `q`, `Esc` or `Ctrl+C` | Cancel without killing anything |
 
-Long lists scroll to fit your terminal. `--force` and `--tree` also apply here (`pk -f`, `pk --tree`). `pk --info` prints the same list without prompting. With no terminal attached (for example in a script or CI), `pk` prints the help instead of waiting for input.
+Long lists scroll to fit your terminal. `--force`, `--children` and `--tree` also apply here (`pk -f`, `pk --tree`). `pk --info` prints the same list without prompting. With no terminal attached (for example in a script or CI), `pk` prints the help instead of waiting for input.
 
 **Typed prompt:** when raw keypresses are not available (for example output is piped, as in `pk | tee out.txt`), the list is numbered instead and you type your choice:
 

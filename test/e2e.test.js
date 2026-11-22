@@ -94,22 +94,34 @@ async function startApp() {
   return { child, port, holderPid };
 }
 
-test('e2e: kills what runs under the port holder too', { skip: process.platform === 'win32' && 'taskkill /T covers this' }, async (t) => {
+// A server that starts a long-running child of its own and prints "<port> <child pid>".
+async function startServerWithChild(t) {
   const grandchild = `setInterval(()=>{},1e6)`;
   const code = `const s=require('http').createServer().listen(0,()=>{
     const g=require('child_process').spawn(process.execPath,['-e',${JSON.stringify(grandchild)}]);
     console.log(s.address().port+' '+g.pid)});setInterval(()=>{},1e6);`;
   const child = spawn(process.execPath, ['-e', code], { stdio: ['ignore', 'pipe', 'inherit'] });
-  t.after(() => child.kill('SIGKILL'));
   const [chunk] = await once(child.stdout, 'data');
-  const [port, grandchildPid] = String(chunk).trim().split(' ').map(Number);
-  t.after(() => { try { process.kill(grandchildPid, 'SIGKILL'); } catch {} });
+  const [port, childPid] = String(chunk).trim().split(' ').map(Number);
+  t.after(() => {
+    child.kill('SIGKILL');
+    try { process.kill(childPid, 'SIGKILL'); } catch {}
+  });
+  return { child, port, childPid };
+}
 
-  const r = pk(String(port));
+test('e2e: only the port holder is stopped, unless --children', { skip: process.platform === 'win32' && 'taskkill /T always stops children' }, async (t) => {
+  const first = await startServerWithChild(t);
+  assert.equal(pk(String(first.port)).status, 0);
+  await exited(first.child);
+  assert.equal(gone(first.childPid), false, 'without --children what runs under the holder keeps running');
+
+  const second = await startServerWithChild(t);
+  const r = pk(String(second.port), '--children');
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.match(r.stdout, /\+ 1 other process\b/);
-  await exited(child);
-  assert.ok(await settled(grandchildPid), 'the holder\'s child must be gone');
+  await exited(second.child);
+  assert.ok(await settled(second.childPid), 'the holder\'s child must be gone');
 });
 
 test('e2e: the parent survives without --tree and is stopped with --tree --yes', { skip: process.platform === 'win32' && '--tree is not supported on Windows' }, async (t) => {
@@ -154,7 +166,7 @@ test('e2e: a selected port held under another selected process is freed, not rep
   }
   const ports = seen.trim().split(/\s+/).map(Number);
 
-  const r = pk(...ports.map(String));
+  const r = pk(...ports.map(String), '--children');
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.doesNotMatch(r.stderr, /Failed to free/);
   assert.match(r.stdout, /Freed 2 of 2 ports/);

@@ -178,7 +178,7 @@ export async function confirmParents(targets) {
   const table = readProcessTable();
   const plans = targets
     .filter((t) => t.kind === 'process')
-    .map((t) => ({ t, plan: planKill(table, t.pid, true, process.pid) }))
+    .map((t) => ({ t, plan: planKill(table, t.pid, 'parent', process.pid) }))
     .filter(({ plan }) => plan.parent);
   if (plans.length === 0) return true;
   if (!process.stdin.isTTY) throw new Error('--tree asks before stopping a parent, but there is no terminal to ask on. Pass --yes to skip the question.');

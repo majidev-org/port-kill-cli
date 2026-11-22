@@ -21,16 +21,17 @@ const alive = (pid) => {
  * Kill a process, but only while it still holds the port it was found on. Pids are reused, and the
  * target list can be stale (the interactive picker waits on the user), so `stillHolds` is checked
  * right before signalling and again before escalating to SIGKILL.
- * On Linux/macOS everything running under the holder goes with it (as `taskkill /T` does on Windows),
- * and with `withParent` its parent too; see planKill for what is always spared. Those other pids come
- * from one `ps` snapshot taken just before signalling, which is why they are not re-checked like the holder.
+ * On Linux/macOS only the holder is signalled unless `scope` widens it to what runs under it
+ * ('children', which `taskkill /T` always does on Windows) or to its parent too ('parent'); see planKill
+ * for what is always spared. Those other pids come from one `ps` snapshot taken just before signalling,
+ * which is why they are not re-checked like the holder.
  * @param {number} pid
  * @param {boolean} force
  * @param {() => boolean} stillHolds
- * @param {boolean} [withParent]
+ * @param {'holder' | 'children' | 'parent'} [scope]
  * @returns {Promise<string>} how the process was ended, for reporting
  */
-export async function killPid(pid, force, stillHolds, withParent = false) {
+export async function killPid(pid, force, stillHolds, scope = 'holder') {
   // process.kill(0) and negative pids signal whole process groups; pid 1 is init. Never valid here.
   if (!Number.isInteger(pid) || pid <= 1) throw new Error(`refusing to signal invalid PID ${pid}`);
   if (signalled.has(pid)) return 'SIGTERM (stopped with another selected process)';
@@ -41,7 +42,7 @@ export async function killPid(pid, force, stillHolds, withParent = false) {
     return 'taskkill /T /F';
   }
 
-  const { pids, parent, note } = planKill(readProcessTable(), pid, withParent, process.pid);
+  const { pids, parent, note } = planKill(scope === 'holder' ? new Map() : readProcessTable(), pid, scope, process.pid);
   for (const p of pids) signalled.add(p);
   const others = pids.length - 1 - (parent ? 1 : 0);
   const also = [
