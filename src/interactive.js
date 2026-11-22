@@ -82,7 +82,7 @@ function pickCheckboxes(targets) {
     const rows = cells.slice(top, top + height).map((row, i) => {
       const index = top + i;
       const box = checked.has(index) ? '[x]' : '[ ]';
-      if (index === cursor) return c.inverse(`❯ ${box} ${plainRow(row, widths)} `); // selection bar
+      if (index === cursor) return c.inverse(`❯ ${box} ${plainRow(row, widths)}`.padEnd(length + 2)); // selection bar, full table width
       return `  ${checked.has(index) ? c.green(box) : c.dim(box)} ${dataRow(row, widths)}`;
     });
 
