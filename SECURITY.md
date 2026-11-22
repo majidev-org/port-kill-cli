@@ -26,7 +26,7 @@ Only the latest published version is supported; fixes ship as a new patch releas
 | Unprivileged use | `pk` never elevates. Another user's process needs `sudo` or Administrator, and the error message says so. |
 | Unreviewed or rewritten history | `main` is a [protected branch](README.md#branch-protection): pull requests with passing CI on three operating systems, no force pushes, no deletion, linear history. |
 | Unauthorized releases | `v*` tags are covered by a [tag ruleset](https://github.com/majidev-org/port-kill-cli/rules): only repository admins can create them, and none can be moved or deleted. Publishing also requires the tag to be on `main`. |
-| Supply chain | Zero runtime dependencies. Releases are published from tags on `main` by [GitHub Actions](.github/workflows/publish.yml) with pinned action SHAs, read-only default permissions, npm [trusted publishing](https://docs.npmjs.com/trusted-publishers) (no stored npm token) and [provenance](https://docs.npmjs.com/generating-provenance-statements). |
+| Supply chain | Zero runtime dependencies. Releases are published from tags on `main` by [GitHub Actions](.github/workflows/publish.yml) with pinned action SHAs, read-only default permissions, a package-scoped npm token kept only as a GitHub Actions secret, and [provenance](https://docs.npmjs.com/generating-provenance-statements). |
 
 ## Known limitations
 
@@ -35,5 +35,6 @@ Only the latest published version is supported; fixes ship as a new patch releas
 - Windows always uses `taskkill /T /F` (whole process tree, forced); there is no graceful step there.
 - Ranges are not capped: `pk 1-65535` frees everything you own that listens. Nothing outside your own user is touched without `sudo`/Administrator.
 - Only TCP listeners are found; UDP sockets are not.
+- Releases use a stored `NPM_TOKEN` secret, so anyone who can change the workflow on `main` or read repository secrets could publish. Keep the token granular (this package only) with a short expiry, and rotate it if in doubt.
 - Branch protection does not apply to repository admins, so the owner's account is the trust anchor. Use a strong password and 2FA on it.
 - On Unix, commands are found through your `PATH`; keep it free of untrusted directories.

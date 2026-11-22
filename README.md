@@ -112,9 +112,7 @@ Settings: *Settings → Branches* in the [repository](https://github.com/majidev
 
 Publishing is automated by [.github/workflows/publish.yml](.github/workflows/publish.yml). Pushing a `vX.Y.Z` tag runs the tests on Linux, macOS and Windows, checks the tag is on `main` and matches `package.json`, and publishes to npm.
 
-One-time setup: the workflow publishes with npm [trusted publishing](https://docs.npmjs.com/trusted-publishers) (short-lived OIDC credentials), so no npm token is stored in GitHub. On npmjs.com open the package's **Settings → Trusted Publisher**, choose GitHub Actions, and enter organization `majidev-org`, repository `port-kill-cli`, workflow `publish.yml`.
-
-See npm's [trusted publishing docs](https://docs.npmjs.com/trusted-publishers) and GitHub's [OIDC guide](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect) for how this works.
+One-time setup: the workflow publishes with an npm access token stored as the `NPM_TOKEN` repository secret (*Settings → Secrets and variables → Actions*). Create a [granular access token](https://docs.npmjs.com/creating-and-viewing-access-tokens) limited to this package with read and write permission, and set a short expiry. Provenance is still signed through GitHub's OIDC token (`id-token: write`).
 
 ```bash
 npm version patch          # bumps package.json and creates the vX.Y.Z tag
