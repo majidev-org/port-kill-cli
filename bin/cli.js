@@ -9,7 +9,7 @@ import { describe, findTargets, freeTarget, printable, targetKey } from '../src/
 
 function printHelp() {
   console.log(`
-${c.bold('pk / kp / port-kill')} — Cross-platform port cleaner
+${c.bold('pk / kp / port-kill / kill-port')} — Cross-platform port cleaner
 
 ${c.bold('Usage:')}
   pk | kp                                      Pick ports to free from an interactive list

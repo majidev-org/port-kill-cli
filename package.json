@@ -14,7 +14,8 @@
   "bin": {
     "port-kill": "./bin/cli.js",
     "pk": "./bin/cli.js",
-    "kp": "./bin/cli.js"
+    "kp": "./bin/cli.js",
+    "kill-port": "./bin/cli.js"
   },
   "files": [
     "bin/",

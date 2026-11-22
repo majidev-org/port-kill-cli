@@ -11,9 +11,9 @@ const cli = fileURLToPath(new URL('../bin/cli.js', import.meta.url));
 const pk = (...args) =>
   spawnSync(process.execPath, [cli, ...args], { encoding: 'utf8', timeout: 20_000, env: { ...process.env, NO_COLOR: '1' } });
 
-test('e2e: package.json exposes pk, kp and port-kill as the same CLI', async () => {
+test('e2e: package.json exposes pk, kp, kill-port and port-kill as the same CLI', async () => {
   const { bin } = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
-  assert.deepEqual(bin, { 'port-kill': './bin/cli.js', pk: './bin/cli.js', kp: './bin/cli.js' });
+  assert.deepEqual(bin, { 'port-kill': './bin/cli.js', pk: './bin/cli.js', kp: './bin/cli.js', 'kill-port': './bin/cli.js' });
 });
 
 // PATH='' makes lsof/ss unfindable on Unix. Windows resolves tools from System32 regardless of PATH.

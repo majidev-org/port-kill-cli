@@ -40,7 +40,7 @@ npx @majidev-org/port-kill-cli 3000
 ### Install globally for the `pk` / `kp` shortcuts
 ```bash
 npm install -g @majidev-org/port-kill-cli
-pk 3000                   # or: kp 3000 (also available as `port-kill`)
+pk 3000                   # or: kp 3000 (also available as `port-kill` and `kill-port`)
 ```
 
 ## Usage & Examples
