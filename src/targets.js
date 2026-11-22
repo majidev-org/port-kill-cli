@@ -48,7 +48,7 @@ export const describe = (t) =>
     : `${c.bold(printable(t.name))} ${c.dim(`(PID ${t.pid})`)}`;
 
 /** Who can reach the port, dimmed: "all interfaces", "localhost only" or the bind address. */
-export const where = (t) => (t.address ? c.dim(reach(t.address)) : '');
+export const where = (t) => (t.address ? c.dim(printable(reach(t.address))) : '');
 
 const MAX_COMMAND = 100;
 

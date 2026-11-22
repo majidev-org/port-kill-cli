@@ -38,7 +38,8 @@ export function parseDockerPs(out) {
   const results = [];
   for (const line of out.split(/\r?\n/)) {
     const [id, name, image = '', ports = ''] = line.split('\t');
-    if (!id || !name) continue;
+    // The id ends up as an argument of `docker stop`; only a hex id is accepted so it can never look like a flag.
+    if (!/^[0-9a-f]+$/i.test(id) || !name) continue;
     const seen = new Set();
     for (const mapping of ports.split(', ')) {
       const m = mapping.match(/^(.*):(\d+)(?:-(\d+))?->/); // greedy: ":::8080->" gives address "::"

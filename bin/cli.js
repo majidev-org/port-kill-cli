@@ -75,7 +75,7 @@ async function main() {
   try {
     opts = parseArgs(process.argv.slice(2));
   } catch (err) {
-    console.error(c.red(`✖ ${err.message}`));
+    console.error(c.red(`✖ ${printable(err.message)}`)); // the message echoes the user's argument
     process.exitCode = 1;
     return;
   }

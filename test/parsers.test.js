@@ -4,6 +4,7 @@ import { parseArgs } from '../src/args.js';
 import { isLocalEndpoint, parseDockerPs } from '../src/docker.js';
 import { parseSelection } from '../src/interactive.js';
 import { parseLsof, parseNetstat, parseSs, reach } from '../src/listeners.js';
+import { killPid } from '../src/kill.js';
 import { printable } from '../src/targets.js';
 
 test('parseArgs: ports, ranges, flags', () => {
@@ -54,6 +55,7 @@ test('parseNetstat: listening sockets only, IPv4 and IPv6', () => {
 test('parseDockerPs: published ports, ranges, IPv6 duplicates', () => {
   const out = [
     'a1b2\tweb\tnginx:1.27\t0.0.0.0:8080->80/tcp, :::8080->80/tcp',
+    '--rm\tevil\talpine\t0.0.0.0:7000->80/tcp', // not a hex id: must never reach `docker stop`
     'c3d4\tdb\tpostgres\t5432/tcp',
     'e5f6\tmulti\tapp\t127.0.0.1:5000-5001->5000-5001/tcp, [::]:9229->9229/tcp',
   ].join('\n');
@@ -97,4 +99,10 @@ test('reach: who can connect to a bind address', () => {
   assert.equal(reach('127.0.0.1'), 'localhost only');
   assert.equal(reach('[::1]'), 'localhost only');
   assert.equal(reach('192.168.1.5'), '192.168.1.5');
+});
+
+test('killPid: refuses pids that would signal process groups or init', async () => {
+  for (const bad of [0, 1, -1, NaN, 1.5]) {
+    await assert.rejects(killPid(bad, true, () => true), /invalid PID/, String(bad));
+  }
 });
