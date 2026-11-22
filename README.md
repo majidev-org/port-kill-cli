@@ -88,8 +88,9 @@ pk 3000 --info            # or: kp 3000 --info
 # Force kill immediately (skips graceful SIGTERM)
 pk 3000 --force           # or: kp 3000 --force
 
-# Also stop the parent that started it, e.g. a helper's app (Linux/macOS)
+# Also stop the parent that started it, e.g. a helper's app (Linux/macOS). Asks first
 pk 3000 --tree            # or: kp 3000 --tree
+pk 3000 --tree --yes      # same, without the question (scripts)
 
 # Pick ports to free from an interactive list
 pk                        # or: kp
@@ -150,13 +151,14 @@ Free several ports at once. Each result says how the process was stopped, and a 
 | :--- | :--- | :--- |
 | `--info` | `-i` | Show the process, bind address, owner and command using the port without killing it |
 | `--force` | `-f` | Immediately force-kill the process (`SIGKILL` / `taskkill /F` / `docker kill`) |
-| `--tree` | | Also stop the process's parent and everything under it, for when the port is held by a helper of a larger app. Linux/macOS only. Never stops `pk`'s own terminal, `init`, a shell or a session manager. Docker containers are unaffected |
+| `--tree` | | Also stop the process's parent and everything under it, for when the port is held by a helper of a larger app. Linux/macOS only. Never stops `pk`'s own terminal, `init`, a shell or a session manager. Docker containers are unaffected. It lists the parents it would stop and asks `[y/N]` first (without a terminal it refuses unless you pass `--yes`) |
+| `--yes` | `-y` | Skip the `--tree` question |
 | `--version` | `-v` | Print the installed version |
 | `--help` | `-h` | Display usage instructions and options |
 
 Flags can go before or after the ports and can be combined: `pk 3000 -i`, `pk -f 3000-3005`.
 
-By default `pk` stops the process that holds the port and everything running under it, not the app that started it. Many apps hold their port in a helper (VS Code's extension host, pgAdmin's server), so the window or app can stay open after its port is freed. `--tree` stops the parent as well, which can close the whole app and lose unsaved work, so check with `--info` first. An unknown flag or an invalid port (`abc`, `99999`, `3005-3000`) prints an error and exits with code `1`.
+By default `pk` stops the process that holds the port and everything running under it, not the app that started it. Many apps hold their port in a helper (VS Code's extension host, pgAdmin's server), so the window or app can stay open after its port is freed. `--tree` stops the parent as well, which can close the whole app and lose unsaved work, so it lists the parents and asks before doing it. An unknown flag or an invalid port (`abc`, `99999`, `3005-3000`) prints an error and exits with code `1`.
 
 ## Interactive Mode
 

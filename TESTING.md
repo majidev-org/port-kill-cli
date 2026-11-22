@@ -75,7 +75,7 @@ Each scenario starts a throwaway server with `node -e "require('http').createSer
    node -e "require('child_process').spawn(process.execPath, ['-e', \"require('http').createServer().listen(5100)\"], {stdio: 'inherit'}); setInterval(() => {}, 1e6)" &
    ```
 2. Run `pk 5100`. *Expected:* the server is killed, the app keeps running (`pgrep -f setInterval`).
-3. Repeat step 1, then run `pk 5100 --tree`. *Expected:* `✔ Freed port 5100 … via SIGTERM (graceful) + parent node (PID <n>)`, and the app is gone too.
+3. Repeat step 1, then run `pk 5100 --tree`. *Expected:* a list `:5100  node (PID <n>) → node (PID <m>)` and `? Stop them? [y/N]`. Answer `n` (or press Enter): `• Cancelled, nothing was stopped.` and both processes keep running. Run it again and answer `y`: `✔ Freed port 5100 … via SIGTERM (graceful) + parent node (PID <m>)`, and the app is gone too. With `--yes` the question is skipped, and `pk 5100 --tree < /dev/null` without `--yes` fails with `--tree asks before stopping a parent`.
 4. Run `pk <port> --tree` for a server started directly from your shell. *Expected:* the shell is not killed; the output ends `(parent bash (PID <n>) left running)`.
 
 ### Test D: Invalid Input & Edge Cases

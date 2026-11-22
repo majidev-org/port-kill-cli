@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 import process from 'node:process';
 import { parseArgs } from '../src/args.js';
 import { c } from '../src/colors.js';
-import { pickTargets, printTargets } from '../src/interactive.js';
+import { confirmParents, pickTargets, printTargets } from '../src/interactive.js';
 import { describe, findTargets, freeTarget, printable, targetKey } from '../src/targets.js';
 
 const { version } = createRequire(import.meta.url)('../package.json');
@@ -30,7 +30,8 @@ ${row('pk --info', 'List every port in use')}
   ${section('OPTIONS')}
 ${flag('-i, --info', 'Inspect only (do not kill)')}
 ${flag('-f, --force', 'Force kill immediately (SIGKILL / taskkill /F / docker kill)')}
-${flag('    --tree', 'Also stop the parent that started it (not on Windows)')}
+${flag('    --tree', 'Also stop the parent that started it, after asking (not on Windows)')}
+${flag('-y, --yes', 'Do not ask before --tree stops a parent')}
 ${flag('-v, --version', 'Show version')}
 ${flag('-h, --help', 'Show this help message')}
 
@@ -48,7 +49,9 @@ function errorMessage(err) {
 }
 
 /** Free the given targets, reporting each container/process once with all ports it held. */
-async function freeAll(targets, { force, tree }) {
+async function freeAll(targets, { force, tree, yes }) {
+  if (tree && !yes && !(await confirmParents(targets))) return console.log(c.dim('• Cancelled, nothing was stopped.'));
+
   const groups = new Map();
   for (const t of targets) {
     const key = targetKey(t);

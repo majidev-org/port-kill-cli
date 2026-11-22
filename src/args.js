@@ -4,6 +4,8 @@ const FLAGS = {
   '-f': 'force',
   '--force': 'force',
   '--tree': 'tree',
+  '-y': 'yes',
+  '--yes': 'yes',
   '-h': 'help',
   '--help': 'help',
   '-v': 'version',
@@ -14,10 +16,10 @@ export const isValidPort = (p) => Number.isInteger(p) && p > 0 && p <= 65535;
 
 /**
  * Parse CLI arguments into options. Throws an Error with a user-facing message on bad input.
- * @returns {{ info: boolean, force: boolean, tree: boolean, help: boolean, version: boolean, ports: number[] }}
+ * @returns {{ info: boolean, force: boolean, tree: boolean, yes: boolean, help: boolean, version: boolean, ports: number[] }}
  */
 export function parseArgs(argv) {
-  const opts = { info: false, force: false, tree: false, help: false, version: false, ports: [] };
+  const opts = { info: false, force: false, tree: false, yes: false, help: false, version: false, ports: [] };
   const ports = new Set();
 
   for (const arg of argv) {

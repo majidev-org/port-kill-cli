@@ -112,7 +112,7 @@ test('e2e: kills what runs under the port holder too', { skip: process.platform 
   assert.ok(await settled(grandchildPid), 'the holder\'s child must be gone');
 });
 
-test('e2e: the parent survives without --tree and is stopped with it', { skip: process.platform === 'win32' && '--tree is not supported on Windows' }, async (t) => {
+test('e2e: the parent survives without --tree and is stopped with --tree --yes', { skip: process.platform === 'win32' && '--tree is not supported on Windows' }, async (t) => {
   const first = await startApp();
   t.after(() => first.child.kill('SIGKILL'));
   assert.equal(pk(String(first.port)).status, 0);
@@ -122,7 +122,12 @@ test('e2e: the parent survives without --tree and is stopped with it', { skip: p
 
   const second = await startApp();
   t.after(() => second.child.kill('SIGKILL'));
-  const r = pk(String(second.port), '--tree');
+  const refused = pk(String(second.port), '--tree'); // spawnSync has no terminal, so it cannot be asked
+  assert.equal(refused.status, 1);
+  assert.match(refused.stderr, /--tree asks before stopping a parent.*--yes/);
+  assert.equal(second.child.exitCode, null, 'nothing is stopped without an answer');
+
+  const r = pk(String(second.port), '--tree', '--yes');
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.match(r.stdout, / \+ parent \S+ \(PID \d+\)/);
   await exited(second.child);

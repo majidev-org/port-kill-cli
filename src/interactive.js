@@ -1,7 +1,8 @@
 import process from 'node:process';
 import { createInterface, emitKeypressEvents } from 'node:readline';
 import { c } from './colors.js';
-import { cellsOf, extra } from './targets.js';
+import { cellsOf, extra, printable } from './targets.js';
+import { planKill, readProcessTable } from './tree.js';
 import { columnWidths, dataRow, headerRow, keyHints, labelledRule, plainRow, rule, tableWidth } from './ui.js';
 
 /** Print targets as an aligned table; `numbered` adds a leading index for the typed prompt. */
@@ -166,4 +167,37 @@ async function pickTyped(targets) {
 /** Show listening ports and let the user choose which to free. Returns the chosen targets. */
 export async function pickTargets(targets) {
   return canUseCheckboxes() ? pickCheckboxes(targets) : pickTyped(targets);
+}
+
+/**
+ * `--tree` closes whole apps, so say which parents would go and ask first. Returns false when the
+ * user declines. Throws when there is no terminal to ask on (pass --yes to skip the question).
+ * Nothing to ask when no target has a parent that would be stopped.
+ */
+export async function confirmParents(targets) {
+  const table = readProcessTable();
+  const plans = targets
+    .filter((t) => t.kind === 'process')
+    .map((t) => ({ t, plan: planKill(table, t.pid, true, process.pid) }))
+    .filter(({ plan }) => plan.parent);
+  if (plans.length === 0) return true;
+  if (!process.stdin.isTTY) throw new Error('--tree asks before stopping a parent, but there is no terminal to ask on. Pass --yes to skip the question.');
+
+  console.log(c.yellow('\n! --tree will also stop these parents, and everything running under them:\n'));
+  for (const { t, plan } of plans) {
+    const others = plan.pids.length - 2;
+    const more = others > 0 ? c.dim(` + ${others} other process${others === 1 ? '' : 'es'}`) : '';
+    console.log(`  ${c.bold(`:${t.port}`)}  ${printable(t.name)} ${c.dim(`(PID ${t.pid})`)} ${c.dim('→')} ${c.bold(printable(plan.parent.name))} ${c.dim(`(PID ${plan.parent.pid})`)}${more}`);
+  }
+  console.log(c.dim('\n  Unsaved work in those programs is lost.'));
+
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+  rl.setPrompt(`\n${c.cyan('?')} Stop them? ${c.dim('[y/N]')} `);
+  rl.prompt();
+  try {
+    for await (const answer of rl) return /^y(es)?$/i.test(answer.trim()); // Ctrl+D ends the loop: counts as no
+    return false;
+  } finally {
+    rl.close();
+  }
 }
