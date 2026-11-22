@@ -1,6 +1,6 @@
 {
   "name": "@majidev-org/port-kill-cli",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Fast, zero-dependency cross-platform CLI to kill processes on any port (pk 3000)",
   "repository": {
     "type": "git",
