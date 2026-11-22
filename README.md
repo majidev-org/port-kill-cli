@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.svg" alt="pk – port-kill-cli logo" width="300">
+  <img src="https://raw.githubusercontent.com/majidev-org/port-kill-cli/main/assets/logo.svg" alt="pk – port-kill-cli logo" width="300">
 </p>
 
 # port-kill-cli (`pk`)
@@ -103,6 +103,8 @@ Ensure your dev port is always free before starting your server:
 - Changes arrive through a pull request, and the [CI workflow](.github/workflows/ci.yml) must pass on Linux, macOS and Windows.
 - Force pushes and branch deletion are blocked, history stays linear, and review conversations must be resolved.
 - Admins are not forced through these rules, so the repository owner can still push release commits (`npm version`) directly. Releases only publish when the tag points at a commit on `main`.
+
+Release tags (`v*`) are protected by a [tag ruleset](https://github.com/majidev-org/port-kill-cli/rules): only repository admins can create them, and nobody can move or delete one. Because a tag push triggers the npm publish, this keeps write-access collaborators from releasing.
 
 Settings: *Settings → Branches* in the [repository](https://github.com/majidev-org/port-kill-cli/settings/branches). See GitHub's [branch protection docs](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches).
 
