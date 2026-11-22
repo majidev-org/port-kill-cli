@@ -1,10 +1,13 @@
 name: CI
 
-# Required status checks for the protected `main` branch (see README → Branch protection).
+# Required status checks for the protected `main` branch (see CONTRIBUTING.md → Branch protection).
+# Changes that only touch Markdown files skip CI: no test reads them and they are not part of the code.
 on:
   pull_request:
+    paths-ignore: ['**.md']
   push:
     branches: [main]
+    paths-ignore: ['**.md']
 
 permissions:
   contents: read
