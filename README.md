@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.svg" alt="pk – port-kill-cli logo" width="300">
+</p>
+
 # port-kill-cli (`pk`)
 
 [![npm version](https://img.shields.io/npm/v/@majidev-org/port-kill-cli)](https://www.npmjs.com/package/@majidev-org/port-kill-cli)
@@ -122,6 +126,10 @@ npm test                   # unit tests for the parsers (node:test, no dependenc
 ```
 
 See [TESTING.md](TESTING.md) for linking the CLI locally and manual test scenarios. Bugs and ideas are welcome in the [issue tracker](https://github.com/majidev-org/port-kill-cli/issues).
+
+## Branding
+
+Logo and icons live in [assets/](assets/): [logo.svg](assets/logo.svg), [icon.svg](assets/icon.svg) (plus [icon-512.png](assets/icon-512.png) and [logo.png](assets/logo.png)) and [social-preview.png](assets/social-preview.png) (1280×640, for the GitHub social card). They are not part of the npm package. The SVGs are hand-drawn shapes with no font dependency; regenerate the PNGs with headless Chrome, e.g. `google-chrome --headless --window-size=512,512 --default-background-color=00000000 --screenshot=assets/icon-512.png assets/icon.svg`.
 
 ## Terms, Privacy & License
 
