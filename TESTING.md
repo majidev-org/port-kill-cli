@@ -108,6 +108,7 @@ pk < /dev/null # (or kp < /dev/null) prints the help menu (no interactive prompt
 1. Start a dummy server on port `4001`.
 2. Run `pk` (or `kp`) with no arguments. A checkbox list of ports in use appears.
 3. Move to `:4001` with `↑`/`↓`, press `Space` to tick it (the counter reads `1/N selected`) and press Enter. *Expected:* `✔ Freed port 4001 — killed node (PID <number>)`, and no other port is touched.
+3b. *Options (Linux/macOS):* two boxes sit under the list, **Also stop what it started** and **Also close the app that started it**. Press `c` and `t` to toggle them (or move onto one and press `Space`); ticking the app shows the children as `(included)`. The line under them explains the highlighted option. Tick a port that an app started plus the app option, press Enter, answer `n` at `Stop them? [y/N]`: *Expected:* `• Cancelled, nothing was stopped.` With `y` the app and its port holder are both stopped.
 4. Run `pk` (or `kp`) again and press Enter without ticking anything, then once more and press `q`. *Expected:* nothing is killed either time, and the cursor is visible again afterwards.
 5. Typed fallback: run `pk | cat`. A numbered list appears; type the number next to `:4001` and press Enter. *Expected:* same `✔ Freed port 4001 …` result.
 

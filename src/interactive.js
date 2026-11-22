@@ -51,27 +51,44 @@ const PICKER_KEYS = [
   ['↑↓', 'move'],
   ['space', 'toggle'],
   ['a', 'all'],
+  ['c', 'children'],
+  ['t', 'app'],
   ['enter', 'free selected'],
   ['q', 'quit'],
 ];
 const PICKER_CHROME = 6; // title, header, two rules, detail line and key hints around the rows
 
+// Ticked under the port list, so nobody has to remember --children / --tree. Windows has neither:
+// taskkill /T always stops children there and --tree is not supported.
+const OPTIONS = [
+  { key: 'children', hotkey: 'c', flag: '--children', label: 'Also stop what it started', hint: 'child processes running under the ticked ports, such as workers behind a server' },
+  { key: 'tree', hotkey: 't', flag: '--tree', label: 'Also close the app that started it', hint: 'the parent program and everything under it, such as a whole editor window. Unsaved work is lost; you are asked to confirm' },
+];
+const pickerOptions = () => (process.platform === 'win32' ? [] : OPTIONS);
+
 /**
- * Checkbox picker: ↑/↓ (or k/j) move, Space toggles, a toggles all, Enter confirms, q / Esc / Ctrl+C cancels.
+ * Checkbox picker: ↑/↓ (or k/j) move, Space toggles, a toggles all ports, c / t toggle the "also stop
+ * children / parent" options (also reachable with the cursor), Enter confirms, q / Esc / Ctrl+C cancels.
  * Redraws in place and scrolls when the list is taller than the terminal.
+ * @returns {Promise<{ targets: object[], children: boolean, tree: boolean }>}
  */
-function pickCheckboxes(targets) {
+function pickCheckboxes(targets, initial) {
   const { stdin, stdout } = process;
   const cells = targets.map(cellsOf);
   const checked = new Set();
+  const options = pickerOptions();
+  const on = { children: initial.children, tree: initial.tree };
+  const rowCount = targets.length + options.length; // port rows, then option rows
   let cursor = 0;
   let top = 0;
   let drawn = 0;
 
   const render = () => {
-    const height = Math.max(3, Math.min(targets.length, (stdout.rows || 24) - PICKER_CHROME - 3));
-    if (cursor < top) top = cursor;
-    if (cursor >= top + height) top = cursor - height + 1;
+    const height = Math.max(3, Math.min(targets.length, (stdout.rows || 24) - PICKER_CHROME - options.length - 3));
+    if (cursor < targets.length) {
+      if (cursor < top) top = cursor;
+      if (cursor >= top + height) top = cursor - height + 1;
+    }
 
     const widths = columnWidths(cells, 6);
     const length = tableWidth(widths, 6) - 2;
@@ -87,6 +104,16 @@ function pickCheckboxes(targets) {
       return `  ${checked.has(index) ? c.green(box) : c.dim(box)} ${dataRow(row, widths)}`;
     });
 
+    // the parent includes everything under it, so with it ticked "children" shows as included
+    const optionRows = options.map((opt, i) => {
+      const included = opt.key === 'children' && on.tree;
+      const box = on[opt.key] || included ? '[x]' : '[ ]';
+      const text = `${opt.label}${included ? ' (included)' : ''}`;
+      if (targets.length + i === cursor) return c.inverse(`❯ ${box} ${text}  ${opt.flag}`.padEnd(length + 2));
+      return `  ${on[opt.key] || included ? c.green(box) : c.dim(box)} ${text}  ${c.dim(opt.flag)}`;
+    });
+    const detail = cursor < targets.length ? extra(targets[cursor]) : options[cursor - targets.length].hint;
+
     const above = top;
     const below = targets.length - top - height;
     const more = [above && `↑ ${above} more`, below && `↓ ${below} more`].filter(Boolean).join(' · ');
@@ -97,7 +124,8 @@ function pickCheckboxes(targets) {
       `  ${rule(length)}`,
       ...rows,
       `  ${labelledRule(more, length)}`,
-      c.dim(`  ${extra(targets[cursor])}`), // full owner and command of the highlighted row
+      ...optionRows,
+      c.dim(`  ${detail}`), // full owner and command of the highlighted port, or what the option does
       `  ${keyHints(PICKER_KEYS)}`,
     ];
 
@@ -112,15 +140,23 @@ function pickCheckboxes(targets) {
       stdin.setRawMode(false);
       stdin.pause();
       stdout.write(SHOW_CURSOR);
-      resolve(result);
+      resolve({ targets: result, children: on.children, tree: on.tree });
+    };
+
+    const toggleOption = (key) => {
+      if (key === 'children' && on.tree) return; // already included by the parent
+      on[key] = !on[key];
     };
 
     const onKey = (_, key = {}) => {
       if (key.name === 'q' || key.name === 'escape' || (key.ctrl && key.name === 'c')) return finish([]);
       if (key.name === 'return') return finish([...checked].sort((a, b) => a - b).map((i) => targets[i]));
-      if (key.name === 'up' || key.name === 'k') cursor = (cursor - 1 + targets.length) % targets.length;
-      else if (key.name === 'down' || key.name === 'j') cursor = (cursor + 1) % targets.length;
+      const hot = key.ctrl ? undefined : options.find((o) => o.hotkey === key.name);
+      if (key.name === 'up' || key.name === 'k') cursor = (cursor - 1 + rowCount) % rowCount;
+      else if (key.name === 'down' || key.name === 'j') cursor = (cursor + 1) % rowCount;
+      else if (key.name === 'space' && cursor >= targets.length) toggleOption(options[cursor - targets.length].key);
       else if (key.name === 'space') checked.has(cursor) ? checked.delete(cursor) : checked.add(cursor);
+      else if (hot) toggleOption(hot.key);
       else if (key.name === 'a') {
         if (checked.size === targets.length) checked.clear();
         else targets.forEach((_t, i) => checked.add(i));
@@ -139,7 +175,7 @@ function pickCheckboxes(targets) {
 }
 
 /** Typed fallback for when raw keypresses are unavailable (e.g. output is piped). */
-async function pickTyped(targets) {
+async function pickTyped(targets, initial) {
   console.log(c.bold('\nPorts in use:\n'));
   printTargets(targets, { numbered: true });
   console.log();
@@ -150,23 +186,30 @@ async function pickTyped(targets) {
   try {
     // The line iterator ends cleanly on Ctrl+D / closed stdin, unlike a pending rl.question()
     for await (const answer of rl) {
-      if (!answer.trim()) return [];
+      if (!answer.trim()) return { ...initial, targets: [] };
       try {
-        return parseSelection(answer, targets.length).map((i) => targets[i]);
+        return { ...initial, targets: parseSelection(answer, targets.length).map((i) => targets[i]) };
       } catch (err) {
         console.error(c.red(`✖ ${err.message}`));
         rl.prompt();
       }
     }
-    return [];
+    return { ...initial, targets: [] };
   } finally {
     rl.close();
   }
 }
 
-/** Show listening ports and let the user choose which to free. Returns the chosen targets. */
-export async function pickTargets(targets) {
-  return canUseCheckboxes() ? pickCheckboxes(targets) : pickTyped(targets);
+/**
+ * Show listening ports and let the user choose which to free, and whether to also stop children or the
+ * parent (the flags give the starting state). The typed fallback has no checkboxes, so only the flags apply.
+ * @param {object[]} targets
+ * @param {{ children: boolean, tree: boolean }} initial
+ * @returns {Promise<{ targets: object[], children: boolean, tree: boolean }>}
+ */
+export async function pickTargets(targets, { children, tree }) {
+  const initial = { children, tree };
+  return canUseCheckboxes() ? pickCheckboxes(targets, initial) : pickTyped(targets, initial);
 }
 
 /**

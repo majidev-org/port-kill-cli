@@ -6,7 +6,7 @@ import { parseSelection } from '../src/interactive.js';
 import { parseLsof, parseNetstat, parseSs, reach } from '../src/listeners.js';
 import { killPid } from '../src/kill.js';
 import { cellsOf, printable } from '../src/targets.js';
-import { parseProcessTable, planKill } from '../src/tree.js';
+import { parseProcessTable, planKill, scopeOf } from '../src/tree.js';
 import { columnWidths, fit } from '../src/ui.js';
 
 test('parseArgs: ports, ranges, flags', () => {
@@ -167,4 +167,11 @@ test('planKill: never signals pk or the processes it runs under, nor anything be
   // a parent that pk runs under is spared even though it is not a shell
   const editor = parseProcessTable(['20 1 code', '30 20 code', '40 30 pk'].join('\n'));
   assert.deepEqual(planKill(editor, 30, 'parent', 40), { pids: [30], parent: undefined, note: 'parent code (PID 20) left running' });
+});
+
+test('scopeOf: the parent includes the children, which include the holder', () => {
+  assert.equal(scopeOf({ children: false, tree: false }), 'holder');
+  assert.equal(scopeOf({ children: true, tree: false }), 'children');
+  assert.equal(scopeOf({ children: false, tree: true }), 'parent');
+  assert.equal(scopeOf({ children: true, tree: true }), 'parent');
 });

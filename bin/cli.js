@@ -5,6 +5,7 @@ import process from 'node:process';
 import { parseArgs } from '../src/args.js';
 import { c } from '../src/colors.js';
 import { confirmParents, pickTargets, printTargets } from '../src/interactive.js';
+import { scopeOf } from '../src/tree.js';
 import { describe, findTargets, freeTarget, printable, targetKey } from '../src/targets.js';
 
 const { version } = createRequire(import.meta.url)('../package.json');
@@ -60,7 +61,7 @@ async function freeAll(targets, { force, children, tree, yes }) {
     groups.get(key).ports.push(t.port);
   }
 
-  const scope = tree ? 'parent' : children ? 'children' : 'holder';
+  const scope = scopeOf({ children, tree });
 
   // Free everything concurrently (the graceful SIGTERM wait overlaps), but report in port order.
   const entries = [...groups.values()];
@@ -119,7 +120,8 @@ async function main() {
     const targets = await findTargets();
     if (targets.length === 0) return console.log(c.dim('• No ports in use.'));
     if (opts.info) return printTargets(targets);
-    return freeAll(await pickTargets(targets), opts);
+    const picked = await pickTargets(targets, opts);
+    return freeAll(picked.targets, { ...opts, ...picked });
   }
 
   const targets = await findTargets(opts.ports);

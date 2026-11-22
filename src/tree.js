@@ -32,6 +32,9 @@ export function readProcessTable() {
   }
 }
 
+/** The widest thing the user asked to stop; the parent already includes everything under it. */
+export const scopeOf = ({ children, tree }) => (tree ? 'parent' : children ? 'children' : 'holder');
+
 /**
  * Decide which processes to signal when freeing a port held by `pid`, by `scope`:
  * - 'holder': just the holder (the default)

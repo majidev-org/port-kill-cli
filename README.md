@@ -176,9 +176,13 @@ Running `pk` with no ports lists every port in use as a checkbox list, so you ti
   [ ] :5173  node     4188          alice      localhost only  vite
   [x] :8080  api      a1b2c3d4e5f6  container  all interfaces  nginx:1.27
   ─────────────────────────────────────────────────────────────────────────
+  [ ] Also stop what it started  --children
+  [ ] Also close the app that started it  --tree
   user alice · cmd node server.js --port 3000
-  ↑↓ move  ·  space toggle  ·  a all  ·  enter free selected  ·  q quit
+  ↑↓ move  ·  space toggle  ·  a all  ·  c children  ·  t app  ·  enter free selected  ·  q quit
 ```
+
+The two options under the list work like the ports: move onto one with `↑`/`↓` and press `Space`, or press its key from anywhere. Ticking the app also shows the children as included. Closing the app still lists the parents and asks `[y/N]` first, and the flags `--children` / `--tree` just start with the boxes ticked. The options are hidden on Windows, where children are always stopped and `--tree` is not supported. The typed prompt has no checkboxes, so there you need the flags.
 
 The highlighted row is drawn as a selection bar, the line under the list shows the full owner and command of that row, and a `↑ n more` / `↓ n more` marker appears in the rule when the list is taller than your terminal.
 
@@ -187,6 +191,8 @@ The highlighted row is drawn as a selection bar, the line under the list shows t
 | `↑` / `↓` (or `k` / `j`) | Move the cursor |
 | `Space` | Tick or untick the port under the cursor |
 | `a` | Tick all, or untick all if everything is already ticked |
+| `c` | Tick or untick **Also stop what it started** (same as `--children`) |
+| `t` | Tick or untick **Also close the app that started it** (same as `--tree`) |
 | `Enter` | Free the ticked ports (nothing ticked = cancel) |
 | `q`, `Esc` or `Ctrl+C` | Cancel without killing anything |
 
