@@ -44,7 +44,7 @@ test('e2e: --info reports, pk frees the port, second run says already free', asy
   t.after(() => child.kill('SIGKILL'));
 
   const info = pk(String(port), '--info');
-  assert.match(info.stdout, new RegExp(`Port ${port} is in use by .*\\(PID ${child.pid}\\)`), info.stdout + info.stderr);
+  assert.match(info.stdout, new RegExp(`:${port}\\b.*\\b${child.pid}\\b`), info.stdout + info.stderr);
   assert.equal(child.exitCode, null, '--info must not kill');
 
   const kill = pk(String(port));

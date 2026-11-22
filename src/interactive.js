@@ -1,16 +1,24 @@
 import process from 'node:process';
 import { createInterface, emitKeypressEvents } from 'node:readline';
 import { c } from './colors.js';
-import { describe, extra, where } from './targets.js';
+import { cellsOf, extra } from './targets.js';
+import { columnWidths, dataRow, headerRow, keyHints, labelledRule, plainRow, rule, tableWidth } from './ui.js';
 
-export function printTargets(targets) {
-  const width = String(targets.length).length;
-  targets.forEach((t, i) => {
-    const num = c.cyan(String(i + 1).padStart(width));
-    console.log(`  ${num}  ${c.bold(`:${t.port}`.padEnd(7))} ${describe(t)}  ${where(t)}`);
-    const more = extra(t);
-    if (more) console.log(c.dim(`  ${' '.repeat(width)}  ${' '.repeat(8)} ${more}`));
+/** Print targets as an aligned table; `numbered` adds a leading index for the typed prompt. */
+export function printTargets(targets, { numbered = false } = {}) {
+  const rows = targets.map(cellsOf);
+  const numWidth = String(targets.length).length;
+  const indent = 2 + (numbered ? numWidth + 2 : 0);
+  const widths = columnWidths(rows, indent);
+  const line = rule(tableWidth(widths, indent) - 2);
+
+  console.log(`  ${numbered ? ' '.repeat(numWidth + 2) : ''}${headerRow(widths)}`);
+  console.log(`  ${line}`);
+  rows.forEach((row, i) => {
+    const num = numbered ? `${c.cyan(String(i + 1).padStart(numWidth))}  ` : '';
+    console.log(`  ${num}${dataRow(row, widths)}`);
   });
+  console.log(`  ${line}`);
 }
 
 /**
@@ -38,34 +46,63 @@ const HIDE_CURSOR = '\x1b[?25l\x1b[?7l'; // hide cursor, disable wrap so every r
 const canUseCheckboxes = () =>
   process.stdin.isTTY && process.stdout.isTTY && typeof process.stdin.setRawMode === 'function';
 
+const PICKER_KEYS = [
+  ['↑↓', 'move'],
+  ['space', 'toggle'],
+  ['a', 'all'],
+  ['enter', 'free selected'],
+  ['q', 'quit'],
+];
+const PICKER_CHROME = 6; // title, header, two rules, detail line and key hints around the rows
+
 /**
  * Checkbox picker: ↑/↓ (or k/j) move, Space toggles, a toggles all, Enter confirms, q / Esc / Ctrl+C cancels.
  * Redraws in place and scrolls when the list is taller than the terminal.
  */
 function pickCheckboxes(targets) {
   const { stdin, stdout } = process;
+  const cells = targets.map(cellsOf);
   const checked = new Set();
   let cursor = 0;
   let top = 0;
   let drawn = 0;
 
   const render = () => {
-    const height = Math.max(3, Math.min(targets.length, (stdout.rows || 24) - 5));
+    const height = Math.max(3, Math.min(targets.length, (stdout.rows || 24) - PICKER_CHROME - 3));
     if (cursor < top) top = cursor;
     if (cursor >= top + height) top = cursor - height + 1;
 
-    const rows = targets.slice(top, top + height).map((t, i) => {
+    const widths = columnWidths(cells, 6);
+    const length = tableWidth(widths, 6) - 2;
+
+    const left = `  pk  Select ports to free`;
+    const right = `${checked.size} of ${targets.length} selected`;
+    const title = `  ${c.bold('pk')}  ${c.dim('Select ports to free')}${' '.repeat(Math.max(2, length + 2 - left.length - right.length))}${checked.size ? c.green(right) : c.dim(right)}`;
+
+    const rows = cells.slice(top, top + height).map((row, i) => {
       const index = top + i;
-      const pointer = index === cursor ? c.cyan('❯') : ' ';
-      const box = checked.has(index) ? c.green('[x]') : c.dim('[ ]');
-      return `${pointer} ${box} ${c.bold(`:${t.port}`.padEnd(7))} ${describe(t)}  ${where(t)}`;
+      const box = checked.has(index) ? '[x]' : '[ ]';
+      if (index === cursor) return c.inverse(`❯ ${box} ${plainRow(row, widths)} `); // selection bar
+      return `  ${checked.has(index) ? c.green(box) : c.dim(box)} ${dataRow(row, widths)}`;
     });
-    // details of the highlighted row; always one line so the redraw height stays constant
-    rows.push(c.dim(`  ${extra(targets[cursor])}`), c.dim(`${checked.size}/${targets.length} selected · space toggle · a all · enter confirm · q cancel`));
+
+    const above = top;
+    const below = targets.length - top - height;
+    const more = [above && `↑ ${above} more`, below && `↓ ${below} more`].filter(Boolean).join(' · ');
+
+    const lines = [
+      title,
+      `      ${headerRow(widths)}`,
+      `  ${rule(length)}`,
+      ...rows,
+      `  ${labelledRule(more, length)}`,
+      c.dim(`  ${extra(targets[cursor])}`), // full owner and command of the highlighted row
+      `  ${keyHints(PICKER_KEYS)}`,
+    ];
 
     if (drawn) stdout.write(`\x1b[${drawn}F\x1b[J`); // back to the first row, clear everything below
-    stdout.write(`${rows.join('\n')}\n`);
-    drawn = rows.length;
+    stdout.write(`${lines.join('\n')}\n`);
+    drawn = lines.length;
   };
 
   return new Promise((resolve) => {
@@ -102,7 +139,8 @@ function pickCheckboxes(targets) {
 
 /** Typed fallback for when raw keypresses are unavailable (e.g. output is piped). */
 async function pickTyped(targets) {
-  printTargets(targets);
+  console.log(c.bold('\nPorts in use:\n'));
+  printTargets(targets, { numbered: true });
   console.log();
 
   const rl = createInterface({ input: process.stdin, output: process.stdout });
@@ -127,6 +165,5 @@ async function pickTyped(targets) {
 
 /** Show listening ports and let the user choose which to free. Returns the chosen targets. */
 export async function pickTargets(targets) {
-  console.log(c.bold('\nPorts in use:\n'));
   return canUseCheckboxes() ? pickCheckboxes(targets) : pickTyped(targets);
 }

@@ -5,7 +5,8 @@ import { isLocalEndpoint, parseDockerPs } from '../src/docker.js';
 import { parseSelection } from '../src/interactive.js';
 import { parseLsof, parseNetstat, parseSs, reach } from '../src/listeners.js';
 import { killPid } from '../src/kill.js';
-import { printable } from '../src/targets.js';
+import { cellsOf, printable } from '../src/targets.js';
+import { columnWidths, fit } from '../src/ui.js';
 
 test('parseArgs: ports, ranges, flags', () => {
   const opts = parseArgs(['3000', '3000-3002', '-f', '--info']);
@@ -105,4 +106,25 @@ test('killPid: refuses pids that would signal process groups or init', async () 
   for (const bad of [0, 1, -1, NaN, 1.5]) {
     await assert.rejects(killPid(bad, true, () => true), /invalid PID/, String(bad));
   }
+});
+
+test('fit: truncates with an ellipsis and never exceeds the width', () => {
+  assert.equal(fit('abc', 5), 'abc');
+  assert.equal(fit('abcdef', 4), 'abc…');
+  assert.equal(fit('abcdef', 4).length, 4);
+});
+
+test('cellsOf: sanitized cells for processes and containers', () => {
+  const proc = { kind: 'process', port: 3000, pid: 42, name: 'no\x1bde', address: '*', user: 'me', command: 'node a\nb' };
+  assert.deepEqual(cellsOf(proc), { port: ':3000', name: 'no de', id: '42', user: 'me', access: 'all interfaces', command: 'node a b' });
+  const box = { kind: 'container', port: 80, id: 'a1b2c3d4e5f6a7b8', name: 'web', image: 'nginx', address: '127.0.0.1' };
+  assert.deepEqual(cellsOf(box), { port: ':80', name: 'web', id: 'a1b2c3d4e5f6', user: 'container', access: 'localhost only', command: 'nginx' });
+});
+
+test('columnWidths: the command column takes the remaining terminal width', () => {
+  const rows = [cellsOf({ kind: 'process', port: 3000, pid: 1234, name: 'node', address: '127.0.0.1', user: 'me', command: 'x'.repeat(300) })];
+  const wide = columnWidths(rows, 2, 120);
+  const narrow = columnWidths(rows, 2, 80);
+  assert.ok(wide.command > narrow.command);
+  assert.equal(columnWidths(rows, 2, undefined).command, 100); // piped: fixed cap, no terminal to measure
 });

@@ -5,30 +5,35 @@ import process from 'node:process';
 import { parseArgs } from '../src/args.js';
 import { c } from '../src/colors.js';
 import { pickTargets, printTargets } from '../src/interactive.js';
-import { describe, extra, findTargets, freeTarget, printable, targetKey, where } from '../src/targets.js';
+import { describe, findTargets, freeTarget, printable, targetKey } from '../src/targets.js';
+
+const { version } = createRequire(import.meta.url)('../package.json');
 
 function printHelp() {
+  const section = (title) => c.bold(c.cyan(title));
+  const row = (usage, text) => `    ${c.bold(usage.padEnd(24))}${text}`;
+  const flag = (usage, text) => `    ${c.yellow(usage.padEnd(24))}${text}`;
   console.log(`
-${c.bold('pk / kp / port-kill / kill-port')} — Cross-platform port cleaner
+  ${c.bold('pk')} ${c.dim(`v${version}`)}  ${c.dim('· find and free ports on Linux, macOS and Windows')}
 
-${c.bold('Usage:')}
-  pk | kp                                      Tick ports to free from an interactive checklist
-  pk | kp <port> [more-ports...] [options]
+  ${section('USAGE')}
+${row('pk', 'Tick ports to free from an interactive checklist')}
+${row('pk <port...> [options]', 'Free one or more ports')}
 
-${c.bold('Examples:')}  (pk and kp are the same command)
-  pk 3000 | kp 3000                            Kill process on port 3000
-  pk 3000 5173 8080 | kp 3000 5173 8080        Kill multiple ports
-  pk 3000-3005 | kp 3000-3005                  Kill a range of ports
-  pk 3000 --info | kp 3000 --info              Show what is running on port 3000 without killing
-  pk --info | kp --info                        List every port in use
+  ${section('EXAMPLES')}
+${row('pk 3000', 'Free port 3000')}
+${row('pk 3000 5173 8080', 'Free several ports')}
+${row('pk 3000-3005', 'Free a range of ports')}
+${row('pk 3000 --info', 'Show what holds port 3000, without killing')}
+${row('pk --info', 'List every port in use')}
 
-  Ports published by Docker are freed by stopping the container.
+  ${section('OPTIONS')}
+${flag('-i, --info', 'Inspect only (do not kill)')}
+${flag('-f, --force', 'Force kill immediately (SIGKILL / taskkill /F / docker kill)')}
+${flag('-v, --version', 'Show version')}
+${flag('-h, --help', 'Show this help message')}
 
-${c.bold('Options:')}
-  -i, --info           Inspect only (do not kill)
-  -f, --force          Force kill immediately (SIGKILL / /F / docker kill)
-  -v, --version        Show version
-  -h, --help           Show this help message
+  ${c.dim('Also available as kp, kill-port and port-kill. Ports published by Docker are freed by stopping the container.')}
 `);
 }
 
@@ -52,7 +57,12 @@ async function freeAll(targets, force) {
 
   // Free everything concurrently (the graceful SIGTERM wait overlaps), but report in port order.
   const entries = [...groups.values()];
+  // Stopping a container can take seconds; say what is happening (cleared before the results print).
+  const busy = process.stdout.isTTY && targets.length > 0;
+  if (busy) process.stdout.write(c.dim(`  Freeing ${targets.length === 1 ? 'port' : `${targets.length} ports`}…`));
   const outcomes = await Promise.allSettled(entries.map(({ target }) => freeTarget(target, force)));
+
+  if (busy) process.stdout.write('\r\x1b[2K');
 
   let freed = 0;
   for (const [i, { target, ports }] of entries.entries()) {
@@ -87,7 +97,7 @@ async function main() {
 
   if (opts.help) return printHelp();
   if (opts.version) {
-    return console.log(createRequire(import.meta.url)('../package.json').version);
+    return console.log(version);
   }
 
   // No ports: list everything (--info) or pick interactively; scripts without a TTY get help
@@ -109,10 +119,9 @@ async function main() {
   }
 
   if (opts.info) {
-    for (const t of targets) {
-      console.log(`${c.cyan('ℹ')} Port ${c.bold(t.port)} is in use by ${describe(t)}  ${where(t)}`);
-      const more = extra(t);
-      if (more) console.log(c.dim(`    ${more}`));
+    if (targets.length > 0) {
+      printTargets(targets);
+      console.log(c.dim(`  ${targets.length} in use`));
     }
     return;
   }

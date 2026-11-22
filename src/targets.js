@@ -49,8 +49,15 @@ export const describe = (t) =>
     ? `Docker container ${c.bold(printable(t.name))} ${c.dim(`(${t.id})`)}`
     : `${c.bold(printable(t.name))} ${c.dim(`(PID ${t.pid})`)}`;
 
-/** Who can reach the port, dimmed: "all interfaces", "localhost only" or the bind address. */
-export const where = (t) => (t.address ? c.dim(printable(reach(t.address))) : '');
+/** Plain, sanitized text for each table column of a target (see ui.js). */
+export const cellsOf = (t) => ({
+  port: `:${t.port}`,
+  name: printable(t.name),
+  id: t.kind === 'container' ? t.id.slice(0, 12) : String(t.pid),
+  user: t.kind === 'container' ? 'container' : printable(t.user ?? ''),
+  access: printable(reach(t.address)),
+  command: printable(t.kind === 'container' ? t.image : (t.command ?? '')),
+});
 
 const MAX_COMMAND = 100;
 

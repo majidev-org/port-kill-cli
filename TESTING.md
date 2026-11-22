@@ -45,7 +45,7 @@ Each scenario starts a throwaway server with `node -e "require('http').createSer
    ```bash
    pk 3000 --info            # or: kp 3000 --info
    ```
-   *Expected:* `ℹ Port 3000 is in use by node (PID <number>)  localhost only` (or `all interfaces` if the server listens on `0.0.0.0`), followed on Linux/macOS by a dim `user <you> · cmd node …` line
+   *Expected:* a table row `:3000  node  <pid>  <you>  localhost only  node -e …` (`all interfaces` if the server listens on `0.0.0.0`; user and command are blank on Windows), followed by `1 in use`
 3. Kill it:
    ```bash
    pk 3000                   # or: kp 3000
@@ -87,7 +87,7 @@ pk < /dev/null # (or kp < /dev/null) prints the help menu (no interactive prompt
    ```bash
    pk 8099 --info            # or: kp 8099 --info
    ```
-   *Expected:* `ℹ Port 8099 is in use by Docker container pk-test (<id>)`
+   *Expected:* a table row `:8099  pk-test  <12-char id>  container  …  <image>`
 3. Free it:
    ```bash
    pk 8099                   # or: kp 8099

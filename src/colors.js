@@ -12,4 +12,5 @@ export const c = {
   cyan: wrap(36),
   dim: wrap(2),
   bold: wrap(1),
+  inverse: wrap(7),
 };

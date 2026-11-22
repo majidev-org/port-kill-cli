@@ -120,9 +120,13 @@ Every example works with any of the command names below.
 ## Output
 
 ```text
-$ pk 3000 --info
-ℹ Port 3000 is in use by node (PID 4121)  localhost only
-    user alice · cmd node server.js --port 3000
+$ pk 3000 8080 --info
+  PORT   PROCESS  PID/ID        USER       ACCESS          COMMAND
+  ──────────────────────────────────────────────────────────────────────────
+  :3000  node     4121          alice      localhost only  node server.js --port 3000
+  :8080  api      a1b2c3d4e5f6  container  all interfaces  nginx:1.27
+  ──────────────────────────────────────────────────────────────────────────
+  2 in use
 
 $ pk 3000 8080 5000
 ✔ Freed port 3000 — killed node (PID 4121) via SIGTERM (graceful)
@@ -131,6 +135,7 @@ $ pk 3000 8080 5000
 ✔ Freed 2 of 2 ports
 ```
 
+- The table fits your terminal: the command column shrinks (and is cut with `…`) to the available width, and colors follow `NO_COLOR` and are off when output is piped. **`ACCESS`** is green for `localhost only` and yellow for `all interfaces`. Containers show their id, `container` and their image.
 - **`localhost only`** means the port is bound to `127.0.0.1` / `::1`. **`all interfaces`** (`0.0.0.0`, `::`, `*`) means other machines on the network can reach it. Any other bind address is printed as is.
 - **`user` and `cmd`** come from `ps`, so they appear on Linux and macOS only. Windows shows the process name, PID and bind address. Commands longer than 100 characters are shortened.
 - Command lines can contain secrets such as tokens passed as arguments. `ps` shows them to any local user already, but keep it in mind before pasting `pk --info` output into a bug report.
@@ -152,14 +157,18 @@ Flags can go before or after the ports and can be combined: `pk 3000 -i`, `pk -f
 Running `pk` with no ports lists every port in use as a checkbox list, so you tick exactly the ones to free:
 
 ```text
-Ports in use:
-
-❯ [x] :3000   node (PID 4121)
-  [ ] :5173   node (PID 4188)
-  [x] :8080   Docker container api (a1b2c3d4e5f6)
-
-2/3 selected · space toggle · a all · enter confirm · q cancel
+  pk  Select ports to free                                   2 of 3 selected
+      PORT   PROCESS  PID/ID        USER       ACCESS          COMMAND
+  ─────────────────────────────────────────────────────────────────────────
+❯ [x] :3000  node     4121          alice      localhost only  node server.js
+  [ ] :5173  node     4188          alice      localhost only  vite
+  [x] :8080  api      a1b2c3d4e5f6  container  all interfaces  nginx:1.27
+  ─────────────────────────────────────────────────────────────────────────
+  user alice · cmd node server.js --port 3000
+  ↑↓ move  ·  space toggle  ·  a all  ·  enter free selected  ·  q quit
 ```
+
+The highlighted row is drawn as a selection bar, the line under the list shows the full owner and command of that row, and a `↑ n more` / `↓ n more` marker appears in the rule when the list is taller than your terminal.
 
 | Key | Action |
 | :--- | :--- |
