@@ -13,6 +13,10 @@ A fast, zero-dependency, cross-platform CLI to find and kill processes occupying
 
 Stop Googling `lsof` vs `netstat`—just run `pk 3000` (`kp`, `kill-port` and `port-kill` are the same command).
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/majidev-org/port-kill-cli/main/assets/screenshot-picker.png" alt="Terminal running pk: a checklist of four listening ports with columns for port, process, PID, user, access and command. Two ports are ticked, the last row is highlighted, and a footer lists the keys: arrows move, space toggles, a selects all, enter frees the selected ports, q quits." width="820">
+</p>
+
 [npm package](https://www.npmjs.com/package/@majidev-org/port-kill-cli) · [Source](https://github.com/majidev-org/port-kill-cli) · [Report an issue](https://github.com/majidev-org/port-kill-cli/issues) · [Security policy](SECURITY.md) · [Privacy](PRIVACY.md) · [Terms](TERMS.md)
 
 ## Features
@@ -119,21 +123,17 @@ Every example works with any of the command names below.
 
 ## Output
 
-```text
-$ pk 3000 8080 --info
-  PORT   PROCESS  PID/ID        USER       ACCESS          COMMAND
-  ──────────────────────────────────────────────────────────────────────────
-  :3000  node     4121          alice      localhost only  node server.js --port 3000
-  :8080  api      a1b2c3d4e5f6  container  all interfaces  nginx:1.27
-  ──────────────────────────────────────────────────────────────────────────
-  2 in use
+Inspect what holds your ports without killing anything:
 
-$ pk 3000 8080 5000
-✔ Freed port 3000 — killed node (PID 4121) via SIGTERM (graceful)
-✔ Freed port 8080 — stopped Docker container api (a1b2c3d4e5f6) via docker stop
-• Port 5000 is already free.
-✔ Freed 2 of 2 ports
-```
+<p align="center">
+  <img src="https://raw.githubusercontent.com/majidev-org/port-kill-cli/main/assets/screenshot-info.png" alt="Terminal running pk 3000 5173 8000 8080 --info: a table of four python3 processes showing port, PID, user, whether each port is reachable on localhost only or all interfaces, and the full command line, followed by '4 in use'." width="820">
+</p>
+
+Free several ports at once. Each result says how the process was stopped, and a summary closes the run:
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/majidev-org/port-kill-cli/main/assets/screenshot-free.png" alt="Terminal running pk 3000 8000: two lines reading 'Freed port … killed python3 via SIGTERM (graceful)' and the summary 'Freed 2 of 2 ports'." width="680">
+</p>
 
 - The table fits your terminal: the command column shrinks (and is cut with `…`) to the available width, and colors follow `NO_COLOR` and are off when output is piped. **`ACCESS`** is green for `localhost only` and yellow for `all interfaces`. Containers show their id, `container` and their image.
 - **`localhost only`** means the port is bound to `127.0.0.1` / `::1`. **`all interfaces`** (`0.0.0.0`, `::`, `*`) means other machines on the network can reach it. Any other bind address is printed as is.
