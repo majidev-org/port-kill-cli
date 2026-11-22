@@ -30,6 +30,7 @@ ${row('pk --info', 'List every port in use')}
   ${section('OPTIONS')}
 ${flag('-i, --info', 'Inspect only (do not kill)')}
 ${flag('-f, --force', 'Force kill immediately (SIGKILL / taskkill /F / docker kill)')}
+${flag('    --tree', 'Also stop the parent that started it (not on Windows)')}
 ${flag('-v, --version', 'Show version')}
 ${flag('-h, --help', 'Show this help message')}
 
@@ -47,7 +48,7 @@ function errorMessage(err) {
 }
 
 /** Free the given targets, reporting each container/process once with all ports it held. */
-async function freeAll(targets, force) {
+async function freeAll(targets, { force, tree }) {
   const groups = new Map();
   for (const t of targets) {
     const key = targetKey(t);
@@ -60,7 +61,7 @@ async function freeAll(targets, force) {
   // Stopping a container can take seconds; say what is happening (cleared before the results print).
   const busy = process.stdout.isTTY && targets.length > 0;
   if (busy) process.stdout.write(c.dim(`  Freeing ${targets.length === 1 ? 'port' : `${targets.length} ports`}…`));
-  const outcomes = await Promise.allSettled(entries.map(({ target }) => freeTarget(target, force)));
+  const outcomes = await Promise.allSettled(entries.map(({ target }) => freeTarget(target, force, tree)));
 
   if (busy) process.stdout.write('\r\x1b[2K');
 
@@ -72,7 +73,7 @@ async function freeAll(targets, force) {
       const how = outcomes[i].value;
       freed += ports.length;
       const verb = target.kind === 'container' ? 'stopped' : 'killed';
-      console.log(`${c.green('✔')} Freed port ${portList} ${c.dim(`— ${verb}`)} ${describe(target)} ${c.dim(`via ${how}`)}`);
+      console.log(`${c.green('✔')} Freed port ${portList} ${c.dim(`— ${verb}`)} ${describe(target)} ${c.dim(`via ${printable(how)}`)}`);
     } catch (err) {
       process.exitCode = 1;
       console.error(`${c.red('✖')} Failed to free port ${portList} held by ${describe(target)}: ${errorMessage(err)}`);
@@ -100,13 +101,19 @@ async function main() {
     return console.log(version);
   }
 
+  if (opts.tree && process.platform === 'win32') {
+    console.error(c.red('✖ --tree is not supported on Windows (taskkill /T already stops everything under the process)'));
+    process.exitCode = 1;
+    return;
+  }
+
   // No ports: list everything (--info) or pick interactively; scripts without a TTY get help
   if (opts.ports.length === 0) {
     if (!opts.info && !process.stdin.isTTY) return printHelp();
     const targets = await findTargets();
     if (targets.length === 0) return console.log(c.dim('• No ports in use.'));
     if (opts.info) return printTargets(targets);
-    return freeAll(await pickTargets(targets), opts.force);
+    return freeAll(await pickTargets(targets), opts);
   }
 
   const targets = await findTargets(opts.ports);
@@ -125,7 +132,7 @@ async function main() {
     }
     return;
   }
-  await freeAll(targets, opts.force);
+  await freeAll(targets, opts);
 }
 
 main().catch((err) => {

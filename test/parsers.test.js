@@ -6,6 +6,7 @@ import { parseSelection } from '../src/interactive.js';
 import { parseLsof, parseNetstat, parseSs, reach } from '../src/listeners.js';
 import { killPid } from '../src/kill.js';
 import { cellsOf, printable } from '../src/targets.js';
+import { parseProcessTable, planKill } from '../src/tree.js';
 import { columnWidths, fit } from '../src/ui.js';
 
 test('parseArgs: ports, ranges, flags', () => {
@@ -127,4 +128,39 @@ test('columnWidths: the command column takes the remaining terminal width', () =
   const narrow = columnWidths(rows, 2, 80);
   assert.ok(wide.command > narrow.command);
   assert.equal(columnWidths(rows, 2, undefined).command, 100); // piped: fixed cap, no terminal to measure
+});
+
+// 10 systemd > 20 code(main) > 30 code(helper, holds the port) > 40 worker; 20 also has 31 (sibling helper);
+// 10 > 50 bash > 60 pk, so 50 and 60 are pk's own lineage
+const table = parseProcessTable(
+  ['1 0 systemd', '10 1 systemd', '20 10 code', '30 20 code', '40 30 node', '31 20 code', '50 10 /bin/bash', '60 50 node', '70 60 node'].join('\n'),
+);
+
+test('parseProcessTable: pid, ppid and basename of comm', () => {
+  assert.deepEqual(parseProcessTable('  50   10 /bin/bash\n'), new Map([[50, { ppid: 10, name: 'bash' }]]));
+});
+
+test('planKill: the holder and everything under it, nothing above', () => {
+  assert.deepEqual(planKill(table, 30, false, 60), { pids: [30, 40], parent: undefined, note: '' });
+});
+
+test('planKill: withParent adds the parent and its whole subtree', () => {
+  const plan = planKill(table, 30, true, 60);
+  assert.deepEqual(plan.pids.sort((a, b) => a - b), [20, 30, 31, 40]);
+  assert.deepEqual(plan.parent, { pid: 20, name: 'code' });
+});
+
+test('planKill: spares init, shells and session managers as parent', () => {
+  assert.deepEqual(planKill(table, 20, true, 60), { pids: [20, 30, 31, 40], parent: undefined, note: 'parent systemd (PID 10) left running' });
+  assert.match(planKill(table, 60, true, 999).note, /parent bash \(PID 50\) left running/);
+  assert.equal(planKill(table, 999, true, 60).note, 'parent not found');
+});
+
+test('planKill: never signals pk or the processes it runs under, nor anything below them', () => {
+  // the holder is pk's grandparent: its subtree is pruned at pk's lineage
+  const own = parseProcessTable(['10 1 term', '50 10 bash', '60 50 pk', '55 10 helper', '90 50 sibling'].join('\n'));
+  assert.deepEqual(planKill(own, 10, false, 60).pids.sort((a, b) => a - b), [10, 55]);
+  // a parent that pk runs under is spared even though it is not a shell
+  const editor = parseProcessTable(['20 1 code', '30 20 code', '40 30 pk'].join('\n'));
+  assert.deepEqual(planKill(editor, 30, true, 40), { pids: [30], parent: undefined, note: 'parent code (PID 20) left running' });
 });

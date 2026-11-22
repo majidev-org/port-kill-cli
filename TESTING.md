@@ -28,7 +28,7 @@ kp --version
 npm test
 ```
 The same suite runs in CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)) on Linux, macOS and Windows for every pull request. Those three checks must pass before merging into `main`.
-Runs the `node:test` suite in [test/](test/): argument parsing, the `lsof` / `ss` / `netstat` / `docker ps` parsers, interactive selection parsing, and sanitizing of untrusted process names.
+Runs the `node:test` suite in [test/](test/): argument parsing, process-tree planning, the `lsof` / `ss` / `netstat` / `docker ps` parsers, interactive selection parsing, and sanitizing of untrusted process names.
 
 ---
 
@@ -68,6 +68,15 @@ Each scenario starts a throwaway server with `node -e "require('http').createSer
    ```
 2. Run `pk 5000` (or `kp 5000`). It sends `SIGTERM`, waits 300 ms, confirms the PID still holds the port, then escalates to `SIGKILL`. *Expected:* `✔ Freed port 5000 … via SIGTERM, then SIGKILL` (a server that ignores `SIGTERM`; a normal one reports `SIGTERM (graceful)`)
 3. Repeat step 1, then run `pk 5000 --force` (or `kp 5000 --force`) for an immediate `SIGKILL`.
+
+### Test C2: Children and `--tree` (Linux/macOS)
+1. Start an "app" that runs a server as its child:
+   ```bash
+   node -e "require('child_process').spawn(process.execPath, ['-e', \"require('http').createServer().listen(5100)\"], {stdio: 'inherit'}); setInterval(() => {}, 1e6)" &
+   ```
+2. Run `pk 5100`. *Expected:* the server is killed, the app keeps running (`pgrep -f setInterval`).
+3. Repeat step 1, then run `pk 5100 --tree`. *Expected:* `✔ Freed port 5100 … via SIGTERM (graceful) + parent node (PID <n>)`, and the app is gone too.
+4. Run `pk <port> --tree` for a server started directly from your shell. *Expected:* the shell is not killed; the output ends `(parent bash (PID <n>) left running)`.
 
 ### Test D: Invalid Input & Edge Cases
 ```bash

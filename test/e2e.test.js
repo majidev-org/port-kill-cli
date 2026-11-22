@@ -70,3 +70,67 @@ test('e2e: graceful kill escalates when SIGTERM is ignored', { skip: process.pla
   assert.equal(pk(String(port)).status, 0);
   await exited(child);
 });
+
+const gone = (pid) => {
+  try {
+    process.kill(pid, 0);
+    return false;
+  } catch {
+    return true;
+  }
+};
+const settled = async (pid) => {
+  for (let i = 0; i < 50 && !gone(pid); i++) await new Promise((r) => setTimeout(r, 100));
+  return gone(pid);
+};
+
+// A process (the "app") that starts a server (the port holder) as its own child and prints "<port> <holder pid>".
+async function startApp() {
+  const holder = `const s=require('http').createServer().listen(0,()=>console.log(s.address().port+' '+process.pid));setInterval(()=>{},1e6);`;
+  const app = `const c=require('child_process').spawn(process.execPath,['-e',${JSON.stringify(holder)}],{stdio:['ignore','inherit','inherit']});setInterval(()=>{},1e6);`;
+  const child = spawn(process.execPath, ['-e', app], { stdio: ['ignore', 'pipe', 'inherit'] });
+  const [chunk] = await once(child.stdout, 'data');
+  const [port, holderPid] = String(chunk).trim().split(' ').map(Number);
+  return { child, port, holderPid };
+}
+
+test('e2e: kills what runs under the port holder too', { skip: process.platform === 'win32' && 'taskkill /T covers this' }, async (t) => {
+  const grandchild = `setInterval(()=>{},1e6)`;
+  const code = `const s=require('http').createServer().listen(0,()=>{
+    const g=require('child_process').spawn(process.execPath,['-e',${JSON.stringify(grandchild)}]);
+    console.log(s.address().port+' '+g.pid)});setInterval(()=>{},1e6);`;
+  const child = spawn(process.execPath, ['-e', code], { stdio: ['ignore', 'pipe', 'inherit'] });
+  t.after(() => child.kill('SIGKILL'));
+  const [chunk] = await once(child.stdout, 'data');
+  const [port, grandchildPid] = String(chunk).trim().split(' ').map(Number);
+  t.after(() => { try { process.kill(grandchildPid, 'SIGKILL'); } catch {} });
+
+  const r = pk(String(port));
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /\+ 1 other process\b/);
+  await exited(child);
+  assert.ok(await settled(grandchildPid), 'the holder\'s child must be gone');
+});
+
+test('e2e: the parent survives without --tree and is stopped with it', { skip: process.platform === 'win32' && '--tree is not supported on Windows' }, async (t) => {
+  const first = await startApp();
+  t.after(() => first.child.kill('SIGKILL'));
+  assert.equal(pk(String(first.port)).status, 0);
+  await new Promise((r) => setTimeout(r, 500));
+  assert.equal(first.child.exitCode, null, 'without --tree the parent keeps running');
+  first.child.kill('SIGKILL');
+
+  const second = await startApp();
+  t.after(() => second.child.kill('SIGKILL'));
+  const r = pk(String(second.port), '--tree');
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, / \+ parent \S+ \(PID \d+\)/);
+  await exited(second.child);
+  assert.ok(await settled(second.holderPid));
+});
+
+test('e2e: --tree is rejected on Windows', { skip: process.platform !== 'win32' && 'Windows only' }, () => {
+  const r = pk('3000', '--tree');
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /--tree is not supported on Windows/);
+});
