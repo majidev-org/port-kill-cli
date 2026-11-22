@@ -24,7 +24,7 @@ Only the latest published version is supported; fixes ship as a new patch releas
 | Reporting "port is free" without looking | If `lsof`/`ss` (Unix) is missing or times out, or `netstat` fails (Windows), `pk` exits with an error instead of listing nothing. Command output is read with a 64 MiB buffer so busy hosts are not silently truncated ([src/listeners.js](src/listeners.js), [src/exec.js](src/exec.js)). |
 | Breaking Docker networking | Ports published by containers are freed with `docker stop` / `docker kill`, never by killing Docker's proxy process. |
 | Unprivileged use | `pk` never elevates. Another user's process needs `sudo` or Administrator, and the error message says so. |
-| Unreviewed or rewritten history | `main` is a [protected branch](README.md#branch-protection): pull requests with passing CI on three operating systems, no force pushes, no deletion, linear history. |
+| Unreviewed or rewritten history | `main` is a [protected branch](CONTRIBUTING.md#branch-protection): pull requests with passing CI on three operating systems, no force pushes, no deletion, linear history. |
 | Unauthorized releases | `v*` tags are covered by a [tag ruleset](https://github.com/majidev-org/port-kill-cli/rules): only repository admins can create them, and none can be moved or deleted. Publishing also requires the tag to be on `main`. |
 | Supply chain | Zero runtime dependencies. Releases are published from tags on `main` by [GitHub Actions](.github/workflows/publish.yml) with pinned action SHAs, read-only default permissions, a package-scoped npm token kept only as a GitHub Actions secret, and [provenance](https://docs.npmjs.com/generating-provenance-statements). |
 
