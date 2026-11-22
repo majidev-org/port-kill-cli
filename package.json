@@ -13,7 +13,8 @@
   "type": "module",
   "bin": {
     "port-kill": "./bin/cli.js",
-    "pk": "./bin/cli.js"
+    "pk": "./bin/cli.js",
+    "kp": "./bin/cli.js"
   },
   "files": [
     "bin/",

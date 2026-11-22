@@ -34,9 +34,11 @@ export const targetKey = (t) => (t.kind === 'container' ? `container:${t.id}` : 
 
 /**
  * Make untrusted text (a process can name itself anything) safe to print: control characters,
- * including ESC and newlines, could otherwise rewrite the terminal or forge output lines.
+ * including ESC and newlines, could otherwise rewrite the terminal or forge output lines, and
+ * bidi overrides / zero-width / line-separator characters can visually reorder or hide text.
  */
-export const printable = (text) => String(text).replace(/[\x00-\x1f\x7f-\x9f]/g, ' ');
+export const printable = (text) =>
+  String(text).replace(/[\x00-\x1f\x7f-\x9f\u200b-\u200f\u2028-\u202e\u2060-\u2069\ufeff]/g, ' ');
 
 export const describe = (t) =>
   t.kind === 'container'

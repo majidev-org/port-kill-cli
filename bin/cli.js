@@ -9,18 +9,18 @@ import { describe, findTargets, freeTarget, printable, targetKey } from '../src/
 
 function printHelp() {
   console.log(`
-${c.bold('pk / port-kill')} — Cross-platform port cleaner
+${c.bold('pk / kp / port-kill')} — Cross-platform port cleaner
 
 ${c.bold('Usage:')}
-  pk                   Pick ports to free from an interactive list
-  pk <port> [more-ports...] [options]
+  pk | kp                                      Pick ports to free from an interactive list
+  pk | kp <port> [more-ports...] [options]
 
-${c.bold('Examples:')}
-  pk 3000              Kill process on port 3000
-  pk 3000 5173 8080    Kill multiple ports
-  pk 3000-3005         Kill a range of ports
-  pk 3000 --info       Show what is running on port 3000 without killing
-  pk --info            List every port in use
+${c.bold('Examples:')}  (pk and kp are the same command)
+  pk 3000 | kp 3000                            Kill process on port 3000
+  pk 3000 5173 8080 | kp 3000 5173 8080        Kill multiple ports
+  pk 3000-3005 | kp 3000-3005                  Kill a range of ports
+  pk 3000 --info | kp 3000 --info              Show what is running on port 3000 without killing
+  pk --info | kp --info                        List every port in use
 
   Ports published by Docker are freed by stopping the container.
 
@@ -100,4 +100,7 @@ async function main() {
   await freeAll(targets, opts.force);
 }
 
-main();
+main().catch((err) => {
+  process.exitCode = 1;
+  console.error(c.red(`✖ ${printable(err.message)}`));
+});

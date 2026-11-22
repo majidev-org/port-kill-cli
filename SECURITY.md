@@ -17,9 +17,11 @@ Only the latest published version is supported; fixes ship as a new patch releas
 | Risk | Mitigation |
 | :--- | :--- |
 | Command injection | All tools (`lsof`, `ss`, `docker`, `taskkill`, …) run through `execFileSync` with an argument array. No shell is involved, and ports are validated as integers in 1–65535. |
-| Terminal escape / log forging via process names | Control characters (including ESC, C1 codes and newlines) are replaced with spaces before names or error text are printed ([src/targets.js](src/targets.js)). |
+| Terminal escape / log forging via process names | Control characters (including ESC, C1 codes and newlines) and bidi / zero-width / line-separator characters are replaced with spaces before names or error text are printed ([src/targets.js](src/targets.js)). |
 | Windows current-directory command hijacking | Commands are launched from `System32` ([src/exec.js](src/exec.js)), so a `netstat.exe` or `docker.exe` in the working directory is not executed. |
 | Killing a recycled PID | Before signalling, and again before escalating to `SIGKILL`, `pk` confirms the PID still listens on the port it was found on ([src/kill.js](src/kill.js)). |
+| Stopping a container on another machine | Docker lookup runs only when the active context (`DOCKER_HOST` / `docker context`) is `unix://`, `npipe://` or a loopback `tcp://`; remote `tcp://` and `ssh://` daemons are ignored ([src/docker.js](src/docker.js)). |
+| Reporting "port is free" without looking | If `lsof`/`ss` (Unix) is missing or times out, or `netstat` fails (Windows), `pk` exits with an error instead of listing nothing. Command output is read with a 64 MiB buffer so busy hosts are not silently truncated ([src/listeners.js](src/listeners.js), [src/exec.js](src/exec.js)). |
 | Breaking Docker networking | Ports published by containers are freed with `docker stop` / `docker kill`, never by killing Docker's proxy process. |
 | Unprivileged use | `pk` never elevates. Another user's process needs `sudo` or Administrator, and the error message says so. |
 | Unreviewed or rewritten history | `main` is a [protected branch](README.md#branch-protection): pull requests with passing CI on three operating systems, no force pushes, no deletion, linear history. |
@@ -30,5 +32,8 @@ Only the latest published version is supported; fixes ship as a new patch releas
 
 - Killing by PID can never be perfectly atomic. The re-check above shrinks the race to milliseconds but cannot remove it.
 - The Windows `System32` lookup is untested on a real Windows machine.
+- Windows always uses `taskkill /T /F` (whole process tree, forced); there is no graceful step there.
+- Ranges are not capped: `pk 1-65535` frees everything you own that listens. Nothing outside your own user is touched without `sudo`/Administrator.
+- Only TCP listeners are found; UDP sockets are not.
 - Branch protection does not apply to repository admins, so the owner's account is the trust anchor. Use a strong password and 2FA on it.
 - On Unix, commands are found through your `PATH`; keep it free of untrusted directories.

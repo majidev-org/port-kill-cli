@@ -27,16 +27,25 @@ export function listListeners() {
     .sort((a, b) => a.port - b.port || a.pid - b.pid);
 }
 
+// A tool that is missing, timed out or overflowed never looked at the ports. Any other failure is an
+// answer (lsof exits 1 when nothing listens). Reporting "port is free" without having looked would be
+// wrong, so when no tool could look, listing fails loudly instead of returning [].
+const couldNotLook = (err) => ['ENOENT', 'ETIMEDOUT', 'ENOBUFS'].includes(err.code);
+
 function listUnix() {
+  let lsofError;
   try {
     return parseLsof(run('lsof', ['-nP', '-iTCP', '-sTCP:LISTEN', '-F', 'pcn']));
-  } catch {
-    // lsof missing (minimal Linux images) or found nothing: fall back to ss
-    try {
-      return parseSs(run('ss', ['-tlnp']));
-    } catch {
-      return [];
+  } catch (err) {
+    lsofError = err; // missing (minimal Linux images) or found nothing: fall back to ss
+  }
+  try {
+    return parseSs(run('ss', ['-tlnp']));
+  } catch (err) {
+    if (couldNotLook(lsofError) && couldNotLook(err)) {
+      throw new Error('could not list listening ports: lsof/ss is missing or timed out (install lsof)');
     }
+    return [];
   }
 }
 
@@ -48,11 +57,8 @@ function listWindows() {
       if (m) names.set(Number(m[2]), m[1]);
     }
   } catch {}
-  try {
-    return parseNetstat(run('netstat', ['-ano'])).map((l) => ({ ...l, name: names.get(l.pid) ?? 'unknown' }));
-  } catch {
-    return [];
-  }
+  // No catch: if netstat fails we have not seen the ports, and "port is free" would be a lie.
+  return parseNetstat(run('netstat', ['-ano'])).map((l) => ({ ...l, name: names.get(l.pid) ?? 'unknown' }));
 }
 
 /** Parse `lsof -F pcn` output: p<pid>, c<command>, n<address> lines. */

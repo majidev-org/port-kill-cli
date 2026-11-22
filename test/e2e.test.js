@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { spawn, spawnSync } from 'node:child_process';
 import { once } from 'node:events';
+import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
@@ -9,6 +10,19 @@ import { fileURLToPath } from 'node:url';
 const cli = fileURLToPath(new URL('../bin/cli.js', import.meta.url));
 const pk = (...args) =>
   spawnSync(process.execPath, [cli, ...args], { encoding: 'utf8', timeout: 20_000, env: { ...process.env, NO_COLOR: '1' } });
+
+test('e2e: package.json exposes pk, kp and port-kill as the same CLI', async () => {
+  const { bin } = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
+  assert.deepEqual(bin, { 'port-kill': './bin/cli.js', pk: './bin/cli.js', kp: './bin/cli.js' });
+});
+
+// PATH='' makes lsof/ss unfindable on Unix. Windows resolves tools from System32 regardless of PATH.
+test('e2e: fails loudly, never "already free", when no tool can list ports', { skip: process.platform === 'win32' && 'tools live in System32' }, () => {
+  const r = spawnSync(process.execPath, [cli, '3000'], { encoding: 'utf8', env: { ...process.env, NO_COLOR: '1', PATH: '' } });
+  assert.equal(r.status, 1, r.stdout + r.stderr);
+  assert.match(r.stderr, /could not list listening ports/);
+  assert.doesNotMatch(r.stdout, /already free/);
+});
 
 /** Start a server on a free port and resolve once it is listening. */
 async function startServer({ ignoreSigterm = false } = {}) {

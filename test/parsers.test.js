@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { parseArgs } from '../src/args.js';
-import { parseDockerPs } from '../src/docker.js';
+import { isLocalEndpoint, parseDockerPs } from '../src/docker.js';
 import { parseSelection } from '../src/interactive.js';
 import { parseLsof, parseNetstat, parseSs } from '../src/listeners.js';
 import { printable } from '../src/targets.js';
@@ -75,4 +75,17 @@ test('parseSelection', () => {
 
 test('printable: neutralizes terminal escapes and newlines in untrusted names', () => {
   assert.equal(printable('node\x1b[2J\x9b0m\n✔ Freed'), 'node [2J 0m ✔ Freed');
+});
+
+test('printable: neutralizes bidi overrides, zero-width and line-separator characters', () => {
+  assert.equal(printable('a\u202Eb\u200Bc\u2028d\u2066e\ufeff'), 'a b c d e ');
+});
+
+test('isLocalEndpoint: only a daemon on this machine may own local ports', () => {
+  for (const ok of ['unix:///var/run/docker.sock', 'npipe:////./pipe/docker_engine', 'tcp://localhost:2375', 'tcp://127.0.0.1:2375', 'tcp://[::1]:2375']) {
+    assert.equal(isLocalEndpoint(ok), true, ok);
+  }
+  for (const remote of ['tcp://203.0.113.1:2375', 'ssh://user@build-host', 'tcp://localhost.evil.example:2375', 'http://localhost:2375', '', 'garbage']) {
+    assert.equal(isLocalEndpoint(remote), false, remote);
+  }
 });

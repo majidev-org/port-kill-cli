@@ -7,4 +7,7 @@ import process from 'node:process';
 // System32 makes that lookup hit the real system tools first.
 const cwd = process.platform === 'win32' ? join(process.env.SystemRoot ?? 'C:\\Windows', 'System32') : undefined;
 
-export const exec = (cmd, args, options) => execFileSync(cmd, args, { ...options, cwd });
+// The 1 MiB default overflows on hosts with many sockets (netstat -ano lists every connection).
+const maxBuffer = 64 * 1024 * 1024;
+
+export const exec = (cmd, args, options) => execFileSync(cmd, args, { maxBuffer, ...options, cwd });
