@@ -139,3 +139,24 @@ test('e2e: --tree is rejected on Windows', { skip: process.platform !== 'win32' 
   assert.equal(r.status, 1);
   assert.match(r.stderr, /--tree is not supported on Windows/);
 });
+
+test('e2e: a selected port held under another selected process is freed, not reported as failed', { skip: process.platform === 'win32' && 'taskkill /T covers this' }, async (t) => {
+  // the app listens itself and starts a server as its child, so one run holds both ports
+  const holder = `const s=require('http').createServer().listen(0,()=>console.log(s.address().port));setInterval(()=>{},1e6);`;
+  const app = `require('child_process').spawn(process.execPath,['-e',${JSON.stringify(holder)}],{stdio:['ignore','inherit','inherit']});
+    const s=require('http').createServer().listen(0,()=>console.log(s.address().port));setInterval(()=>{},1e6);`;
+  const child = spawn(process.execPath, ['-e', app], { stdio: ['ignore', 'pipe', 'inherit'] });
+  t.after(() => child.kill('SIGKILL'));
+  let seen = '';
+  while (seen.trim().split(/\s+/).filter(Boolean).length < 2) {
+    const [chunk] = await once(child.stdout, 'data');
+    seen += chunk;
+  }
+  const ports = seen.trim().split(/\s+/).map(Number);
+
+  const r = pk(...ports.map(String));
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.doesNotMatch(r.stderr, /Failed to free/);
+  assert.match(r.stdout, /Freed 2 of 2 ports/);
+  await exited(child);
+});

@@ -4,6 +4,10 @@ import { planKill, readProcessTable } from './tree.js';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// Pids this run has already signalled. Selecting several ports can name a process that is also under
+// another selected one (a helper beneath the app that was just stopped); it is done, not a failure.
+const signalled = new Set();
+
 const alive = (pid) => {
   try {
     process.kill(pid, 0); // Throws ESRCH if process already exited
@@ -29,6 +33,7 @@ const alive = (pid) => {
 export async function killPid(pid, force, stillHolds, withParent = false) {
   // process.kill(0) and negative pids signal whole process groups; pid 1 is init. Never valid here.
   if (!Number.isInteger(pid) || pid <= 1) throw new Error(`refusing to signal invalid PID ${pid}`);
+  if (signalled.has(pid)) return 'SIGTERM (stopped with another selected process)';
   if (!stillHolds()) throw new Error('process is no longer listening on that port (already exited?)');
 
   if (process.platform === 'win32') {
@@ -37,6 +42,7 @@ export async function killPid(pid, force, stillHolds, withParent = false) {
   }
 
   const { pids, parent, note } = planKill(readProcessTable(), pid, withParent, process.pid);
+  for (const p of pids) signalled.add(p);
   const others = pids.length - 1 - (parent ? 1 : 0);
   const also = [
     parent && `parent ${parent.name} (PID ${parent.pid})`,
