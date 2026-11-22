@@ -43,6 +43,28 @@ npm install -g @majidev-org/port-kill-cli
 pk 3000                   # or: kp 3000 (also available as `port-kill` and `kill-port`)
 ```
 
+### Update
+
+npm does not notify you about new versions of a global package, so check from time to time:
+
+```bash
+pk --version                                    # what you have
+npm view @majidev-org/port-kill-cli version     # latest published
+npm outdated -g @majidev-org/port-kill-cli      # shows current vs latest (no output = up to date)
+
+npm install -g @majidev-org/port-kill-cli@latest   # update
+```
+
+With `npx`, add `@latest` (`npx @majidev-org/port-kill-cli@latest 3000`) to be sure you are not running a cached older copy. To hear about releases, use **Watch → Custom → Releases** on the [GitHub repository](https://github.com/majidev-org/port-kill-cli).
+
+### Uninstall
+
+```bash
+npm uninstall -g @majidev-org/port-kill-cli
+```
+
+This removes all four commands (`pk`, `kp`, `kill-port`, `port-kill`). Use the package name, not a command name. `pk` stores no config or data, so nothing else is left behind. If you only ever used `npx`, nothing is installed; `npm cache clean --force` clears the cached download.
+
 ## Usage & Examples
 
 ```bash
