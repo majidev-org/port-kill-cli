@@ -10,21 +10,53 @@ const portOf = (addr = '') => {
   return isValidPort(port) ? port : null;
 };
 
+// "127.0.0.53%lo:53" -> "127.0.0.53", "[::1]:3000" -> "[::1]", "*:3000" -> "*"
+const addressOf = (addr = '') => addr.slice(0, addr.lastIndexOf(':')).replace(/%.*$/, '');
+
+const WILDCARD = new Set(['*', '0.0.0.0', '[::]', '::']);
+const isLoopback = (a) => /^(127\.|\[?::1\]?$|localhost$)/.test(a);
+const breadth = (a) => (WILDCARD.has(a) ? 2 : isLoopback(a) ? 0 : 1);
+
+/** Human label for who can reach a listening address. */
+export const reach = (address = '') =>
+  WILDCARD.has(address) ? 'all interfaces' : isLoopback(address) ? 'localhost only' : address;
+
 /**
  * List every process listening on a TCP port, in a single system call.
- * @returns {{ port: number, pid: number, name: string }[]} sorted by port
+ * @returns {{ port: number, pid: number, name: string, address: string }[]} sorted by port
  */
 export function listListeners() {
   const raw = process.platform === 'win32' ? listWindows() : listUnix();
-  const seen = new Set();
-  return raw
-    .filter(({ port, pid }) => {
-      const key = `${port}:${pid}`; // IPv4 + IPv6 sockets of the same process collapse to one entry
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    })
-    .sort((a, b) => a.port - b.port || a.pid - b.pid);
+  const merged = new Map();
+  for (const l of raw) {
+    const key = `${l.port}:${l.pid}`; // IPv4 + IPv6 sockets of the same process collapse to one entry
+    const prev = merged.get(key);
+    // keep the widest exposure, so *:3000 plus [::1]:3000 reports "all interfaces"
+    if (!prev || breadth(l.address) > breadth(prev.address)) merged.set(key, l);
+  }
+  return [...merged.values()].sort((a, b) => a.port - b.port || a.pid - b.pid);
+}
+
+/**
+ * Add the owning user and full command line to process targets (Linux/macOS, via one `ps` call).
+ * Best effort: when ps is missing or fails, targets are returned without those fields.
+ */
+export function addProcessDetails(targets) {
+  const pids = [...new Set(targets.filter((t) => t.kind === 'process').map((t) => t.pid))];
+  if (process.platform === 'win32' || pids.length === 0) return targets;
+
+  let out;
+  try {
+    out = run('ps', ['-ww', '-o', 'pid=,user=,args=', '-p', pids.join(',')]);
+  } catch (err) {
+    out = err.stdout ?? ''; // ps exits 1 when one pid already vanished but still prints the others
+  }
+  const info = new Map();
+  for (const line of String(out).split(/\r?\n/)) {
+    const m = line.match(/^\s*(\d+)\s+(\S+)\s+(.*)$/);
+    if (m) info.set(Number(m[1]), { user: m[2], command: m[3] });
+  }
+  return targets.map((t) => (t.kind === 'process' ? { ...t, ...info.get(t.pid) } : t));
 }
 
 // A tool that is missing, timed out or overflowed never looked at the ports. Any other failure is an
@@ -72,7 +104,7 @@ export function parseLsof(out) {
     else if (line[0] === 'c') name = value;
     else if (line[0] === 'n') {
       const port = portOf(value);
-      if (port && pid) results.push({ port, pid, name });
+      if (port && pid) results.push({ port, pid, name, address: addressOf(value) });
     }
   }
   return results;
@@ -82,10 +114,11 @@ export function parseLsof(out) {
 export function parseSs(out) {
   const results = [];
   for (const line of out.split(/\r?\n/)) {
-    const port = portOf(line.trim().split(/\s+/)[3]);
+    const local = line.trim().split(/\s+/)[3];
+    const port = portOf(local);
     if (!port) continue;
     for (const m of line.matchAll(/\("([^"]+)",pid=(\d+)/g)) {
-      results.push({ port, pid: Number(m[2]), name: m[1] });
+      results.push({ port, pid: Number(m[2]), name: m[1], address: addressOf(local) });
     }
   }
   return results;
@@ -102,7 +135,7 @@ export function parseNetstat(out) {
     if (proto !== 'TCP' || !foreign?.endsWith(':0')) continue;
     const port = portOf(local);
     const pid = Number(pidStr);
-    if (port && pid > 0) results.push({ port, pid });
+    if (port && pid > 0) results.push({ port, pid, address: addressOf(local) });
   }
   return results;
 }

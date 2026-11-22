@@ -10,18 +10,19 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  * @param {number} pid
  * @param {boolean} force
  * @param {() => boolean} stillHolds
+ * @returns {Promise<string>} how the process was ended, for reporting
  */
 export async function killPid(pid, force, stillHolds) {
   if (!stillHolds()) throw new Error('process is no longer listening on that port (already exited?)');
 
   if (process.platform === 'win32') {
     exec('taskkill', ['/PID', String(pid), '/T', '/F'], { stdio: ['ignore', 'ignore', 'pipe'] });
-    return;
+    return 'taskkill /T /F';
   }
 
   if (force) {
     process.kill(pid, 'SIGKILL');
-    return;
+    return 'SIGKILL (forced)';
   }
 
   // Graceful SIGTERM first, escalate to SIGKILL if still alive
@@ -29,6 +30,10 @@ export async function killPid(pid, force, stillHolds) {
   await sleep(300);
   try {
     process.kill(pid, 0); // Throws ESRCH if process already exited
-    if (stillHolds()) process.kill(pid, 'SIGKILL');
+    if (stillHolds()) {
+      process.kill(pid, 'SIGKILL');
+      return 'SIGTERM, then SIGKILL';
+    }
   } catch {}
+  return 'SIGTERM (graceful)';
 }

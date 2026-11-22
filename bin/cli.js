@@ -5,7 +5,7 @@ import process from 'node:process';
 import { parseArgs } from '../src/args.js';
 import { c } from '../src/colors.js';
 import { pickTargets, printTargets } from '../src/interactive.js';
-import { describe, findTargets, freeTarget, printable, targetKey } from '../src/targets.js';
+import { describe, extra, findTargets, freeTarget, printable, targetKey, where } from '../src/targets.js';
 
 function printHelp() {
   console.log(`
@@ -50,16 +50,23 @@ async function freeAll(targets, force) {
     groups.get(key).ports.push(t.port);
   }
 
+  let freed = 0;
   for (const { target, ports } of groups.values()) {
     const portList = c.bold(ports.join(', '));
     try {
-      await freeTarget(target, force);
+      const how = await freeTarget(target, force);
+      freed += ports.length;
       const verb = target.kind === 'container' ? 'stopped' : 'killed';
-      console.log(`${c.green('✔')} Freed port ${portList} ${c.dim(`— ${verb}`)} ${describe(target)}`);
+      console.log(`${c.green('✔')} Freed port ${portList} ${c.dim(`— ${verb}`)} ${describe(target)} ${c.dim(`via ${how}`)}`);
     } catch (err) {
       process.exitCode = 1;
       console.error(`${c.red('✖')} Failed to free port ${portList} held by ${describe(target)}: ${errorMessage(err)}`);
     }
+  }
+
+  if (targets.length > 1) {
+    const color = freed === targets.length ? c.green : c.yellow;
+    console.log(color(`${freed === targets.length ? '✔' : '!'} Freed ${freed} of ${targets.length} ports`));
   }
 }
 
@@ -94,7 +101,11 @@ async function main() {
   }
 
   if (opts.info) {
-    for (const t of targets) console.log(`${c.cyan('ℹ')} Port ${c.bold(t.port)} is in use by ${describe(t)}`);
+    for (const t of targets) {
+      console.log(`${c.cyan('ℹ')} Port ${c.bold(t.port)} is in use by ${describe(t)}  ${where(t)}`);
+      const more = extra(t);
+      if (more) console.log(c.dim(`    ${more}`));
+    }
     return;
   }
   await freeAll(targets, opts.force);

@@ -19,7 +19,8 @@ Stop Googling `lsof` vs `netstat`—just run `pk 3000` (`kp`, `kill-port` and `p
 - **Zero Dependencies:** Instant startup with `npx`—no bloated `node_modules` tree.
 - **Cross-Platform:** Works seamlessly on Linux (`lsof` / `ss`), macOS (`lsof`), and Windows (`netstat` / `taskkill`).
 - **Safe & Graceful:** On Linux/macOS sends `SIGTERM` first so servers clean up properly, escalating to `SIGKILL` only if needed. Before every signal it re-checks that the PID still holds the port, so a recycled PID is never killed by mistake. Windows has no graceful signal for server processes, so `taskkill /T /F` is always used there.
-- **Process Info:** Displays the exact process name and PID freed.
+- **Process Info:** Shows the process name and PID, who can reach the port (`all interfaces` or `localhost only`), and on Linux/macOS the owning user and full command line. Docker containers show their image.
+- **Clear Results:** Every freed port says how it was stopped (`SIGTERM (graceful)`, `SIGTERM, then SIGKILL`, `SIGKILL (forced)`, `taskkill /T /F`, `docker stop`) and multi-port runs end with a `Freed 3 of 4 ports` summary.
 - **Multi-Port & Ranges:** Kill single ports, multiple ports, or port ranges in one command.
 - **Docker-Aware:** Ports published by a Docker container are freed with `docker stop` instead of killing Docker's proxy (which would break Docker networking). Remote Docker contexts (`DOCKER_HOST=tcp://…`, `ssh://…`) are ignored, so a container on another machine is never stopped because its port number matches.
 - **Interactive Mode:** Run `pk` with no arguments to see every port in use and tick the ones to free.
@@ -116,11 +117,30 @@ Every example works with any of the command names below.
 | several | `pk 3000 5173 3000-3005` | Any mix of ports and ranges. Duplicates are ignored |
 | none | `pk` | Interactive picker (see below) |
 
+## Output
+
+```text
+$ pk 3000 --info
+ℹ Port 3000 is in use by node (PID 4121)  localhost only
+    user alice · cmd node server.js --port 3000
+
+$ pk 3000 8080 5000
+✔ Freed port 3000 — killed node (PID 4121) via SIGTERM (graceful)
+✔ Freed port 8080 — stopped Docker container api (a1b2c3d4e5f6) via docker stop
+• Port 5000 is already free.
+✔ Freed 2 of 2 ports
+```
+
+- **`localhost only`** means the port is bound to `127.0.0.1` / `::1`. **`all interfaces`** (`0.0.0.0`, `::`, `*`) means other machines on the network can reach it. Any other bind address is printed as is.
+- **`user` and `cmd`** come from `ps`, so they appear on Linux and macOS only. Windows shows the process name, PID and bind address. Commands longer than 100 characters are shortened.
+- Command lines can contain secrets such as tokens passed as arguments. `ps` shows them to any local user already, but keep it in mind before pasting `pk --info` output into a bug report.
+- The `Freed N of M ports` summary appears when more than one port was handled. A failure sets exit code `1`.
+
 ## Options
 
 | Flag | Alias | Description |
 | :--- | :--- | :--- |
-| `--info` | `-i` | Show the process name and PID using the port without killing it |
+| `--info` | `-i` | Show the process, bind address, owner and command using the port without killing it |
 | `--force` | `-f` | Immediately force-kill the process (`SIGKILL` / `taskkill /F` / `docker kill`) |
 | `--version` | `-v` | Print the installed version |
 | `--help` | `-h` | Display usage instructions and options |

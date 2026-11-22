@@ -21,32 +21,34 @@ export function isLocalEndpoint(endpoint) {
 /**
  * List host ports published by running Docker containers.
  * Returns [] when Docker is not installed, the daemon is not reachable, or it is not on this machine.
- * @returns {{ port: number, id: string, name: string }[]}
+ * @returns {{ port: number, id: string, name: string, image: string, address: string }[]}
  */
 export function listContainerPorts() {
   try {
     const endpoint = docker(['context', 'inspect', '--format', '{{.Endpoints.docker.Host}}']).trim();
     if (!isLocalEndpoint(endpoint)) return [];
-    return parseDockerPs(docker(['ps', '--format', '{{.ID}}\t{{.Names}}\t{{.Ports}}']));
+    return parseDockerPs(docker(['ps', '--format', '{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Ports}}']));
   } catch {
     return [];
   }
 }
 
-/** Parse `docker ps` rows like: `a1b2c3\tweb\t0.0.0.0:8080->80/tcp, :::8080->80/tcp` */
+/** Parse `docker ps` rows like: `a1b2c3\tweb\tnginx:1.27\t0.0.0.0:8080->80/tcp, :::8080->80/tcp` */
 export function parseDockerPs(out) {
   const results = [];
   for (const line of out.split(/\r?\n/)) {
-    const [id, name, ports = ''] = line.split('\t');
+    const [id, name, image = '', ports = ''] = line.split('\t');
     if (!id || !name) continue;
     const seen = new Set();
-    for (const m of ports.matchAll(/:(\d+)(?:-(\d+))?->/g)) {
-      const start = Number(m[1]);
-      const end = Number(m[2] ?? m[1]);
+    for (const mapping of ports.split(', ')) {
+      const m = mapping.match(/^(.*):(\d+)(?:-(\d+))?->/); // greedy: ":::8080->" gives address "::"
+      if (!m) continue;
+      const start = Number(m[2]);
+      const end = Number(m[3] ?? m[2]);
       for (let port = start; port <= end; port++) {
         if (seen.has(port)) continue;
         seen.add(port);
-        results.push({ port, id, name });
+        results.push({ port, id, name, image, address: m[1] });
       }
     }
   }
@@ -56,6 +58,9 @@ export function parseDockerPs(out) {
 /** Host-side helper processes that forward traffic into containers. Killing them breaks Docker. */
 export const isDockerProxy = (name = '') => /docker|vpnkit|wslrelay/i.test(name);
 
+/** @returns {string} how the container was stopped */
 export function stopContainer(id, force) {
-  exec('docker', [force ? 'kill' : 'stop', id], { stdio: ['ignore', 'ignore', 'pipe'] });
+  const verb = force ? 'kill' : 'stop';
+  exec('docker', [verb, id], { stdio: ['ignore', 'ignore', 'pipe'] });
+  return `docker ${verb}`;
 }

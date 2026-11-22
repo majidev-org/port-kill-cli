@@ -45,12 +45,12 @@ Each scenario starts a throwaway server with `node -e "require('http').createSer
    ```bash
    pk 3000 --info            # or: kp 3000 --info
    ```
-   *Expected:* `ℹ Port 3000 is in use by node (PID <number>)`
+   *Expected:* `ℹ Port 3000 is in use by node (PID <number>)  localhost only` (or `all interfaces` if the server listens on `0.0.0.0`), followed on Linux/macOS by a dim `user <you> · cmd node …` line
 3. Kill it:
    ```bash
    pk 3000                   # or: kp 3000
    ```
-   *Expected:* `✔ Freed port 3000 — killed node (PID <number>)`
+   *Expected:* `✔ Freed port 3000 — killed node (PID <number>) via SIGTERM (graceful)`
 4. Run `pk 3000` (or `kp 3000`) again. *Expected:* `• Port 3000 is already free.`
 
 ### Test B: Multiple Ports & Ranges (`pk 4001-4003` / `kp 4001-4003`)
@@ -59,14 +59,14 @@ Each scenario starts a throwaway server with `node -e "require('http').createSer
    ```bash
    pk 4001-4003              # or: kp 4001-4003
    ```
-   *Expected:* three green `✔ Freed port …` lines.
+   *Expected:* three green `✔ Freed port …` lines, then `✔ Freed 3 of 3 ports`.
 
 ### Test C: Stubborn Process (`--force`)
 1. Start a process that ignores `SIGTERM`:
    ```bash
    node -e "process.on('SIGTERM', () => {}); require('http').createServer().listen(5000)" &
    ```
-2. Run `pk 5000` (or `kp 5000`). It sends `SIGTERM`, waits 300 ms, confirms the PID still holds the port, then escalates to `SIGKILL`. *Expected:* `✔ Freed port 5000 …`
+2. Run `pk 5000` (or `kp 5000`). It sends `SIGTERM`, waits 300 ms, confirms the PID still holds the port, then escalates to `SIGKILL`. *Expected:* `✔ Freed port 5000 … via SIGTERM, then SIGKILL` (a server that ignores `SIGTERM`; a normal one reports `SIGTERM (graceful)`)
 3. Repeat step 1, then run `pk 5000 --force` (or `kp 5000 --force`) for an immediate `SIGKILL`.
 
 ### Test D: Invalid Input & Edge Cases
@@ -92,7 +92,7 @@ pk < /dev/null # (or kp < /dev/null) prints the help menu (no interactive prompt
    ```bash
    pk 8099                   # or: kp 8099
    ```
-   *Expected:* `✔ Freed port 8099 — stopped Docker container pk-test (<id>)`
+   *Expected:* `✔ Freed port 8099 — stopped Docker container pk-test (<id>) via docker stop`
 4. Remote contexts are ignored: with the container running again, `DOCKER_HOST=tcp://203.0.113.1:2375 pk 8099 --info` (or `kp`) must say `Port 8099 is already free.` and never touch the container.
 
 ### Test F: Interactive Mode

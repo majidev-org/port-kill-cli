@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { parseArgs } from '../src/args.js';
 import { isLocalEndpoint, parseDockerPs } from '../src/docker.js';
 import { parseSelection } from '../src/interactive.js';
-import { parseLsof, parseNetstat, parseSs } from '../src/listeners.js';
+import { parseLsof, parseNetstat, parseSs, reach } from '../src/listeners.js';
 import { printable } from '../src/targets.js';
 
 test('parseArgs: ports, ranges, flags', () => {
@@ -22,9 +22,9 @@ test('parseArgs: rejects bad input', () => {
 test('parseLsof', () => {
   const out = 'p123\ncnode\nf20\nn*:3000\nf21\nn[::1]:3000\np456\ncpython3\nf3\nn127.0.0.1:8000\n';
   assert.deepEqual(parseLsof(out), [
-    { port: 3000, pid: 123, name: 'node' },
-    { port: 3000, pid: 123, name: 'node' },
-    { port: 8000, pid: 456, name: 'python3' },
+    { port: 3000, pid: 123, name: 'node', address: '*' },
+    { port: 3000, pid: 123, name: 'node', address: '[::1]' },
+    { port: 8000, pid: 456, name: 'python3', address: '127.0.0.1' },
   ]);
 });
 
@@ -34,7 +34,7 @@ test('parseSs', () => {
     'LISTEN 0      511    *:3000             *:*               users:(("node",pid=123,fd=20))',
     'LISTEN 0      4096   127.0.0.53%lo:53   0.0.0.0:*',
   ].join('\n');
-  assert.deepEqual(parseSs(out), [{ port: 3000, pid: 123, name: 'node' }]);
+  assert.deepEqual(parseSs(out), [{ port: 3000, pid: 123, name: 'node', address: '*' }]);
 });
 
 test('parseNetstat: listening sockets only, IPv4 and IPv6', () => {
@@ -46,22 +46,22 @@ test('parseNetstat: listening sockets only, IPv4 and IPv6', () => {
     '  UDP    0.0.0.0:5353           *:*                                    77',
   ].join('\r\n');
   assert.deepEqual(parseNetstat(out), [
-    { port: 3000, pid: 1234 },
-    { port: 5173, pid: 99 },
+    { port: 3000, pid: 1234, address: '0.0.0.0' },
+    { port: 5173, pid: 99, address: '[::]' },
   ]);
 });
 
 test('parseDockerPs: published ports, ranges, IPv6 duplicates', () => {
   const out = [
-    'a1b2\tweb\t0.0.0.0:8080->80/tcp, :::8080->80/tcp',
-    'c3d4\tdb\t5432/tcp',
-    'e5f6\tmulti\t0.0.0.0:5000-5001->5000-5001/tcp, [::]:9229->9229/tcp',
+    'a1b2\tweb\tnginx:1.27\t0.0.0.0:8080->80/tcp, :::8080->80/tcp',
+    'c3d4\tdb\tpostgres\t5432/tcp',
+    'e5f6\tmulti\tapp\t127.0.0.1:5000-5001->5000-5001/tcp, [::]:9229->9229/tcp',
   ].join('\n');
   assert.deepEqual(parseDockerPs(out), [
-    { port: 8080, id: 'a1b2', name: 'web' },
-    { port: 5000, id: 'e5f6', name: 'multi' },
-    { port: 5001, id: 'e5f6', name: 'multi' },
-    { port: 9229, id: 'e5f6', name: 'multi' },
+    { port: 8080, id: 'a1b2', name: 'web', image: 'nginx:1.27', address: '0.0.0.0' },
+    { port: 5000, id: 'e5f6', name: 'multi', image: 'app', address: '127.0.0.1' },
+    { port: 5001, id: 'e5f6', name: 'multi', image: 'app', address: '127.0.0.1' },
+    { port: 9229, id: 'e5f6', name: 'multi', image: 'app', address: '[::]' },
   ]);
 });
 
@@ -88,4 +88,13 @@ test('isLocalEndpoint: only a daemon on this machine may own local ports', () =>
   for (const remote of ['tcp://203.0.113.1:2375', 'ssh://user@build-host', 'tcp://localhost.evil.example:2375', 'http://localhost:2375', '', 'garbage']) {
     assert.equal(isLocalEndpoint(remote), false, remote);
   }
+});
+
+test('reach: who can connect to a bind address', () => {
+  assert.equal(reach('*'), 'all interfaces');
+  assert.equal(reach('0.0.0.0'), 'all interfaces');
+  assert.equal(reach('[::]'), 'all interfaces');
+  assert.equal(reach('127.0.0.1'), 'localhost only');
+  assert.equal(reach('[::1]'), 'localhost only');
+  assert.equal(reach('192.168.1.5'), '192.168.1.5');
 });

@@ -1,13 +1,15 @@
 import process from 'node:process';
 import { createInterface, emitKeypressEvents } from 'node:readline';
 import { c } from './colors.js';
-import { describe } from './targets.js';
+import { describe, extra, where } from './targets.js';
 
 export function printTargets(targets) {
   const width = String(targets.length).length;
   targets.forEach((t, i) => {
     const num = c.cyan(String(i + 1).padStart(width));
-    console.log(`  ${num}  ${c.bold(`:${t.port}`.padEnd(7))} ${describe(t)}`);
+    console.log(`  ${num}  ${c.bold(`:${t.port}`.padEnd(7))} ${describe(t)}  ${where(t)}`);
+    const more = extra(t);
+    if (more) console.log(c.dim(`  ${' '.repeat(width)}  ${' '.repeat(8)} ${more}`));
   });
 }
 
@@ -48,7 +50,7 @@ function pickCheckboxes(targets) {
   let drawn = 0;
 
   const render = () => {
-    const height = Math.max(3, Math.min(targets.length, (stdout.rows || 24) - 4));
+    const height = Math.max(3, Math.min(targets.length, (stdout.rows || 24) - 5));
     if (cursor < top) top = cursor;
     if (cursor >= top + height) top = cursor - height + 1;
 
@@ -56,9 +58,10 @@ function pickCheckboxes(targets) {
       const index = top + i;
       const pointer = index === cursor ? c.cyan('❯') : ' ';
       const box = checked.has(index) ? c.green('[x]') : c.dim('[ ]');
-      return `${pointer} ${box} ${c.bold(`:${t.port}`.padEnd(7))} ${describe(t)}`;
+      return `${pointer} ${box} ${c.bold(`:${t.port}`.padEnd(7))} ${describe(t)}  ${where(t)}`;
     });
-    rows.push('', c.dim(`${checked.size}/${targets.length} selected · space toggle · a all · enter confirm · q cancel`));
+    // details of the highlighted row; always one line so the redraw height stays constant
+    rows.push(c.dim(`  ${extra(targets[cursor])}`), c.dim(`${checked.size}/${targets.length} selected · space toggle · a all · enter confirm · q cancel`));
 
     if (drawn) stdout.write(`\x1b[${drawn}F\x1b[J`); // back to the first row, clear everything below
     stdout.write(`${rows.join('\n')}\n`);
