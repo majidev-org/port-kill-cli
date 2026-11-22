@@ -22,23 +22,37 @@
     "src/"
   ],
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "prepublishOnly": "npm test"
   },
   "keywords": [
     "port",
     "kill",
     "kill-port",
+    "port-kill",
+    "port-killer",
+    "free-port",
     "pk",
     "cli",
     "process",
+    "cross-platform",
     "windows",
     "macos",
     "linux",
-    "docker"
+    "docker",
+    "lsof",
+    "netstat",
+    "zero-dependencies"
   ],
   "engines": {
     "node": ">=18.0.0"
   },
   "license": "MIT",
-  "author": "Majid Ali (https://majidev.netlify.app)"
+  "author": {
+    "name": "Majid Ali",
+    "url": "https://majidev.netlify.app"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }
