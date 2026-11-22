@@ -64,21 +64,23 @@ export function addProcessDetails(targets) {
 // wrong, so when no tool could look, listing fails loudly instead of returning [].
 const couldNotLook = (err) => ['ENOENT', 'ETIMEDOUT', 'ENOBUFS'].includes(err.code);
 
+const listLsof = () => parseLsof(run('lsof', ['-nP', '-iTCP', '-sTCP:LISTEN', '-F', 'pcn']));
+const listSs = () => parseSs(run('ss', ['-tlnp']));
+
+// ss is about twice as fast as lsof, so Linux tries it first; lsof is the fallback (and the macOS tool).
 function listUnix() {
-  let lsofError;
-  try {
-    return parseLsof(run('lsof', ['-nP', '-iTCP', '-sTCP:LISTEN', '-F', 'pcn']));
-  } catch (err) {
-    lsofError = err; // missing (minimal Linux images) or found nothing: fall back to ss
-  }
-  try {
-    return parseSs(run('ss', ['-tlnp']));
-  } catch (err) {
-    if (couldNotLook(lsofError) && couldNotLook(err)) {
-      throw new Error('could not list listening ports: lsof/ss is missing or timed out (install lsof)');
+  const errors = [];
+  for (const list of process.platform === 'linux' ? [listSs, listLsof] : [listLsof]) {
+    try {
+      return list();
+    } catch (err) {
+      errors.push(err); // missing, or lsof's exit 1 for "nothing listens": try the next tool
     }
-    return [];
   }
+  if (errors.every(couldNotLook)) {
+    throw new Error('could not list listening ports: lsof/ss is missing or timed out (install lsof)');
+  }
+  return [];
 }
 
 function listWindows() {

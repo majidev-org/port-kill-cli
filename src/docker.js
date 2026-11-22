@@ -1,7 +1,6 @@
-import { exec } from './exec.js';
+import { exec, execAsync } from './exec.js';
 
-const docker = (args) =>
-  exec('docker', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 3000 });
+const docker = (args) => execAsync('docker', args, { timeout: 3000 });
 
 /**
  * Only a daemon on this machine publishes this machine's ports. A remote context (DOCKER_HOST or
@@ -21,13 +20,13 @@ export function isLocalEndpoint(endpoint) {
 /**
  * List host ports published by running Docker containers.
  * Returns [] when Docker is not installed, the daemon is not reachable, or it is not on this machine.
- * @returns {{ port: number, id: string, name: string, image: string, address: string }[]}
+ * @returns {Promise<{ port: number, id: string, name: string, image: string, address: string }[]>}
  */
-export function listContainerPorts() {
+export async function listContainerPorts() {
   try {
-    const endpoint = docker(['context', 'inspect', '--format', '{{.Endpoints.docker.Host}}']).trim();
+    const endpoint = (await docker(['context', 'inspect', '--format', '{{.Endpoints.docker.Host}}'])).trim();
     if (!isLocalEndpoint(endpoint)) return [];
-    return parseDockerPs(docker(['ps', '--format', '{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Ports}}']));
+    return parseDockerPs(await docker(['ps', '--format', '{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Ports}}']));
   } catch {
     return [];
   }

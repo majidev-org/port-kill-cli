@@ -31,7 +31,7 @@ Only the latest published version is supported; fixes ship as a new patch releas
 
 ## Known limitations
 
-- Killing by PID can never be perfectly atomic. The re-check above shrinks the race to milliseconds but cannot remove it.
+- Killing by PID can never be perfectly atomic. The re-check above shrinks the race to milliseconds but cannot remove it. When several ports are freed at once they share one port scan (reused for at most 100 ms), which is fresh enough for both checks because the graceful wait between them is 300 ms.
 - The Windows `System32` lookup is untested on a real Windows machine.
 - Windows always uses `taskkill /T /F` (whole process tree, forced); there is no graceful step there.
 - Ranges are not capped: `pk 1-65535` frees everything you own that listens. Nothing outside your own user is touched without `sudo`/Administrator.

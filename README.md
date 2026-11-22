@@ -17,17 +17,17 @@ Stop Googling `lsof` vs `netstat`—just run `pk 3000` (`kp`, `kill-port` and `p
 
 ## Features
 - **Zero Dependencies:** Instant startup with `npx`—no bloated `node_modules` tree.
-- **Cross-Platform:** Works seamlessly on Linux (`lsof` / `ss`), macOS (`lsof`), and Windows (`netstat` / `taskkill`).
+- **Cross-Platform:** Works seamlessly on Linux (`ss`, falling back to `lsof`), macOS (`lsof`), and Windows (`netstat` / `taskkill`).
 - **Safe & Graceful:** On Linux/macOS sends `SIGTERM` first so servers clean up properly, escalating to `SIGKILL` only if needed. Before every signal it re-checks that the PID still holds the port, so a recycled PID is never killed by mistake. Windows has no graceful signal for server processes, so `taskkill /T /F` is always used there.
 - **Process Info:** Shows the process name and PID, who can reach the port (`all interfaces` or `localhost only`), and on Linux/macOS the owning user and full command line. Docker containers show their image.
 - **Clear Results:** Every freed port says how it was stopped (`SIGTERM (graceful)`, `SIGTERM, then SIGKILL`, `SIGKILL (forced)`, `taskkill /T /F`, `docker stop`) and multi-port runs end with a `Freed 3 of 4 ports` summary.
-- **Multi-Port & Ranges:** Kill single ports, multiple ports, or port ranges in one command.
+- **Multi-Port & Ranges:** Kill single ports, multiple ports, or port ranges in one command. Ports are freed concurrently, so five servers take about half a second, not five times as long. Large ranges print one summary line for the free ports instead of one line each.
 - **Docker-Aware:** Ports published by a Docker container are freed with `docker stop` instead of killing Docker's proxy (which would break Docker networking). Remote Docker contexts (`DOCKER_HOST=tcp://…`, `ssh://…`) are ignored, so a container on another machine is never stopped because its port number matches.
 - **Interactive Mode:** Run `pk` with no arguments to see every port in use and tick the ones to free.
 
 ## Requirements
 - [Node.js](https://nodejs.org) 18 or newer.
-- Linux/macOS: [`lsof`](https://man7.org/linux/man-pages/man8/lsof.8.html) (Linux falls back to [`ss`](https://man7.org/linux/man-pages/man8/ss.8.html) when `lsof` is missing).
+- Linux: [`ss`](https://man7.org/linux/man-pages/man8/ss.8.html) (falls back to [`lsof`](https://man7.org/linux/man-pages/man8/lsof.8.html) when `ss` is missing). macOS: `lsof`. Both also use `ps` for the owner and command.
 - Windows: `netstat`, `tasklist` and `taskkill`, which ship with the OS.
 - Optional: [Docker](https://docs.docker.com/get-docker/) to detect and stop containers that publish ports.
 

@@ -14,12 +14,14 @@ import { addProcessDetails, listListeners, reach } from './listeners.js';
  * Find everything occupying the given ports (or all listening ports when none are given).
  * Ports published by a container map to the container, not to Docker's proxy process.
  * @param {number[]} [ports]
- * @returns {Target[]}
+ * @returns {Promise<Target[]>}
  */
-export function findTargets(ports) {
-  const containers = listContainerPorts();
+export async function findTargets(ports) {
+  const pendingContainers = listContainerPorts(); // docker runs in the background while the sync port listing below blocks
+  const listeners = listListeners();
+  const containers = await pendingContainers;
   const dockerPorts = new Set(containers.map((t) => t.port));
-  const processes = listListeners().filter((l) => !(dockerPorts.has(l.port) && isDockerProxy(l.name)));
+  const processes = listeners.filter((l) => !(dockerPorts.has(l.port) && isDockerProxy(l.name)));
 
   const wanted = ports?.length ? new Set(ports) : null;
   const found = [
@@ -64,9 +66,18 @@ export function extra(t) {
   return parts.join(' · ');
 }
 
-const holdsPort = (t) => listListeners().some((l) => l.pid === t.pid && l.port === t.port);
+// Freeing several targets at once re-checks them at the same moments (before SIGTERM, before SIGKILL).
+// One scan shared for 100 ms serves all of them instead of one full scan each; it never outlives the
+// 300 ms graceful wait, so the escalation check always sees fresh data.
+let scan = { at: 0, listeners: [] };
+function recentListeners() {
+  if (Date.now() - scan.at > 100) scan = { listeners: listListeners(), at: Date.now() };
+  return scan.listeners;
+}
 
-/** @returns {Promise<string> | string} how the target was stopped, for reporting */
-export function freeTarget(t, force) {
+const holdsPort = (t) => recentListeners().some((l) => l.pid === t.pid && l.port === t.port);
+
+/** @returns {Promise<string>} how the target was stopped, for reporting. Async so a sync throw becomes a rejection. */
+export async function freeTarget(t, force) {
   return t.kind === 'container' ? stopContainer(t.id, force) : killPid(t.pid, force, () => holdsPort(t));
 }

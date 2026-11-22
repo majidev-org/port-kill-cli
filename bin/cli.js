@@ -50,11 +50,16 @@ async function freeAll(targets, force) {
     groups.get(key).ports.push(t.port);
   }
 
+  // Free everything concurrently (the graceful SIGTERM wait overlaps), but report in port order.
+  const entries = [...groups.values()];
+  const outcomes = await Promise.allSettled(entries.map(({ target }) => freeTarget(target, force)));
+
   let freed = 0;
-  for (const { target, ports } of groups.values()) {
+  for (const [i, { target, ports }] of entries.entries()) {
     const portList = c.bold(ports.join(', '));
     try {
-      const how = await freeTarget(target, force);
+      if (outcomes[i].status === 'rejected') throw outcomes[i].reason;
+      const how = outcomes[i].value;
       freed += ports.length;
       const verb = target.kind === 'container' ? 'stopped' : 'killed';
       console.log(`${c.green('✔')} Freed port ${portList} ${c.dim(`— ${verb}`)} ${describe(target)} ${c.dim(`via ${how}`)}`);
@@ -88,16 +93,19 @@ async function main() {
   // No ports: list everything (--info) or pick interactively; scripts without a TTY get help
   if (opts.ports.length === 0) {
     if (!opts.info && !process.stdin.isTTY) return printHelp();
-    const targets = findTargets();
+    const targets = await findTargets();
     if (targets.length === 0) return console.log(c.dim('• No ports in use.'));
     if (opts.info) return printTargets(targets);
     return freeAll(await pickTargets(targets), opts.force);
   }
 
-  const targets = findTargets(opts.ports);
+  const targets = await findTargets(opts.ports);
   const busy = new Set(targets.map((t) => t.port));
-  for (const port of opts.ports) {
-    if (!busy.has(port)) console.log(c.dim(`• Port ${port} is already free.`));
+  const free = opts.ports.filter((port) => !busy.has(port));
+  if (free.length <= 10) {
+    for (const port of free) console.log(c.dim(`• Port ${port} is already free.`));
+  } else {
+    console.log(c.dim(`• ${free.length} of ${opts.ports.length} ports are already free.`)); // pk 1-65535 must not print 65k lines
   }
 
   if (opts.info) {
