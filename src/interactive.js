@@ -219,11 +219,12 @@ export async function pickTargets(targets, { children, tree }) {
  */
 export async function confirmParents(targets) {
   const table = readProcessTable();
-  const plans = targets
+  const all = targets
     .filter((t) => t.kind === 'process')
-    .map((t) => ({ t, plan: planKill(table, t.pid, 'parent', process.pid) }))
-    .filter(({ plan }) => plan.parent);
+    .map((t) => ({ t, plan: planKill(table, t.pid, 'parent', process.pid) }));
+  const plans = all.filter(({ plan }) => plan.parent);
   if (plans.length === 0) return true;
+  const spared = [...new Set(all.filter(({ plan }) => !plan.parent && plan.note).map(({ plan }) => plan.note))];
   if (!process.stdin.isTTY) throw new Error('--tree asks before stopping a parent, but there is no terminal to ask on. Pass --yes to skip the question.');
 
   console.log(c.yellow('\n! --tree will also stop these parents, and everything running under them:\n'));
@@ -232,6 +233,7 @@ export async function confirmParents(targets) {
     const more = others > 0 ? c.dim(` + ${others} other process${others === 1 ? '' : 'es'}`) : '';
     console.log(`  ${c.bold(`:${t.port}`)}  ${printable(t.name)} ${c.dim(`(PID ${t.pid})`)} ${c.dim('→')} ${c.bold(printable(plan.parent.name))} ${c.dim(`(PID ${plan.parent.pid})`)}${more}`);
   }
+  for (const note of spared) console.log(c.dim(`\n  Not stopped: ${printable(note)}`));
   console.log(c.dim('\n  Unsaved work in those programs is lost.'));
 
   const rl = createInterface({ input: process.stdin, output: process.stdout });

@@ -63,7 +63,8 @@ export function planKill(table, pid, scope, selfPid) {
     const ppid = table.get(pid)?.ppid;
     const name = table.get(ppid)?.name;
     if (name === undefined) note = 'parent not found';
-    else if (ppid <= 1 || mine.has(ppid) || PROTECTED_PARENTS.has(name)) note = `parent ${name} (PID ${ppid}) left running`;
+    else if (ppid <= 1 || PROTECTED_PARENTS.has(name)) note = `parent ${name} (PID ${ppid}) left running: protected`;
+    else if (mine.has(ppid)) note = `parent ${name} (PID ${ppid}) left running: pk is running inside it`;
     else {
       root = ppid;
       parent = { pid: ppid, name };

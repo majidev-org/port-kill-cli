@@ -155,8 +155,8 @@ test('planKill: the holder alone is the default, and nothing is looked up', () =
 });
 
 test('planKill: spares init, shells and session managers as parent', () => {
-  assert.deepEqual(planKill(table, 20, 'parent', 60), { pids: [20, 30, 31, 40], parent: undefined, note: 'parent systemd (PID 10) left running' });
-  assert.match(planKill(table, 60, 'parent', 999).note, /parent bash \(PID 50\) left running/);
+  assert.deepEqual(planKill(table, 20, 'parent', 60), { pids: [20, 30, 31, 40], parent: undefined, note: 'parent systemd (PID 10) left running: protected' });
+  assert.match(planKill(table, 60, 'parent', 999).note, /parent bash \(PID 50\) left running: protected/);
   assert.equal(planKill(table, 999, 'parent', 60).note, 'parent not found');
 });
 
@@ -166,7 +166,7 @@ test('planKill: never signals pk or the processes it runs under, nor anything be
   assert.deepEqual(planKill(own, 10, 'children', 60).pids.sort((a, b) => a - b), [10, 55]);
   // a parent that pk runs under is spared even though it is not a shell
   const editor = parseProcessTable(['20 1 code', '30 20 code', '40 30 pk'].join('\n'));
-  assert.deepEqual(planKill(editor, 30, 'parent', 40), { pids: [30], parent: undefined, note: 'parent code (PID 20) left running' });
+  assert.deepEqual(planKill(editor, 30, 'parent', 40), { pids: [30], parent: undefined, note: 'parent code (PID 20) left running: pk is running inside it' });
 });
 
 test('scopeOf: the parent includes the children, which include the holder', () => {
