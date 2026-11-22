@@ -4,6 +4,7 @@ import { parseArgs } from '../src/args.js';
 import { parseDockerPs } from '../src/docker.js';
 import { parseSelection } from '../src/interactive.js';
 import { parseLsof, parseNetstat, parseSs } from '../src/listeners.js';
+import { printable } from '../src/targets.js';
 
 test('parseArgs: ports, ranges, flags', () => {
   const opts = parseArgs(['3000', '3000-3002', '-f', '--info']);
@@ -70,4 +71,8 @@ test('parseSelection', () => {
   assert.deepEqual(parseSelection('a', 3), [0, 1, 2]);
   assert.throws(() => parseSelection('6', 5));
   assert.throws(() => parseSelection('x', 5));
+});
+
+test('printable: neutralizes terminal escapes and newlines in untrusted names', () => {
+  assert.equal(printable('node\x1b[2J\x9b0m\n✔ Freed'), 'node [2J 0m ✔ Freed');
 });

@@ -1,11 +1,21 @@
-import { execFileSync } from 'node:child_process';
 import process from 'node:process';
+import { exec } from './exec.js';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export async function killPid(pid, force) {
+/**
+ * Kill a process, but only while it still holds the port it was found on. Pids are reused, and the
+ * target list can be stale (the interactive picker waits on the user), so `stillHolds` is checked
+ * right before signalling and again before escalating to SIGKILL.
+ * @param {number} pid
+ * @param {boolean} force
+ * @param {() => boolean} stillHolds
+ */
+export async function killPid(pid, force, stillHolds) {
+  if (!stillHolds()) throw new Error('process is no longer listening on that port (already exited?)');
+
   if (process.platform === 'win32') {
-    execFileSync('taskkill', ['/PID', String(pid), '/T', '/F'], { stdio: ['ignore', 'ignore', 'pipe'] });
+    exec('taskkill', ['/PID', String(pid), '/T', '/F'], { stdio: ['ignore', 'ignore', 'pipe'] });
     return;
   }
 
@@ -19,6 +29,6 @@ export async function killPid(pid, force) {
   await sleep(300);
   try {
     process.kill(pid, 0); // Throws ESRCH if process already exited
-    process.kill(pid, 'SIGKILL');
+    if (stillHolds()) process.kill(pid, 'SIGKILL');
   } catch {}
 }

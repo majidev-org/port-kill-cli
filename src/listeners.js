@@ -1,9 +1,9 @@
-import { execFileSync } from 'node:child_process';
 import process from 'node:process';
 import { isValidPort } from './args.js';
+import { exec } from './exec.js';
 
 const run = (cmd, args) =>
-  execFileSync(cmd, args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 5000 });
+  exec(cmd, args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 5000 });
 
 const portOf = (addr = '') => {
   const port = Number(addr.slice(addr.lastIndexOf(':') + 1));

@@ -32,11 +32,19 @@ export function findTargets(ports) {
 /** Identity of the thing to stop; one container or process can hold several ports. */
 export const targetKey = (t) => (t.kind === 'container' ? `container:${t.id}` : `process:${t.pid}`);
 
+/**
+ * Make untrusted text (a process can name itself anything) safe to print: control characters,
+ * including ESC and newlines, could otherwise rewrite the terminal or forge output lines.
+ */
+export const printable = (text) => String(text).replace(/[\x00-\x1f\x7f-\x9f]/g, ' ');
+
 export const describe = (t) =>
   t.kind === 'container'
-    ? `Docker container ${c.bold(t.name)} ${c.dim(`(${t.id})`)}`
-    : `${c.bold(t.name)} ${c.dim(`(PID ${t.pid})`)}`;
+    ? `Docker container ${c.bold(printable(t.name))} ${c.dim(`(${t.id})`)}`
+    : `${c.bold(printable(t.name))} ${c.dim(`(PID ${t.pid})`)}`;
+
+const holdsPort = (t) => listListeners().some((l) => l.pid === t.pid && l.port === t.port);
 
 export function freeTarget(t, force) {
-  return t.kind === 'container' ? stopContainer(t.id, force) : killPid(t.pid, force);
+  return t.kind === 'container' ? stopContainer(t.id, force) : killPid(t.pid, force, () => holdsPort(t));
 }

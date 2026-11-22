@@ -5,7 +5,7 @@ import process from 'node:process';
 import { parseArgs } from '../src/args.js';
 import { c } from '../src/colors.js';
 import { pickTargets, printTargets } from '../src/interactive.js';
-import { describe, findTargets, freeTarget, targetKey } from '../src/targets.js';
+import { describe, findTargets, freeTarget, printable, targetKey } from '../src/targets.js';
 
 function printHelp() {
   console.log(`
@@ -38,7 +38,7 @@ function errorMessage(err) {
   if (err.code === 'EPERM' || /access is denied|permission denied/i.test(detail)) {
     return `permission denied. Try running with ${c.bold('sudo')} or as Administrator.`;
   }
-  return detail;
+  return printable(detail);
 }
 
 /** Free the given targets, reporting each container/process once with all ports it held. */

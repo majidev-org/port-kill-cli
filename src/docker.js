@@ -1,4 +1,4 @@
-import { execFileSync } from 'node:child_process';
+import { exec } from './exec.js';
 
 /**
  * List host ports published by running Docker containers.
@@ -7,7 +7,7 @@ import { execFileSync } from 'node:child_process';
  */
 export function listContainerPorts() {
   try {
-    const out = execFileSync('docker', ['ps', '--format', '{{.ID}}\t{{.Names}}\t{{.Ports}}'], {
+    const out = exec('docker', ['ps', '--format', '{{.ID}}\t{{.Names}}\t{{.Ports}}'], {
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'ignore'],
       timeout: 3000,
@@ -42,5 +42,5 @@ export function parseDockerPs(out) {
 export const isDockerProxy = (name = '') => /docker|vpnkit|wslrelay/i.test(name);
 
 export function stopContainer(id, force) {
-  execFileSync('docker', [force ? 'kill' : 'stop', id], { stdio: ['ignore', 'ignore', 'pipe'] });
+  exec('docker', [force ? 'kill' : 'stop', id], { stdio: ['ignore', 'ignore', 'pipe'] });
 }
