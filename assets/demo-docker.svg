@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="854" height="336" viewBox="0 0 854 336" role="img" aria-labelledby="t d">
+<title id="t">cross-port-kill: pk 8080</title>
+<desc id="d">A terminal frees a port published by Docker. pk 8080 --info shows the container api running nginx:1.27 on port 8080, listed as a container rather than as the Docker proxy process. pk 8080 then frees the port by stopping the container via docker stop.</desc>
+<style>
+text{font-family:'JetBrains Mono','SF Mono',Menlo,'DejaVu Sans Mono',Consolas,monospace;font-size:15px;white-space:pre}
+g{opacity:0;animation-duration:11.00s;animation-iteration-count:infinite;animation-timing-function:step-end}
+.k0{animation-name:k0}@keyframes k0{0%{opacity:1}4.545%{opacity:0}100%{opacity:0}}
+.k1{animation-name:k1}@keyframes k1{0%{opacity:0}4.545%{opacity:1}5.182%{opacity:0}100%{opacity:0}}
+.k2{animation-name:k2}@keyframes k2{0%{opacity:0}5.182%{opacity:1}5.818%{opacity:0}100%{opacity:0}}
+.k3{animation-name:k3}@keyframes k3{0%{opacity:0}5.818%{opacity:1}6.455%{opacity:0}100%{opacity:0}}
+.k4{animation-name:k4}@keyframes k4{0%{opacity:0}6.455%{opacity:1}7.091%{opacity:0}100%{opacity:0}}
+.k5{animation-name:k5}@keyframes k5{0%{opacity:0}7.091%{opacity:1}7.727%{opacity:0}100%{opacity:0}}
+.k6{animation-name:k6}@keyframes k6{0%{opacity:0}7.727%{opacity:1}8.364%{opacity:0}100%{opacity:0}}
+.k7{animation-name:k7}@keyframes k7{0%{opacity:0}8.364%{opacity:1}9%{opacity:0}100%{opacity:0}}
+.k8{animation-name:k8}@keyframes k8{0%{opacity:0}9%{opacity:1}9.636%{opacity:0}100%{opacity:0}}
+.k9{animation-name:k9}@keyframes k9{0%{opacity:0}9.636%{opacity:1}10.273%{opacity:0}100%{opacity:0}}
+.k10{animation-name:k10}@keyframes k10{0%{opacity:0}10.273%{opacity:1}10.909%{opacity:0}100%{opacity:0}}
+.k11{animation-name:k11}@keyframes k11{0%{opacity:0}10.909%{opacity:1}11.545%{opacity:0}100%{opacity:0}}
+.k12{animation-name:k12}@keyframes k12{0%{opacity:0}11.545%{opacity:1}12.182%{opacity:0}100%{opacity:0}}
+.k13{animation-name:k13}@keyframes k13{0%{opacity:0}12.182%{opacity:1}12.818%{opacity:0}100%{opacity:0}}
+.k14{animation-name:k14}@keyframes k14{0%{opacity:0}12.818%{opacity:1}16%{opacity:0}100%{opacity:0}}
+.k15{animation-name:k15}@keyframes k15{0%{opacity:0}16%{opacity:1}100%{opacity:1}}
+.k16{animation-name:k16}@keyframes k16{0%{opacity:0}34.182%{opacity:1}38.727%{opacity:0}100%{opacity:0}}
+.k17{animation-name:k17}@keyframes k17{0%{opacity:0}38.727%{opacity:1}39.364%{opacity:0}100%{opacity:0}}
+.k18{animation-name:k18}@keyframes k18{0%{opacity:0}39.364%{opacity:1}40%{opacity:0}100%{opacity:0}}
+.k19{animation-name:k19}@keyframes k19{0%{opacity:0}40%{opacity:1}40.636%{opacity:0}100%{opacity:0}}
+.k20{animation-name:k20}@keyframes k20{0%{opacity:0}40.636%{opacity:1}41.273%{opacity:0}100%{opacity:0}}
+.k21{animation-name:k21}@keyframes k21{0%{opacity:0}41.273%{opacity:1}41.909%{opacity:0}100%{opacity:0}}
+.k22{animation-name:k22}@keyframes k22{0%{opacity:0}41.909%{opacity:1}42.545%{opacity:0}100%{opacity:0}}
+.k23{animation-name:k23}@keyframes k23{0%{opacity:0}42.545%{opacity:1}45.727%{opacity:0}100%{opacity:0}}
+.k24{animation-name:k24}@keyframes k24{0%{opacity:0}45.727%{opacity:1}100%{opacity:1}}
+.k25{animation-name:k25}@keyframes k25{0%{opacity:0}45.727%{opacity:1}57.545%{opacity:0}100%{opacity:0}}
+.k26{animation-name:k26}@keyframes k26{0%{opacity:0}57.545%{opacity:1}100%{opacity:1}}
+.k27{animation-name:k27}@keyframes k27{0%{opacity:0}58.455%{opacity:1}63%{opacity:0}100%{opacity:0}}
+.k28{animation-name:k28}@keyframes k28{0%{opacity:0}63%{opacity:1}63.636%{opacity:0}100%{opacity:0}}
+.k29{animation-name:k29}@keyframes k29{0%{opacity:0}63.636%{opacity:1}64.273%{opacity:0}100%{opacity:0}}
+.k30{animation-name:k30}@keyframes k30{0%{opacity:0}64.273%{opacity:1}64.909%{opacity:0}100%{opacity:0}}
+.k31{animation-name:k31}@keyframes k31{0%{opacity:0}64.909%{opacity:1}65.545%{opacity:0}100%{opacity:0}}
+.k32{animation-name:k32}@keyframes k32{0%{opacity:0}65.545%{opacity:1}66.182%{opacity:0}100%{opacity:0}}
+.k33{animation-name:k33}@keyframes k33{0%{opacity:0}66.182%{opacity:1}66.818%{opacity:0}100%{opacity:0}}
+.k34{animation-name:k34}@keyframes k34{0%{opacity:0}66.818%{opacity:1}70%{opacity:0}100%{opacity:0}}
+.k35{animation-name:k35}@keyframes k35{0%{opacity:0}70%{opacity:1}100%{opacity:1}}
+.k36{animation-name:k36}@keyframes k36{0%{opacity:0}70.909%{opacity:1}100%{opacity:1}}
+.caret{animation:blink 1s step-end infinite}@keyframes blink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}g.p{opacity:1}}
+</style>
+<rect x="0.5" y="0.5" width="853" height="335" rx="12" fill="#1e1e2e" stroke="#313244"/>
+<path d="M12.5 0.5h829a12 12 0 0 1 12 12v28h-853v-28a12 12 0 0 1 12-12z" fill="#181825"/>
+<circle cx="24" cy="20" r="6.5" fill="#f38ba8"/><circle cx="46" cy="20" r="6.5" fill="#f9e2af"/><circle cx="68" cy="20" r="6.5" fill="#a6e3a1"/>
+<text x="427" y="25" text-anchor="middle" fill="#9399b2">pk 8080</text>
+<g class="k0"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k1"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> p</text><rect class="caret" x="49" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k2"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk</text><rect class="caret" x="58" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k3"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk </text><rect class="caret" x="67" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k4"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8</text><rect class="caret" x="76" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k5"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 80</text><rect class="caret" x="85" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k6"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 808</text><rect class="caret" x="94" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k7"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8080</text><rect class="caret" x="103" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k8"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8080 </text><rect class="caret" x="112" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k9"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8080 -</text><rect class="caret" x="121" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k10"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8080 --</text><rect class="caret" x="130" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k11"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8080 --i</text><rect class="caret" x="139" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k12"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="117" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8080 --in</text><rect class="caret" x="148" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k13"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="126" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8080 --inf</text><rect class="caret" x="157" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k14"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="135" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8080 --info</text><rect class="caret" x="166" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k15 p"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="135" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8080 --info</text></g>
+<g class="k15 p"><text x="40" y="94" textLength="576" lengthAdjust="spacingAndGlyphs" fill="#9399b2" font-weight="700">PORT   PROCESS  PID/ID        USER       ACCESS          COMMAND</text></g>
+<g class="k15 p"><text x="40" y="116" textLength="783" lengthAdjust="spacingAndGlyphs" fill="#9399b2">───────────────────────────────────────────────────────────────────────────────────────</text></g>
+<g class="k15 p"><text x="40" y="138" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#89dceb" font-weight="700">:8080</text><text x="85" y="138" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4">  api      </text><text x="184" y="138" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#9399b2">a1b2c3d4e5f6</text><text x="310" y="138" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#9399b2">container</text><text x="409" y="138" textLength="126" lengthAdjust="spacingAndGlyphs" fill="#f9e2af">all interfaces</text><text x="553" y="138" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#9399b2">nginx:1.27</text></g>
+<g class="k15 p"><text x="40" y="160" textLength="783" lengthAdjust="spacingAndGlyphs" fill="#9399b2">───────────────────────────────────────────────────────────────────────────────────────</text></g>
+<g class="k15 p"><text x="22" y="182" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#9399b2">  1 in use</text></g>
+<g class="k15 p"><text x="22" y="204" textLength="126" lengthAdjust="spacingAndGlyphs" fill="#9399b2">  To free it: </text><text x="148" y="204" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#9399b2" font-weight="700">pk 8080</text></g>
+<g class="k16"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k17"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> p</text><rect class="caret" x="49" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k18"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk</text><rect class="caret" x="58" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k19"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk </text><rect class="caret" x="67" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k20"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8</text><rect class="caret" x="76" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k21"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 80</text><rect class="caret" x="85" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k22"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 808</text><rect class="caret" x="94" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k23"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8080</text><rect class="caret" x="103" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k24 p"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8080</text></g>
+<g class="k25"><text x="22" y="248" textLength="135" lengthAdjust="spacingAndGlyphs" fill="#9399b2">  Freeing port…</text></g>
+<g class="k26 p"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">✔</text><text x="31" y="248" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> Freed port </text><text x="139" y="248" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4" font-weight="700">8080</text><text x="184" y="248" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#9399b2">— stopped</text><text x="265" y="248" textLength="162" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> Docker container </text><text x="427" y="248" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4" font-weight="700">api</text><text x="463" y="248" textLength="126" lengthAdjust="spacingAndGlyphs" fill="#9399b2">(a1b2c3d4e5f6)</text><text x="598" y="248" textLength="135" lengthAdjust="spacingAndGlyphs" fill="#9399b2">via docker stop</text></g>
+<g class="k27"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k28"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> p</text><rect class="caret" x="49" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k29"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk</text><rect class="caret" x="58" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k30"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk </text><rect class="caret" x="67" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k31"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8</text><rect class="caret" x="76" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k32"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 80</text><rect class="caret" x="85" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k33"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 808</text><rect class="caret" x="94" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k34"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8080</text><rect class="caret" x="103" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k35"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 8080</text></g>
+<g class="k35"><text x="22" y="292" textLength="252" lengthAdjust="spacingAndGlyphs" fill="#9399b2">• Port 8080 is already free.</text></g>
+<g class="k36"><text x="22" y="314" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="299" width="9" height="18" fill="#cdd6f4"/></g>
+</svg>

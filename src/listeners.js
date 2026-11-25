@@ -22,19 +22,22 @@ export const reach = (address = '') =>
   WILDCARD.has(address) ? 'all interfaces' : isLoopback(address) ? 'localhost only' : address;
 
 /**
- * List every process listening on a TCP port, in a single system call.
- * @returns {{ port: number, pid: number, name: string, address: string }[]} sorted by port
+ * List every process listening on a TCP port or bound to a UDP port, in a single system call.
+ * UDP has no "listening": a bound, unconnected socket is what receives on a port, so that is what
+ * counts. Connected UDP sockets are clients (a DNS lookup, a QUIC connection) and are skipped.
+ * @param {string[]} [protocols] 'tcp' and/or 'udp'
+ * @returns {{ port: number, protocol: string, pid: number, name: string, address: string }[]} sorted by port
  */
-export function listListeners() {
-  const raw = process.platform === 'win32' ? listWindows() : listUnix();
+export function listListeners(protocols = ['tcp']) {
+  const raw = (process.platform === 'win32' ? listWindows() : listUnix(protocols)).filter((l) => protocols.includes(l.protocol));
   const merged = new Map();
   for (const l of raw) {
-    const key = `${l.port}:${l.pid}`; // IPv4 + IPv6 sockets of the same process collapse to one entry
+    const key = `${l.port}/${l.protocol}:${l.pid}`; // IPv4 + IPv6 sockets of the same process collapse to one entry
     const prev = merged.get(key);
     // keep the widest exposure, so *:3000 plus [::1]:3000 reports "all interfaces"
     if (!prev || breadth(l.address) > breadth(prev.address)) merged.set(key, l);
   }
-  return [...merged.values()].sort((a, b) => a.port - b.port || a.pid - b.pid);
+  return [...merged.values()].sort((a, b) => a.port - b.port || a.protocol.localeCompare(b.protocol) || a.pid - b.pid);
 }
 
 /**
@@ -64,15 +67,31 @@ export function addProcessDetails(targets) {
 // wrong, so when no tool could look, listing fails loudly instead of returning [].
 const couldNotLook = (err) => ['ENOENT', 'ETIMEDOUT', 'ENOBUFS'].includes(err.code);
 
-const listLsof = () => parseLsof(run('lsof', ['-nP', '-iTCP', '-sTCP:LISTEN', '-F', 'pcn']));
-const listSs = () => parseSs(run('ss', ['-tlnp']));
+// One lsof call per protocol: combined with a TCP state filter (-sTCP:LISTEN), lsof drops -iUDP files.
+// lsof exits 1 when it finds nothing; that is an answer, unlike a missing or timed-out lsof.
+const LSOF_SELECT = { tcp: ['-iTCP', '-sTCP:LISTEN'], udp: ['-iUDP'] };
+function listLsof(protocols) {
+  return protocols.flatMap((protocol) => {
+    let out;
+    try {
+      out = run('lsof', ['-nP', ...LSOF_SELECT[protocol], '-F', 'pcPn']);
+    } catch (err) {
+      if (couldNotLook(err) || err.status !== 1) throw err;
+      out = String(err.stdout ?? '');
+    }
+    return parseLsof(out);
+  });
+}
+// -l lists listening TCP sockets and unconnected (bound) UDP sockets
+const listSs = (protocols) =>
+  parseSs(run('ss', [`-${protocols.includes('tcp') ? 't' : ''}${protocols.includes('udp') ? 'u' : ''}lnp`]), protocols[0]);
 
 // ss is about twice as fast as lsof, so Linux tries it first; lsof is the fallback (and the macOS tool).
-function listUnix() {
+function listUnix(protocols) {
   const errors = [];
   for (const list of process.platform === 'linux' ? [listSs, listLsof] : [listLsof]) {
     try {
-      return list();
+      return list(protocols);
     } catch (err) {
       errors.push(err); // missing, or lsof's exit 1 for "nothing listens": try the next tool
     }
@@ -92,52 +111,71 @@ function listWindows() {
     }
   } catch {}
   // No catch: if netstat fails we have not seen the ports, and "port is free" would be a lie.
+  // -ano lists TCP and UDP in one call; listListeners keeps the protocols asked for.
   return parseNetstat(run('netstat', ['-ano'])).map((l) => ({ ...l, name: names.get(l.pid) ?? 'unknown' }));
 }
 
-/** Parse `lsof -F pcn` output: p<pid>, c<command>, n<address> lines. */
+/**
+ * Parse `lsof -F pcPn` output: p<pid>, c<command>, then per socket P<protocol> and n<address>.
+ * Without P lines (older callers) every socket is TCP. A UDP name with "->" is a connected client
+ * socket (local->remote), not something serving the port, so it is skipped.
+ */
 export function parseLsof(out) {
   const results = [];
   let pid;
   let name = 'unknown';
+  let protocol = 'tcp';
   for (const line of out.split(/\r?\n/)) {
     const value = line.slice(1);
     if (line[0] === 'p') pid = Number(value);
     else if (line[0] === 'c') name = value;
+    else if (line[0] === 'P') protocol = value.toLowerCase();
     else if (line[0] === 'n') {
+      if (value.includes('->') || !['tcp', 'udp'].includes(protocol)) continue;
       const port = portOf(value);
-      if (port && pid) results.push({ port, pid, name, address: addressOf(value) });
-    }
-  }
-  return results;
-}
-
-/** Parse `ss -tlnp` output. Rows without pid info (other users' processes) are skipped. */
-export function parseSs(out) {
-  const results = [];
-  for (const line of out.split(/\r?\n/)) {
-    const local = line.trim().split(/\s+/)[3];
-    const port = portOf(local);
-    if (!port) continue;
-    for (const m of line.matchAll(/\("([^"]+)",pid=(\d+)/g)) {
-      results.push({ port, pid: Number(m[2]), name: m[1], address: addressOf(local) });
+      if (port && pid) results.push({ port, protocol, pid, name, address: addressOf(value) });
     }
   }
   return results;
 }
 
 /**
- * Parse `netstat -ano` TCP rows. A listening socket has a foreign port of 0; checking that
- * instead of the "LISTENING" state keeps this working on non-English Windows.
+ * Parse `ss -tlnp` / `-ulnp` / `-tulnp` output. With both -t and -u, ss adds a Netid column (tcp/udp)
+ * first; with one of them there is none and every row is `protocol`.
+ * Rows without pid info (other users' processes) are skipped.
+ */
+export function parseSs(out, protocol = 'tcp') {
+  const results = [];
+  for (const line of out.split(/\r?\n/)) {
+    const cols = line.trim().split(/\s+/);
+    const netid = ['tcp', 'udp'].includes(cols[0]) ? cols[0] : null;
+    const local = cols[netid ? 4 : 3];
+    const port = portOf(local);
+    if (!port) continue;
+    for (const m of line.matchAll(/\("([^"]+)",pid=(\d+)/g)) {
+      results.push({ port, protocol: netid ?? protocol, pid: Number(m[2]), name: m[1], address: addressOf(local) });
+    }
+  }
+  return results;
+}
+
+/**
+ * Parse `netstat -ano` TCP and UDP rows. A listening TCP socket has a foreign port of 0; checking
+ * that instead of the "LISTENING" state keeps this working on non-English Windows. UDP rows have no
+ * state column (`UDP  0.0.0.0:5353  *:*  77`) and every one is a bound socket.
  */
 export function parseNetstat(out) {
   const results = [];
   for (const line of out.split(/\r?\n/)) {
-    const [proto, local, foreign, , pidStr] = line.trim().split(/\s+/);
-    if (proto !== 'TCP' || !foreign?.endsWith(':0')) continue;
+    const cols = line.trim().split(/\s+/);
+    const [proto, local, foreign] = cols;
+    let pidStr;
+    if (proto === 'TCP' && foreign?.endsWith(':0')) pidStr = cols[4];
+    else if (proto === 'UDP' && foreign === '*:*') pidStr = cols[3];
+    else continue;
     const port = portOf(local);
     const pid = Number(pidStr);
-    if (port && pid > 0) results.push({ port, pid, address: addressOf(local) });
+    if (port && pid > 0) results.push({ port, protocol: proto.toLowerCase(), pid, address: addressOf(local) });
   }
   return results;
 }

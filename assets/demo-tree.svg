@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="944" height="358" viewBox="0 0 944 358" role="img" aria-labelledby="t d">
+<title id="t">cross-port-kill: pk --tree</title>
+<desc id="d">A terminal stops more than the port holder. pk 3000 --children frees port 3000 and also stops the 4 worker processes under it. pk 5050 --tree lists the parent it would stop, pgadmin4, warns that unsaved work is lost and asks &quot;Stop them? [y/N]&quot;. After answering y, port 5050 is freed and the parent pgadmin4 is stopped too.</desc>
+<style>
+text{font-family:'JetBrains Mono','SF Mono',Menlo,'DejaVu Sans Mono',Consolas,monospace;font-size:15px;white-space:pre}
+g{opacity:0;animation-duration:12.30s;animation-iteration-count:infinite;animation-timing-function:step-end}
+.k0{animation-name:k0}@keyframes k0{0%{opacity:1}4.065%{opacity:0}100%{opacity:0}}
+.k1{animation-name:k1}@keyframes k1{0%{opacity:0}4.065%{opacity:1}4.634%{opacity:0}100%{opacity:0}}
+.k2{animation-name:k2}@keyframes k2{0%{opacity:0}4.634%{opacity:1}5.203%{opacity:0}100%{opacity:0}}
+.k3{animation-name:k3}@keyframes k3{0%{opacity:0}5.203%{opacity:1}5.772%{opacity:0}100%{opacity:0}}
+.k4{animation-name:k4}@keyframes k4{0%{opacity:0}5.772%{opacity:1}6.341%{opacity:0}100%{opacity:0}}
+.k5{animation-name:k5}@keyframes k5{0%{opacity:0}6.341%{opacity:1}6.911%{opacity:0}100%{opacity:0}}
+.k6{animation-name:k6}@keyframes k6{0%{opacity:0}6.911%{opacity:1}7.48%{opacity:0}100%{opacity:0}}
+.k7{animation-name:k7}@keyframes k7{0%{opacity:0}7.48%{opacity:1}8.049%{opacity:0}100%{opacity:0}}
+.k8{animation-name:k8}@keyframes k8{0%{opacity:0}8.049%{opacity:1}8.618%{opacity:0}100%{opacity:0}}
+.k9{animation-name:k9}@keyframes k9{0%{opacity:0}8.618%{opacity:1}9.187%{opacity:0}100%{opacity:0}}
+.k10{animation-name:k10}@keyframes k10{0%{opacity:0}9.187%{opacity:1}9.756%{opacity:0}100%{opacity:0}}
+.k11{animation-name:k11}@keyframes k11{0%{opacity:0}9.756%{opacity:1}10.325%{opacity:0}100%{opacity:0}}
+.k12{animation-name:k12}@keyframes k12{0%{opacity:0}10.325%{opacity:1}10.894%{opacity:0}100%{opacity:0}}
+.k13{animation-name:k13}@keyframes k13{0%{opacity:0}10.894%{opacity:1}11.463%{opacity:0}100%{opacity:0}}
+.k14{animation-name:k14}@keyframes k14{0%{opacity:0}11.463%{opacity:1}12.033%{opacity:0}100%{opacity:0}}
+.k15{animation-name:k15}@keyframes k15{0%{opacity:0}12.033%{opacity:1}12.602%{opacity:0}100%{opacity:0}}
+.k16{animation-name:k16}@keyframes k16{0%{opacity:0}12.602%{opacity:1}13.171%{opacity:0}100%{opacity:0}}
+.k17{animation-name:k17}@keyframes k17{0%{opacity:0}13.171%{opacity:1}13.74%{opacity:0}100%{opacity:0}}
+.k18{animation-name:k18}@keyframes k18{0%{opacity:0}13.74%{opacity:1}16.585%{opacity:0}100%{opacity:0}}
+.k19{animation-name:k19}@keyframes k19{0%{opacity:0}16.585%{opacity:1}100%{opacity:1}}
+.k20{animation-name:k20}@keyframes k20{0%{opacity:0}16.585%{opacity:1}21.463%{opacity:0}100%{opacity:0}}
+.k21{animation-name:k21}@keyframes k21{0%{opacity:0}21.463%{opacity:1}100%{opacity:1}}
+.k22{animation-name:k22}@keyframes k22{0%{opacity:0}36.098%{opacity:1}40.163%{opacity:0}100%{opacity:0}}
+.k23{animation-name:k23}@keyframes k23{0%{opacity:0}40.163%{opacity:1}40.732%{opacity:0}100%{opacity:0}}
+.k24{animation-name:k24}@keyframes k24{0%{opacity:0}40.732%{opacity:1}41.301%{opacity:0}100%{opacity:0}}
+.k25{animation-name:k25}@keyframes k25{0%{opacity:0}41.301%{opacity:1}41.87%{opacity:0}100%{opacity:0}}
+.k26{animation-name:k26}@keyframes k26{0%{opacity:0}41.87%{opacity:1}42.439%{opacity:0}100%{opacity:0}}
+.k27{animation-name:k27}@keyframes k27{0%{opacity:0}42.439%{opacity:1}43.008%{opacity:0}100%{opacity:0}}
+.k28{animation-name:k28}@keyframes k28{0%{opacity:0}43.008%{opacity:1}43.577%{opacity:0}100%{opacity:0}}
+.k29{animation-name:k29}@keyframes k29{0%{opacity:0}43.577%{opacity:1}44.146%{opacity:0}100%{opacity:0}}
+.k30{animation-name:k30}@keyframes k30{0%{opacity:0}44.146%{opacity:1}44.715%{opacity:0}100%{opacity:0}}
+.k31{animation-name:k31}@keyframes k31{0%{opacity:0}44.715%{opacity:1}45.285%{opacity:0}100%{opacity:0}}
+.k32{animation-name:k32}@keyframes k32{0%{opacity:0}45.285%{opacity:1}45.854%{opacity:0}100%{opacity:0}}
+.k33{animation-name:k33}@keyframes k33{0%{opacity:0}45.854%{opacity:1}46.423%{opacity:0}100%{opacity:0}}
+.k34{animation-name:k34}@keyframes k34{0%{opacity:0}46.423%{opacity:1}46.992%{opacity:0}100%{opacity:0}}
+.k35{animation-name:k35}@keyframes k35{0%{opacity:0}46.992%{opacity:1}47.561%{opacity:0}100%{opacity:0}}
+.k36{animation-name:k36}@keyframes k36{0%{opacity:0}47.561%{opacity:1}50.407%{opacity:0}100%{opacity:0}}
+.k37{animation-name:k37}@keyframes k37{0%{opacity:0}50.407%{opacity:1}100%{opacity:1}}
+.k38{animation-name:k38}@keyframes k38{0%{opacity:0}51.22%{opacity:1}62.602%{opacity:0}100%{opacity:0}}
+.k39{animation-name:k39}@keyframes k39{0%{opacity:0}62.602%{opacity:1}66.667%{opacity:0}100%{opacity:0}}
+.k40{animation-name:k40}@keyframes k40{0%{opacity:0}66.667%{opacity:1}100%{opacity:1}}
+.k41{animation-name:k41}@keyframes k41{0%{opacity:0}66.667%{opacity:1}71.545%{opacity:0}100%{opacity:0}}
+.k42{animation-name:k42}@keyframes k42{0%{opacity:0}71.545%{opacity:1}100%{opacity:1}}
+.k43{animation-name:k43}@keyframes k43{0%{opacity:0}72.358%{opacity:1}100%{opacity:1}}
+.caret{animation:blink 1s step-end infinite}@keyframes blink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}g.p{opacity:1}}
+</style>
+<rect x="0.5" y="0.5" width="943" height="357" rx="12" fill="#1e1e2e" stroke="#313244"/>
+<path d="M12.5 0.5h919a12 12 0 0 1 12 12v28h-943v-28a12 12 0 0 1 12-12z" fill="#181825"/>
+<circle cx="24" cy="20" r="6.5" fill="#f38ba8"/><circle cx="46" cy="20" r="6.5" fill="#f9e2af"/><circle cx="68" cy="20" r="6.5" fill="#a6e3a1"/>
+<text x="472" y="25" text-anchor="middle" fill="#9399b2">pk --tree</text>
+<g class="k0"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k1"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> p</text><rect class="caret" x="49" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k2"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk</text><rect class="caret" x="58" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k3"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk </text><rect class="caret" x="67" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k4"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3</text><rect class="caret" x="76" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k5"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 30</text><rect class="caret" x="85" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k6"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 300</text><rect class="caret" x="94" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k7"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3000</text><rect class="caret" x="103" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k8"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3000 </text><rect class="caret" x="112" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k9"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3000 -</text><rect class="caret" x="121" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k10"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3000 --</text><rect class="caret" x="130" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k11"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3000 --c</text><rect class="caret" x="139" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k12"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="117" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3000 --ch</text><rect class="caret" x="148" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k13"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="126" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3000 --chi</text><rect class="caret" x="157" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k14"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="135" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3000 --chil</text><rect class="caret" x="166" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k15"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="144" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3000 --child</text><rect class="caret" x="175" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k16"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="153" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3000 --childr</text><rect class="caret" x="184" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k17"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="162" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3000 --childre</text><rect class="caret" x="193" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k18"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="171" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3000 --children</text><rect class="caret" x="202" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k19 p"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="171" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 3000 --children</text></g>
+<g class="k20"><text x="22" y="94" textLength="135" lengthAdjust="spacingAndGlyphs" fill="#9399b2">  Freeing port…</text></g>
+<g class="k21 p"><text x="22" y="94" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">✔</text><text x="31" y="94" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> Freed port </text><text x="139" y="94" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4" font-weight="700">3000</text><text x="184" y="94" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#9399b2">— killed</text><text x="265" y="94" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4" font-weight="700">node</text><text x="310" y="94" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#9399b2">(PID 41210)</text><text x="418" y="94" textLength="378" lengthAdjust="spacingAndGlyphs" fill="#9399b2">via SIGTERM (graceful) + 4 other processes</text></g>
+<g class="k22"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k23"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> p</text><rect class="caret" x="49" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k24"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk</text><rect class="caret" x="58" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k25"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk </text><rect class="caret" x="67" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k26"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5</text><rect class="caret" x="76" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k27"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 50</text><rect class="caret" x="85" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k28"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 505</text><rect class="caret" x="94" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k29"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5050</text><rect class="caret" x="103" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k30"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5050 </text><rect class="caret" x="112" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k31"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5050 -</text><rect class="caret" x="121" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k32"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5050 --</text><rect class="caret" x="130" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k33"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5050 --t</text><rect class="caret" x="139" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k34"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="117" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5050 --tr</text><rect class="caret" x="148" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k35"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="126" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5050 --tre</text><rect class="caret" x="157" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k36"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="135" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5050 --tree</text><rect class="caret" x="166" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k37 p"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="135" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5050 --tree</text></g>
+<g class="k37 p"><text x="22" y="160" textLength="657" lengthAdjust="spacingAndGlyphs" fill="#f9e2af">! --tree will also stop these parents, and everything running under them:</text></g>
+<g class="k37 p"><text x="40" y="204" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4" font-weight="700">:5050</text><text x="85" y="204" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4">  python3 </text><text x="175" y="204" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#9399b2">(PID 4180)</text><text x="274" y="204" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#9399b2">→</text><text x="292" y="204" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4" font-weight="700">pgadmin4</text><text x="373" y="204" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#9399b2">(PID 4100)</text></g>
+<g class="k37 p"><text x="22" y="248" textLength="369" lengthAdjust="spacingAndGlyphs" fill="#9399b2">  Unsaved work in those programs is lost.</text></g>
+<g class="k38"><text x="22" y="292" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#89dceb">?</text><text x="31" y="292" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> Stop them? </text><text x="139" y="292" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#9399b2">[y/N]</text><rect class="caret" x="193" y="277" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k39"><text x="22" y="292" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#89dceb">?</text><text x="31" y="292" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> Stop them? </text><text x="139" y="292" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#9399b2">[y/N]</text><text x="184" y="292" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> y</text><rect class="caret" x="202" y="277" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k40 p"><text x="22" y="292" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#89dceb">?</text><text x="31" y="292" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> Stop them? </text><text x="139" y="292" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#9399b2">[y/N]</text><text x="184" y="292" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> y</text></g>
+<g class="k41"><text x="22" y="314" textLength="135" lengthAdjust="spacingAndGlyphs" fill="#9399b2">  Freeing port…</text></g>
+<g class="k42 p"><text x="22" y="314" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">✔</text><text x="31" y="314" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> Freed port </text><text x="139" y="314" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4" font-weight="700">5050</text><text x="184" y="314" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#9399b2">— killed</text><text x="265" y="314" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4" font-weight="700">python3</text><text x="337" y="314" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#9399b2">(PID 4180)</text><text x="436" y="314" textLength="459" lengthAdjust="spacingAndGlyphs" fill="#9399b2">via SIGTERM (graceful) + parent pgadmin4 (PID 4100)</text></g>
+<g class="k43"><text x="22" y="336" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="321" width="9" height="18" fill="#cdd6f4"/></g>
+</svg>

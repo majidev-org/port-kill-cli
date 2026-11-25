@@ -1,6 +1,6 @@
 # Terms of Use
 
-By installing or running `pk` / `port-kill` (`@majidev-org/port-kill-cli`) you agree to these terms. They sit alongside the [MIT License](LICENSE), which governs copying and modification of the code; if the two conflict, the license wins.
+By installing or running `cross-port-kill` under any of its command names (`pk`, `kp`, `cpk`, `ckp`, `port-kill`, `kill-port`, `cross-port-kill`, `cross-kill-port`, `pk-udp`, `pk-tcp`) you agree to these terms. They sit alongside the [MIT License](LICENSE), which governs copying and modification of the code; if the two conflict, the license wins.
 
 ## 1. What the tool does
 

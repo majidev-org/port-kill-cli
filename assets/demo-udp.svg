@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="314" viewBox="0 0 800 314" role="img" aria-labelledby="t d">
+<title id="t">cross-port-kill: pk udp ports</title>
+<desc id="d">A terminal frees a UDP port. pk 5353 says port 5353 is already free, because ports are TCP by default. pk udp ports lists the UDP ports in use: node bound to 5353 on all interfaces, and suggests 'To free one: pk 5353/udp' or picking from a list with pk --udp. pk 5353/udp frees it: 'Freed port 5353/udp — killed node via SIGTERM (graceful)'.</desc>
+<style>
+text{font-family:'JetBrains Mono','SF Mono',Menlo,'DejaVu Sans Mono',Consolas,monospace;font-size:15px;white-space:pre}
+g{opacity:0;animation-duration:11.84s;animation-iteration-count:infinite;animation-timing-function:step-end}
+.k0{animation-name:k0}@keyframes k0{0%{opacity:1}4.223%{opacity:0}100%{opacity:0}}
+.k1{animation-name:k1}@keyframes k1{0%{opacity:0}4.223%{opacity:1}4.814%{opacity:0}100%{opacity:0}}
+.k2{animation-name:k2}@keyframes k2{0%{opacity:0}4.814%{opacity:1}5.405%{opacity:0}100%{opacity:0}}
+.k3{animation-name:k3}@keyframes k3{0%{opacity:0}5.405%{opacity:1}5.997%{opacity:0}100%{opacity:0}}
+.k4{animation-name:k4}@keyframes k4{0%{opacity:0}5.997%{opacity:1}6.588%{opacity:0}100%{opacity:0}}
+.k5{animation-name:k5}@keyframes k5{0%{opacity:0}6.588%{opacity:1}7.179%{opacity:0}100%{opacity:0}}
+.k6{animation-name:k6}@keyframes k6{0%{opacity:0}7.179%{opacity:1}7.77%{opacity:0}100%{opacity:0}}
+.k7{animation-name:k7}@keyframes k7{0%{opacity:0}7.77%{opacity:1}10.726%{opacity:0}100%{opacity:0}}
+.k8{animation-name:k8}@keyframes k8{0%{opacity:0}10.726%{opacity:1}100%{opacity:1}}
+.k9{animation-name:k9}@keyframes k9{0%{opacity:0}22.551%{opacity:1}26.774%{opacity:0}100%{opacity:0}}
+.k10{animation-name:k10}@keyframes k10{0%{opacity:0}26.774%{opacity:1}27.365%{opacity:0}100%{opacity:0}}
+.k11{animation-name:k11}@keyframes k11{0%{opacity:0}27.365%{opacity:1}27.956%{opacity:0}100%{opacity:0}}
+.k12{animation-name:k12}@keyframes k12{0%{opacity:0}27.956%{opacity:1}28.547%{opacity:0}100%{opacity:0}}
+.k13{animation-name:k13}@keyframes k13{0%{opacity:0}28.547%{opacity:1}29.139%{opacity:0}100%{opacity:0}}
+.k14{animation-name:k14}@keyframes k14{0%{opacity:0}29.139%{opacity:1}29.73%{opacity:0}100%{opacity:0}}
+.k15{animation-name:k15}@keyframes k15{0%{opacity:0}29.73%{opacity:1}30.321%{opacity:0}100%{opacity:0}}
+.k16{animation-name:k16}@keyframes k16{0%{opacity:0}30.321%{opacity:1}30.912%{opacity:0}100%{opacity:0}}
+.k17{animation-name:k17}@keyframes k17{0%{opacity:0}30.912%{opacity:1}31.503%{opacity:0}100%{opacity:0}}
+.k18{animation-name:k18}@keyframes k18{0%{opacity:0}31.503%{opacity:1}32.095%{opacity:0}100%{opacity:0}}
+.k19{animation-name:k19}@keyframes k19{0%{opacity:0}32.095%{opacity:1}32.686%{opacity:0}100%{opacity:0}}
+.k20{animation-name:k20}@keyframes k20{0%{opacity:0}32.686%{opacity:1}33.277%{opacity:0}100%{opacity:0}}
+.k21{animation-name:k21}@keyframes k21{0%{opacity:0}33.277%{opacity:1}36.233%{opacity:0}100%{opacity:0}}
+.k22{animation-name:k22}@keyframes k22{0%{opacity:0}36.233%{opacity:1}100%{opacity:1}}
+.k23{animation-name:k23}@keyframes k23{0%{opacity:0}54.814%{opacity:1}59.037%{opacity:0}100%{opacity:0}}
+.k24{animation-name:k24}@keyframes k24{0%{opacity:0}59.037%{opacity:1}59.628%{opacity:0}100%{opacity:0}}
+.k25{animation-name:k25}@keyframes k25{0%{opacity:0}59.628%{opacity:1}60.22%{opacity:0}100%{opacity:0}}
+.k26{animation-name:k26}@keyframes k26{0%{opacity:0}60.22%{opacity:1}60.811%{opacity:0}100%{opacity:0}}
+.k27{animation-name:k27}@keyframes k27{0%{opacity:0}60.811%{opacity:1}61.402%{opacity:0}100%{opacity:0}}
+.k28{animation-name:k28}@keyframes k28{0%{opacity:0}61.402%{opacity:1}61.993%{opacity:0}100%{opacity:0}}
+.k29{animation-name:k29}@keyframes k29{0%{opacity:0}61.993%{opacity:1}62.584%{opacity:0}100%{opacity:0}}
+.k30{animation-name:k30}@keyframes k30{0%{opacity:0}62.584%{opacity:1}63.176%{opacity:0}100%{opacity:0}}
+.k31{animation-name:k31}@keyframes k31{0%{opacity:0}63.176%{opacity:1}63.767%{opacity:0}100%{opacity:0}}
+.k32{animation-name:k32}@keyframes k32{0%{opacity:0}63.767%{opacity:1}64.358%{opacity:0}100%{opacity:0}}
+.k33{animation-name:k33}@keyframes k33{0%{opacity:0}64.358%{opacity:1}64.949%{opacity:0}100%{opacity:0}}
+.k34{animation-name:k34}@keyframes k34{0%{opacity:0}64.949%{opacity:1}67.905%{opacity:0}100%{opacity:0}}
+.k35{animation-name:k35}@keyframes k35{0%{opacity:0}67.905%{opacity:1}100%{opacity:1}}
+.k36{animation-name:k36}@keyframes k36{0%{opacity:0}67.905%{opacity:1}72.128%{opacity:0}100%{opacity:0}}
+.k37{animation-name:k37}@keyframes k37{0%{opacity:0}72.128%{opacity:1}100%{opacity:1}}
+.k38{animation-name:k38}@keyframes k38{0%{opacity:0}72.973%{opacity:1}100%{opacity:1}}
+.caret{animation:blink 1s step-end infinite}@keyframes blink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}g.p{opacity:1}}
+</style>
+<rect x="0.5" y="0.5" width="799" height="313" rx="12" fill="#1e1e2e" stroke="#313244"/>
+<path d="M12.5 0.5h775a12 12 0 0 1 12 12v28h-799v-28a12 12 0 0 1 12-12z" fill="#181825"/>
+<circle cx="24" cy="20" r="6.5" fill="#f38ba8"/><circle cx="46" cy="20" r="6.5" fill="#f9e2af"/><circle cx="68" cy="20" r="6.5" fill="#a6e3a1"/>
+<text x="400" y="25" text-anchor="middle" fill="#9399b2">pk udp ports</text>
+<g class="k0"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k1"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> p</text><rect class="caret" x="49" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k2"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk</text><rect class="caret" x="58" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k3"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk </text><rect class="caret" x="67" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k4"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5</text><rect class="caret" x="76" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k5"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 53</text><rect class="caret" x="85" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k6"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 535</text><rect class="caret" x="94" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k7"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5353</text><rect class="caret" x="103" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k8 p"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5353</text></g>
+<g class="k8 p"><text x="22" y="94" textLength="252" lengthAdjust="spacingAndGlyphs" fill="#9399b2">• Port 5353 is already free.</text></g>
+<g class="k9"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k10"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> p</text><rect class="caret" x="49" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k11"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk</text><rect class="caret" x="58" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k12"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk </text><rect class="caret" x="67" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k13"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk u</text><rect class="caret" x="76" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k14"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk ud</text><rect class="caret" x="85" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k15"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk udp</text><rect class="caret" x="94" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k16"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk udp </text><rect class="caret" x="103" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k17"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk udp p</text><rect class="caret" x="112" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k18"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk udp po</text><rect class="caret" x="121" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k19"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk udp por</text><rect class="caret" x="130" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k20"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk udp port</text><rect class="caret" x="139" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k21"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="117" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk udp ports</text><rect class="caret" x="148" y="101" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k22 p"><text x="22" y="116" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="116" textLength="117" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk udp ports</text></g>
+<g class="k22 p"><text x="40" y="138" textLength="513" lengthAdjust="spacingAndGlyphs" fill="#9399b2" font-weight="700">PORT       PROCESS  PID/ID  USER  ACCESS          COMMAND</text></g>
+<g class="k22 p"><text x="40" y="160" textLength="729" lengthAdjust="spacingAndGlyphs" fill="#9399b2">─────────────────────────────────────────────────────────────────────────────────</text></g>
+<g class="k22 p"><text x="40" y="182" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#89dceb" font-weight="700">:5353/udp</text><text x="121" y="182" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4">  node     </text><text x="220" y="182" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#9399b2">41500 </text><text x="292" y="182" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#9399b2">dev </text><text x="346" y="182" textLength="126" lengthAdjust="spacingAndGlyphs" fill="#f9e2af">all interfaces</text><text x="490" y="182" textLength="153" lengthAdjust="spacingAndGlyphs" fill="#9399b2">node discovery.js</text></g>
+<g class="k22 p"><text x="40" y="204" textLength="729" lengthAdjust="spacingAndGlyphs" fill="#9399b2">─────────────────────────────────────────────────────────────────────────────────</text></g>
+<g class="k22 p"><text x="22" y="226" textLength="135" lengthAdjust="spacingAndGlyphs" fill="#9399b2">  To free one: </text><text x="157" y="226" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#9399b2" font-weight="700">pk 5353/udp</text><text x="256" y="226" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#9399b2"> · </text><text x="283" y="226" textLength="189" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4">or pick from a list: </text><text x="472" y="226" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4" font-weight="700">pk --udp</text></g>
+<g class="k23"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="233" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k24"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="248" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> p</text><rect class="caret" x="49" y="233" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k25"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="248" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk</text><rect class="caret" x="58" y="233" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k26"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="248" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk </text><rect class="caret" x="67" y="233" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k27"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="248" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5</text><rect class="caret" x="76" y="233" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k28"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="248" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 53</text><rect class="caret" x="85" y="233" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k29"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="248" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 535</text><rect class="caret" x="94" y="233" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k30"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="248" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5353</text><rect class="caret" x="103" y="233" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k31"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="248" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5353/</text><rect class="caret" x="112" y="233" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k32"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="248" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5353/u</text><rect class="caret" x="121" y="233" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k33"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="248" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5353/ud</text><rect class="caret" x="130" y="233" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k34"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="248" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5353/udp</text><rect class="caret" x="139" y="233" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k35 p"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="248" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk 5353/udp</text></g>
+<g class="k36"><text x="22" y="270" textLength="135" lengthAdjust="spacingAndGlyphs" fill="#9399b2">  Freeing port…</text></g>
+<g class="k37 p"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">✔</text><text x="31" y="270" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> Freed port </text><text x="139" y="270" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4" font-weight="700">5353/udp</text><text x="220" y="270" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#9399b2">— killed</text><text x="301" y="270" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4" font-weight="700">node</text><text x="346" y="270" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#9399b2">(PID 41500)</text><text x="454" y="270" textLength="198" lengthAdjust="spacingAndGlyphs" fill="#9399b2">via SIGTERM (graceful)</text></g>
+<g class="k38"><text x="22" y="292" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="277" width="9" height="18" fill="#cdd6f4"/></g>
+</svg>

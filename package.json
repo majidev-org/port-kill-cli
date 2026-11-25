@@ -1,6 +1,6 @@
 {
-  "name": "@majidev-org/port-kill-cli",
-  "version": "1.2.0",
+  "name": "cross-port-kill",
+  "version": "2.0.0",
   "description": "A fast, zero-dependency, cross-platform CLI to find and kill processes occupying ports on Linux, macOS, and Windows (pk 3000)",
   "repository": {
     "type": "git",
@@ -12,10 +12,16 @@
   },
   "type": "module",
   "bin": {
-    "port-kill": "./bin/cli.js",
     "pk": "./bin/cli.js",
     "kp": "./bin/cli.js",
-    "kill-port": "./bin/cli.js"
+    "cpk": "./bin/cli.js",
+    "ckp": "./bin/cli.js",
+    "port-kill": "./bin/cli.js",
+    "kill-port": "./bin/cli.js",
+    "cross-port-kill": "./bin/cli.js",
+    "cross-kill-port": "./bin/cli.js",
+    "pk-udp": "./bin/pk-udp.js",
+    "pk-tcp": "./bin/pk-tcp.js"
   },
   "files": [
     "bin/",
@@ -33,6 +39,10 @@
     "port-killer",
     "free-port",
     "pk",
+    "cpk",
+    "cross-port-kill",
+    "udp",
+    "tcp",
     "cli",
     "process",
     "cross-platform",
