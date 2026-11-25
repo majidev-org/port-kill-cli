@@ -11,9 +11,14 @@ const cli = fileURLToPath(new URL('../bin/cli.js', import.meta.url));
 const pk = (...args) =>
   spawnSync(process.execPath, [cli, ...args], { encoding: 'utf8', timeout: 20_000, env: { ...process.env, NO_COLOR: '1' } });
 
-test('e2e: package.json exposes pk, kp, kill-port and port-kill as the same CLI', async () => {
+test('e2e: package.json exposes every command name as the same CLI', async () => {
   const { bin } = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
-  assert.deepEqual(bin, { 'port-kill': './bin/cli.js', pk: './bin/cli.js', kp: './bin/cli.js', 'kill-port': './bin/cli.js' });
+  const names = ['pk', 'kp', 'cpk', 'ckp', 'port-kill', 'kill-port', 'cross-port-kill', 'cross-kill-port'];
+  assert.deepEqual(bin, {
+    ...Object.fromEntries(names.map((n) => [n, './bin/cli.js'])),
+    'pk-udp': './bin/pk-udp.js',
+    'pk-tcp': './bin/pk-tcp.js',
+  });
 });
 
 // PATH='' makes lsof/ss unfindable on Unix. Windows resolves tools from System32 regardless of PATH.
@@ -53,6 +58,79 @@ test('e2e: --info reports, pk frees the port, second run says already free', asy
   await exited(child);
 
   assert.match(pk(String(port)).stdout, new RegExp(`Port ${port} is already free`));
+});
+
+test('e2e: a pasted URL or host:port frees the port', async (t) => {
+  const { child, port } = await startServer();
+  t.after(() => child.kill('SIGKILL'));
+
+  const info = pk(`localhost:${port}`, 'list'); // "list" is --info
+  assert.match(info.stdout, new RegExp(`:${port}\\b.*\\b${child.pid}\\b`), info.stdout + info.stderr);
+  assert.equal(child.exitCode, null, 'list must not kill');
+
+  const kill = pk(`http://localhost:${port}/`);
+  assert.equal(kill.status, 0, kill.stdout + kill.stderr);
+  assert.match(kill.stdout, new RegExp(`Freed port ${port}`));
+  await exited(child);
+});
+
+test('e2e: "pk port N" shows the holder and how to free it, "pk kill N" frees it', async (t) => {
+  const { child, port } = await startServer();
+  t.after(() => child.kill('SIGKILL'));
+
+  for (const words of [['port', String(port)], ['what', 'is', 'on', String(port)], ['is', String(port), 'free']]) {
+    const r = pk(...words);
+    assert.match(r.stdout, new RegExp(`:${port}\\b.*\\b${child.pid}\\b`), words.join(' ') + '\n' + r.stdout + r.stderr);
+    assert.match(r.stdout, new RegExp(`To free it: \\S+ ${port}\\b`));
+    assert.equal(child.exitCode, null, `"${words.join(' ')}" must not kill`);
+  }
+
+  const kill = pk('kill', String(port));
+  assert.equal(kill.status, 0, kill.stdout + kill.stderr);
+  assert.match(kill.stdout, new RegExp(`Freed port ${port}`));
+  await exited(child);
+});
+
+/** Bind a UDP socket on a free port and resolve once it is bound. */
+async function startUdp() {
+  const code = `const s=require('dgram').createSocket('udp4');s.bind(0,'127.0.0.1',()=>console.log(s.address().port));setInterval(()=>{},1e6);`;
+  const child = spawn(process.execPath, ['-e', code], { stdio: ['ignore', 'pipe', 'inherit'] });
+  const [chunk] = await once(child.stdout, 'data');
+  return { child, port: Number(String(chunk).trim()) };
+}
+
+test('e2e: UDP ports are only touched when asked for, with --udp or a /udp suffix', async (t) => {
+  const { child, port } = await startUdp();
+  t.after(() => child.kill('SIGKILL'));
+
+  const tcpOnly = pk(String(port)); // TCP is the default: the UDP holder must survive
+  assert.match(tcpOnly.stdout, new RegExp(`Port ${port} is already free`), tcpOnly.stdout + tcpOnly.stderr);
+  assert.equal(child.exitCode, null, 'a plain port must not stop a UDP socket');
+
+  const info = pk(String(port), '--udp', '--info');
+  assert.match(info.stdout, new RegExp(`:${port}/udp\\b.*\\b${child.pid}\\b`), info.stdout + info.stderr);
+
+  const kill = pk(`${port}/udp`);
+  assert.equal(kill.status, 0, kill.stdout + kill.stderr);
+  assert.match(kill.stdout, new RegExp(`Freed port ${port}/udp`));
+  await exited(child);
+});
+
+test('e2e: pk-udp is pk --udp, pk-tcp is pk --tcp', async (t) => {
+  const run = (file, ...args) =>
+    spawnSync(process.execPath, [fileURLToPath(new URL(`../bin/${file}`, import.meta.url)), ...args], {
+      encoding: 'utf8', timeout: 20_000, env: { ...process.env, NO_COLOR: '1' },
+    });
+  const { child, port } = await startUdp();
+  t.after(() => child.kill('SIGKILL'));
+
+  assert.match(run('pk-tcp.js', String(port)).stdout, new RegExp(`Port ${port} is already free`));
+  assert.equal(child.exitCode, null, 'pk-tcp must not stop a UDP socket');
+
+  const kill = run('pk-udp.js', String(port));
+  assert.equal(kill.status, 0, kill.stdout + kill.stderr);
+  assert.match(kill.stdout, new RegExp(`Freed port ${port}/udp`));
+  await exited(child);
 });
 
 test('e2e: --force kills a process that ignores SIGTERM', { skip: process.platform === 'win32' && 'no SIGTERM on Windows' }, async (t) => {

@@ -1,6 +1,6 @@
 # Local Development & Testing Guide
 
-Follow these steps to link, run, and test `port-kill-cli` (`pk` / `kp`) locally before publishing to npm. See the [README](README.md) for usage and [SECURITY.md](SECURITY.md) for the safety checks these tests exercise.
+Follow these steps to link, run, and test `cross-port-kill` (`pk` / `kp`) locally before publishing to npm. See the [README](README.md) for usage and [SECURITY.md](SECURITY.md) for the safety checks these tests exercise.
 
 **Requirements:** [Node.js](https://nodejs.org) 18+; `lsof` (or `ss` on Linux); optionally [Docker](https://docs.docker.com/get-docker/) for Test E.
 
@@ -14,11 +14,19 @@ chmod +x bin/cli.js
 npm link
 ```
 
-This creates a global symlink so you can run `pk`, `kp` and `port-kill` from any directory. Verify it works:
+This creates a global symlink so you can run all ten commands (`pk`, `kp`, `cpk`, `ckp`, `port-kill`, `kill-port`, `cross-port-kill`, `cross-kill-port`, `pk-udp`, `pk-tcp`) from any directory. Verify it works:
 
 ```bash
 pk --help
 kp --version
+cpk --version
+ckp --version
+port-kill --version
+kill-port --version
+cross-port-kill --version
+cross-kill-port --version
+pk-udp --version
+pk-tcp --version            # all ten print the same version
 ```
 
 ---
@@ -80,12 +88,32 @@ Each scenario starts a throwaway server with `node -e "require('http').createSer
 
 ### Test D: Invalid Input & Edge Cases
 ```bash
-pk 99999       # (or kp 99999)     ✖ Invalid port or range: "99999" (expected 1–65535, e.g. 3000 or 3000-3005)
-pk abc         # (or kp abc)       ✖ Invalid port or range: "abc" (expected 1–65535, e.g. 3000 or 3000-3005)
+pk 99999       # (or kp 99999)     ✖ Invalid port or range: "99999" (expected 1–65535, e.g. 3000, 3000-3005, :3000, localhost:3000 or 5353/udp)
+pk abc         # (or kp abc)       ✖ Invalid port or range: "abc" (expected 1–65535, e.g. 3000, 3000-3005, :3000, localhost:3000 or 5353/udp)
 pk 3005-3000   # (or kp 3005-3000) ✖ Invalid port or range … (end before start)
-pk --nope      # (or kp --nope)    ✖ Unknown option: "--nope"
+pk --nope      # (or kp --nope)    ✖ Unknown option: "--nope". Run pk --help to see the options.
+pk --forse     # (or kp --forse)   ✖ Unknown option: "--forse". Did you mean "--force"?
 pk < /dev/null # (or kp < /dev/null) prints the help menu (no interactive prompt without a TTY)
+pk 3000/sctp   # (or kp 3000/sctp) ✖ Invalid port or range: "3000/sctp" (only /tcp and /udp)
 ```
+
+### Test D1: Words
+Start a dummy server on `4001` (as in Test A), then:
+1. `pk port 4001`, `pk what is on 4001` and `pk is 4001 free`. *Expected:* each shows the server and ends with `To free it: pk 4001`. The server keeps running.
+2. `pk kil 4001`. *Expected:* `✖ Unknown word: "kil". Did you mean "kill"?`, nothing is stopped.
+3. `pk kill 4001`. *Expected:* `✔ Freed port 4001 …`.
+4. `pk localhost:4001` and `pk http://localhost:4001/` work the same as `pk 4001` (restart the server between runs).
+
+### Test D2: UDP Ports
+1. Bind a UDP socket in a separate terminal:
+   ```bash
+   node -e "require('dgram').createSocket('udp4').bind(5454, () => console.log('bound 5454/udp'))"
+   ```
+2. Run `pk 5454`. *Expected:* `• Port 5454 is already free.` and the socket keeps running (TCP is the default).
+3. Run `pk 5454 --udp --info` (or `pk 5454/udp --info`). *Expected:* a row for `:5454/udp` with the node PID.
+4. Run `pk 5454/udp`. *Expected:* `✔ Freed port 5454/udp … via SIGTERM (graceful)` and the first terminal returns to the prompt.
+5. Run `pk --udp`. *Expected:* the picker lists UDP ports only, each shown as `:<port>/udp`.
+6. Docker: `docker run -d --rm --name pk-udp -p 5455:53/udp alpine sleep 600`, then `pk 5455` says already free and `pk 5455/udp` stops the container via `docker stop`.
 
 ### Test E: Docker Containers
 1. Start a container that publishes a port:
@@ -131,5 +159,5 @@ pk 4002 --info            # or: kp 4002 --info
 To test the published package instead of your local checkout:
 
 ```bash
-npm unlink -g @majidev-org/port-kill-cli
+npm unlink -g cross-port-kill
 ```

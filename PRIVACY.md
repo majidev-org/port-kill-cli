@@ -1,6 +1,6 @@
 # Privacy Policy
 
-`pk` (`@majidev-org/port-kill-cli`) is a local command-line tool. **It collects no data.**
+`pk` (`cross-port-kill`) is a local command-line tool. **It collects no data.**
 
 ## What it does and does not do
 

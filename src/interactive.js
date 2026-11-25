@@ -1,5 +1,6 @@
 import process from 'node:process';
 import { createInterface, emitKeypressEvents } from 'node:readline';
+import { portLabel } from './args.js';
 import { c } from './colors.js';
 import { cellsOf, extra, printable } from './targets.js';
 import { planKill, readProcessTable } from './tree.js';
@@ -231,7 +232,7 @@ export async function confirmParents(targets) {
   for (const { t, plan } of plans) {
     const others = plan.pids.length - 2;
     const more = others > 0 ? c.dim(` + ${others} other process${others === 1 ? '' : 'es'}`) : '';
-    console.log(`  ${c.bold(`:${t.port}`)}  ${printable(t.name)} ${c.dim(`(PID ${t.pid})`)} ${c.dim('→')} ${c.bold(printable(plan.parent.name))} ${c.dim(`(PID ${plan.parent.pid})`)}${more}`);
+    console.log(`  ${c.bold(`:${portLabel(t.port, t.protocol)}`)}  ${printable(t.name)} ${c.dim(`(PID ${t.pid})`)} ${c.dim('→')} ${c.bold(printable(plan.parent.name))} ${c.dim(`(PID ${plan.parent.pid})`)}${more}`);
   }
   for (const note of spared) console.log(c.dim(`\n  Not stopped: ${printable(note)}`));
   console.log(c.dim('\n  Unsaved work in those programs is lost.'));

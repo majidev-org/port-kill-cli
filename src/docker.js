@@ -18,9 +18,9 @@ export function isLocalEndpoint(endpoint) {
 }
 
 /**
- * List host ports published by running Docker containers.
+ * List host ports published by running Docker containers, with their protocol (tcp, udp, or sctp).
  * Returns [] when Docker is not installed, the daemon is not reachable, or it is not on this machine.
- * @returns {Promise<{ port: number, id: string, name: string, image: string, address: string }[]>}
+ * @returns {Promise<{ port: number, protocol: string, id: string, name: string, image: string, address: string }[]>}
  */
 export async function listContainerPorts() {
   try {
@@ -32,7 +32,7 @@ export async function listContainerPorts() {
   }
 }
 
-/** Parse `docker ps` rows like: `a1b2c3\tweb\tnginx:1.27\t0.0.0.0:8080->80/tcp, :::8080->80/tcp` */
+/** Parse `docker ps` rows like: `a1b2c3\tweb\tnginx:1.27\t0.0.0.0:8080->80/tcp, :::8080->80/tcp, 0.0.0.0:5353->53/udp` */
 export function parseDockerPs(out) {
   const results = [];
   for (const line of out.split(/\r?\n/)) {
@@ -41,14 +41,16 @@ export function parseDockerPs(out) {
     if (!/^[0-9a-f]+$/i.test(id) || !name) continue;
     const seen = new Set();
     for (const mapping of ports.split(', ')) {
-      const m = mapping.match(/^(.*):(\d+)(?:-(\d+))?->/); // greedy: ":::8080->" gives address "::"
+      // greedy: ":::8080->" gives address "::". The container side ends in /tcp, /udp or /sctp.
+      const m = mapping.match(/^(.*):(\d+)(?:-(\d+))?->[\d-]+\/(\w+)$/);
       if (!m) continue;
       const start = Number(m[2]);
       const end = Number(m[3] ?? m[2]);
+      const protocol = m[4].toLowerCase();
       for (let port = start; port <= end; port++) {
-        if (seen.has(port)) continue;
-        seen.add(port);
-        results.push({ port, id, name, image, address: m[1] });
+        if (seen.has(`${port}/${protocol}`)) continue;
+        seen.add(`${port}/${protocol}`);
+        results.push({ port, protocol, id, name, image, address: m[1] });
       }
     }
   }

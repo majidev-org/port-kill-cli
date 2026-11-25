@@ -10,7 +10,7 @@ Please do **not** open a public issue for security problems. Use GitHub's privat
 [majidev.netlify.app](https://majidev.netlify.app) and ask for a private channel.
 
 Only the latest published version is supported; fixes ship as a new patch release on
-[npm](https://www.npmjs.com/package/@majidev-org/port-kill-cli).
+[npm](https://www.npmjs.com/package/cross-port-kill).
 
 ## What `pk` does to stay safe
 

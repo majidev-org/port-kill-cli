@@ -8,7 +8,7 @@ import { c } from './colors.js';
 const GAP = '  ';
 /** [cell key, header title, max width]; the last column takes whatever width is left. */
 const COLUMNS = [
-  ['port', 'PORT', 7],
+  ['port', 'PORT', 10], // ":65535/udp"
   ['name', 'PROCESS', 26],
   ['id', 'PID/ID', 12],
   ['user', 'USER', 14],
@@ -69,6 +69,25 @@ export const rule = (length) => c.dim('─'.repeat(Math.max(0, length)));
 /** A rule with a label, e.g. "─ ↓ 7 more ───────". */
 export const labelledRule = (label, length) =>
   label ? c.dim(`─ ${label} ${'─'.repeat(Math.max(0, length - label.length - 3))}`) : rule(length);
+
+/**
+ * The command that frees what --info just showed, so nobody has to work it out. For named ports:
+ * "To free it: pk 3000" / "To free them: pk 3000 5353/udp". For a full listing, real examples from it
+ * and how to open the picker for the same protocols: "To free one: pk 3000 · several: pk 3000 5173 ·
+ * or pick from a list: pk".
+ * @param {string[]} labels port labels as typed back to pk ("3000", "5353/udp"), in display order
+ * @param {{ command?: string, all?: boolean, protocols?: string[] }} [options]
+ */
+export function freeHint(labels, { command = 'pk', all = false, protocols = ['tcp'] } = {}) {
+  const cmd = (args) => c.bold(`${command} ${args}`.trim());
+  if (!all) return c.dim(`  To free ${labels.length === 1 ? 'it' : 'them'}: ${cmd(labels.join(' '))}`);
+  const pick = protocols.includes('udp') ? (protocols.includes('tcp') ? '--tcp --udp' : '--udp') : '';
+  const parts = [];
+  if (labels.length > 0) parts.push(`To free one: ${cmd(labels[0])}`);
+  if (labels.length > 1) parts.push(`several: ${cmd(labels.slice(0, 2).join(' '))}`);
+  parts.push(`${parts.length ? 'or ' : ''}pick from a list: ${cmd(pick)}`);
+  return c.dim(`  ${parts.join(c.dim(' · '))}`);
+}
 
 /** Key hints like "↑↓ move · space toggle", key names bold. */
 export const keyHints = (pairs) => pairs.map(([key, label]) => `${c.bold(key)} ${c.dim(label)}`).join(c.dim('  ·  '));

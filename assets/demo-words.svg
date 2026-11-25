@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="872" height="490" viewBox="0 0 872 490" role="img" aria-labelledby="t d">
+<title id="t">cross-port-kill: pk port 3000</title>
+<desc id="d">A terminal uses plain words. pk port 3000 shows node holding port 3000 and ends with 'To free it: pk 3000'. pk kill 3000 frees it. pk what is on 8080 shows the Docker container api and how to free it; a question only ever looks. pk kil 5173 is a typo and pk answers: Unknown word 'kil'. Did you mean 'kill'?</desc>
+<style>
+text{font-family:'JetBrains Mono','SF Mono',Menlo,'DejaVu Sans Mono',Consolas,monospace;font-size:15px;white-space:pre}
+g{opacity:0;animation-duration:15.33s;animation-iteration-count:infinite;animation-timing-function:step-end}
+.k0{animation-name:k0}@keyframes k0{0%{opacity:1}3.262%{opacity:0}100%{opacity:0}}
+.k1{animation-name:k1}@keyframes k1{0%{opacity:0}3.262%{opacity:1}3.718%{opacity:0}100%{opacity:0}}
+.k2{animation-name:k2}@keyframes k2{0%{opacity:0}3.718%{opacity:1}4.175%{opacity:0}100%{opacity:0}}
+.k3{animation-name:k3}@keyframes k3{0%{opacity:0}4.175%{opacity:1}4.631%{opacity:0}100%{opacity:0}}
+.k4{animation-name:k4}@keyframes k4{0%{opacity:0}4.631%{opacity:1}5.088%{opacity:0}100%{opacity:0}}
+.k5{animation-name:k5}@keyframes k5{0%{opacity:0}5.088%{opacity:1}5.545%{opacity:0}100%{opacity:0}}
+.k6{animation-name:k6}@keyframes k6{0%{opacity:0}5.545%{opacity:1}6.001%{opacity:0}100%{opacity:0}}
+.k7{animation-name:k7}@keyframes k7{0%{opacity:0}6.001%{opacity:1}6.458%{opacity:0}100%{opacity:0}}
+.k8{animation-name:k8}@keyframes k8{0%{opacity:0}6.458%{opacity:1}6.915%{opacity:0}100%{opacity:0}}
+.k9{animation-name:k9}@keyframes k9{0%{opacity:0}6.915%{opacity:1}7.371%{opacity:0}100%{opacity:0}}
+.k10{animation-name:k10}@keyframes k10{0%{opacity:0}7.371%{opacity:1}7.828%{opacity:0}100%{opacity:0}}
+.k11{animation-name:k11}@keyframes k11{0%{opacity:0}7.828%{opacity:1}8.284%{opacity:0}100%{opacity:0}}
+.k12{animation-name:k12}@keyframes k12{0%{opacity:0}8.284%{opacity:1}10.568%{opacity:0}100%{opacity:0}}
+.k13{animation-name:k13}@keyframes k13{0%{opacity:0}10.568%{opacity:1}100%{opacity:1}}
+.k14{animation-name:k14}@keyframes k14{0%{opacity:0}22.309%{opacity:1}25.571%{opacity:0}100%{opacity:0}}
+.k15{animation-name:k15}@keyframes k15{0%{opacity:0}25.571%{opacity:1}26.027%{opacity:0}100%{opacity:0}}
+.k16{animation-name:k16}@keyframes k16{0%{opacity:0}26.027%{opacity:1}26.484%{opacity:0}100%{opacity:0}}
+.k17{animation-name:k17}@keyframes k17{0%{opacity:0}26.484%{opacity:1}26.941%{opacity:0}100%{opacity:0}}
+.k18{animation-name:k18}@keyframes k18{0%{opacity:0}26.941%{opacity:1}27.397%{opacity:0}100%{opacity:0}}
+.k19{animation-name:k19}@keyframes k19{0%{opacity:0}27.397%{opacity:1}27.854%{opacity:0}100%{opacity:0}}
+.k20{animation-name:k20}@keyframes k20{0%{opacity:0}27.854%{opacity:1}28.311%{opacity:0}100%{opacity:0}}
+.k21{animation-name:k21}@keyframes k21{0%{opacity:0}28.311%{opacity:1}28.767%{opacity:0}100%{opacity:0}}
+.k22{animation-name:k22}@keyframes k22{0%{opacity:0}28.767%{opacity:1}29.224%{opacity:0}100%{opacity:0}}
+.k23{animation-name:k23}@keyframes k23{0%{opacity:0}29.224%{opacity:1}29.68%{opacity:0}100%{opacity:0}}
+.k24{animation-name:k24}@keyframes k24{0%{opacity:0}29.68%{opacity:1}30.137%{opacity:0}100%{opacity:0}}
+.k25{animation-name:k25}@keyframes k25{0%{opacity:0}30.137%{opacity:1}30.594%{opacity:0}100%{opacity:0}}
+.k26{animation-name:k26}@keyframes k26{0%{opacity:0}30.594%{opacity:1}32.877%{opacity:0}100%{opacity:0}}
+.k27{animation-name:k27}@keyframes k27{0%{opacity:0}32.877%{opacity:1}100%{opacity:1}}
+.k28{animation-name:k28}@keyframes k28{0%{opacity:0}32.877%{opacity:1}36.138%{opacity:0}100%{opacity:0}}
+.k29{animation-name:k29}@keyframes k29{0%{opacity:0}36.138%{opacity:1}100%{opacity:1}}
+.k30{animation-name:k30}@keyframes k30{0%{opacity:0}43.966%{opacity:1}47.228%{opacity:0}100%{opacity:0}}
+.k31{animation-name:k31}@keyframes k31{0%{opacity:0}47.228%{opacity:1}47.684%{opacity:0}100%{opacity:0}}
+.k32{animation-name:k32}@keyframes k32{0%{opacity:0}47.684%{opacity:1}48.141%{opacity:0}100%{opacity:0}}
+.k33{animation-name:k33}@keyframes k33{0%{opacity:0}48.141%{opacity:1}48.598%{opacity:0}100%{opacity:0}}
+.k34{animation-name:k34}@keyframes k34{0%{opacity:0}48.598%{opacity:1}49.054%{opacity:0}100%{opacity:0}}
+.k35{animation-name:k35}@keyframes k35{0%{opacity:0}49.054%{opacity:1}49.511%{opacity:0}100%{opacity:0}}
+.k36{animation-name:k36}@keyframes k36{0%{opacity:0}49.511%{opacity:1}49.967%{opacity:0}100%{opacity:0}}
+.k37{animation-name:k37}@keyframes k37{0%{opacity:0}49.967%{opacity:1}50.424%{opacity:0}100%{opacity:0}}
+.k38{animation-name:k38}@keyframes k38{0%{opacity:0}50.424%{opacity:1}50.881%{opacity:0}100%{opacity:0}}
+.k39{animation-name:k39}@keyframes k39{0%{opacity:0}50.881%{opacity:1}51.337%{opacity:0}100%{opacity:0}}
+.k40{animation-name:k40}@keyframes k40{0%{opacity:0}51.337%{opacity:1}51.794%{opacity:0}100%{opacity:0}}
+.k41{animation-name:k41}@keyframes k41{0%{opacity:0}51.794%{opacity:1}52.25%{opacity:0}100%{opacity:0}}
+.k42{animation-name:k42}@keyframes k42{0%{opacity:0}52.25%{opacity:1}52.707%{opacity:0}100%{opacity:0}}
+.k43{animation-name:k43}@keyframes k43{0%{opacity:0}52.707%{opacity:1}53.164%{opacity:0}100%{opacity:0}}
+.k44{animation-name:k44}@keyframes k44{0%{opacity:0}53.164%{opacity:1}53.62%{opacity:0}100%{opacity:0}}
+.k45{animation-name:k45}@keyframes k45{0%{opacity:0}53.62%{opacity:1}54.077%{opacity:0}100%{opacity:0}}
+.k46{animation-name:k46}@keyframes k46{0%{opacity:0}54.077%{opacity:1}54.534%{opacity:0}100%{opacity:0}}
+.k47{animation-name:k47}@keyframes k47{0%{opacity:0}54.534%{opacity:1}54.99%{opacity:0}100%{opacity:0}}
+.k48{animation-name:k48}@keyframes k48{0%{opacity:0}54.99%{opacity:1}57.273%{opacity:0}100%{opacity:0}}
+.k49{animation-name:k49}@keyframes k49{0%{opacity:0}57.273%{opacity:1}100%{opacity:1}}
+.k50{animation-name:k50}@keyframes k50{0%{opacity:0}68.363%{opacity:1}71.624%{opacity:0}100%{opacity:0}}
+.k51{animation-name:k51}@keyframes k51{0%{opacity:0}71.624%{opacity:1}72.081%{opacity:0}100%{opacity:0}}
+.k52{animation-name:k52}@keyframes k52{0%{opacity:0}72.081%{opacity:1}72.538%{opacity:0}100%{opacity:0}}
+.k53{animation-name:k53}@keyframes k53{0%{opacity:0}72.538%{opacity:1}72.994%{opacity:0}100%{opacity:0}}
+.k54{animation-name:k54}@keyframes k54{0%{opacity:0}72.994%{opacity:1}73.451%{opacity:0}100%{opacity:0}}
+.k55{animation-name:k55}@keyframes k55{0%{opacity:0}73.451%{opacity:1}73.907%{opacity:0}100%{opacity:0}}
+.k56{animation-name:k56}@keyframes k56{0%{opacity:0}73.907%{opacity:1}74.364%{opacity:0}100%{opacity:0}}
+.k57{animation-name:k57}@keyframes k57{0%{opacity:0}74.364%{opacity:1}74.821%{opacity:0}100%{opacity:0}}
+.k58{animation-name:k58}@keyframes k58{0%{opacity:0}74.821%{opacity:1}75.277%{opacity:0}100%{opacity:0}}
+.k59{animation-name:k59}@keyframes k59{0%{opacity:0}75.277%{opacity:1}75.734%{opacity:0}100%{opacity:0}}
+.k60{animation-name:k60}@keyframes k60{0%{opacity:0}75.734%{opacity:1}76.19%{opacity:0}100%{opacity:0}}
+.k61{animation-name:k61}@keyframes k61{0%{opacity:0}76.19%{opacity:1}78.474%{opacity:0}100%{opacity:0}}
+.k62{animation-name:k62}@keyframes k62{0%{opacity:0}78.474%{opacity:1}100%{opacity:1}}
+.k63{animation-name:k63}@keyframes k63{0%{opacity:0}79.126%{opacity:1}100%{opacity:1}}
+.caret{animation:blink 1s step-end infinite}@keyframes blink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}g.p{opacity:1}}
+</style>
+<rect x="0.5" y="0.5" width="871" height="489" rx="12" fill="#1e1e2e" stroke="#313244"/>
+<path d="M12.5 0.5h847a12 12 0 0 1 12 12v28h-871v-28a12 12 0 0 1 12-12z" fill="#181825"/>
+<circle cx="24" cy="20" r="6.5" fill="#f38ba8"/><circle cx="46" cy="20" r="6.5" fill="#f9e2af"/><circle cx="68" cy="20" r="6.5" fill="#a6e3a1"/>
+<text x="436" y="25" text-anchor="middle" fill="#9399b2">pk port 3000</text>
+<g class="k0"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k1"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> p</text><rect class="caret" x="49" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k2"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk</text><rect class="caret" x="58" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k3"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk </text><rect class="caret" x="67" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k4"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk p</text><rect class="caret" x="76" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k5"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk po</text><rect class="caret" x="85" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k6"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk por</text><rect class="caret" x="94" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k7"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk port</text><rect class="caret" x="103" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k8"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk port </text><rect class="caret" x="112" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k9"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk port 3</text><rect class="caret" x="121" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k10"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk port 30</text><rect class="caret" x="130" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k11"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk port 300</text><rect class="caret" x="139" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k12"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="117" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk port 3000</text><rect class="caret" x="148" y="57" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k13 p"><text x="22" y="72" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="72" textLength="117" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk port 3000</text></g>
+<g class="k13 p"><text x="40" y="94" textLength="477" lengthAdjust="spacingAndGlyphs" fill="#9399b2" font-weight="700">PORT   PROCESS  PID/ID  USER  ACCESS          COMMAND</text></g>
+<g class="k13 p"><text x="40" y="116" textLength="801" lengthAdjust="spacingAndGlyphs" fill="#9399b2">─────────────────────────────────────────────────────────────────────────────────────────</text></g>
+<g class="k13 p"><text x="40" y="138" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#89dceb" font-weight="700">:3000</text><text x="85" y="138" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4">  node     </text><text x="184" y="138" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#9399b2">41210 </text><text x="256" y="138" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#9399b2">dev </text><text x="310" y="138" textLength="126" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">localhost only</text><text x="454" y="138" textLength="126" lengthAdjust="spacingAndGlyphs" fill="#9399b2">node server.js</text></g>
+<g class="k13 p"><text x="40" y="160" textLength="801" lengthAdjust="spacingAndGlyphs" fill="#9399b2">─────────────────────────────────────────────────────────────────────────────────────────</text></g>
+<g class="k13 p"><text x="22" y="182" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#9399b2">  1 in use</text></g>
+<g class="k13 p"><text x="22" y="204" textLength="126" lengthAdjust="spacingAndGlyphs" fill="#9399b2">  To free it: </text><text x="148" y="204" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#9399b2" font-weight="700">pk 3000</text></g>
+<g class="k14"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k15"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> p</text><rect class="caret" x="49" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k16"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk</text><rect class="caret" x="58" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k17"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk </text><rect class="caret" x="67" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k18"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk k</text><rect class="caret" x="76" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k19"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk ki</text><rect class="caret" x="85" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k20"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kil</text><rect class="caret" x="94" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k21"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kill</text><rect class="caret" x="103" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k22"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kill </text><rect class="caret" x="112" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k23"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kill 3</text><rect class="caret" x="121" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k24"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kill 30</text><rect class="caret" x="130" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k25"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kill 300</text><rect class="caret" x="139" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k26"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="117" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kill 3000</text><rect class="caret" x="148" y="211" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k27 p"><text x="22" y="226" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="226" textLength="117" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kill 3000</text></g>
+<g class="k28"><text x="22" y="248" textLength="135" lengthAdjust="spacingAndGlyphs" fill="#9399b2">  Freeing port…</text></g>
+<g class="k29 p"><text x="22" y="248" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">✔</text><text x="31" y="248" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> Freed port </text><text x="139" y="248" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4" font-weight="700">3000</text><text x="184" y="248" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#9399b2">— killed</text><text x="265" y="248" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4" font-weight="700">node</text><text x="310" y="248" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#9399b2">(PID 41210)</text><text x="418" y="248" textLength="198" lengthAdjust="spacingAndGlyphs" fill="#9399b2">via SIGTERM (graceful)</text></g>
+<g class="k30"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k31"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> p</text><rect class="caret" x="49" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k32"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk</text><rect class="caret" x="58" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k33"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk </text><rect class="caret" x="67" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k34"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk w</text><rect class="caret" x="76" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k35"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk wh</text><rect class="caret" x="85" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k36"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk wha</text><rect class="caret" x="94" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k37"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk what</text><rect class="caret" x="103" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k38"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk what </text><rect class="caret" x="112" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k39"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk what i</text><rect class="caret" x="121" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k40"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk what is</text><rect class="caret" x="130" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k41"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk what is </text><rect class="caret" x="139" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k42"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="117" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk what is o</text><rect class="caret" x="148" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k43"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="126" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk what is on</text><rect class="caret" x="157" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k44"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="135" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk what is on </text><rect class="caret" x="166" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k45"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="144" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk what is on 8</text><rect class="caret" x="175" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k46"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="153" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk what is on 80</text><rect class="caret" x="184" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k47"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="162" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk what is on 808</text><rect class="caret" x="193" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k48"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="171" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk what is on 8080</text><rect class="caret" x="202" y="255" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k49 p"><text x="22" y="270" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="270" textLength="171" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk what is on 8080</text></g>
+<g class="k49 p"><text x="40" y="292" textLength="576" lengthAdjust="spacingAndGlyphs" fill="#9399b2" font-weight="700">PORT   PROCESS  PID/ID        USER       ACCESS          COMMAND</text></g>
+<g class="k49 p"><text x="40" y="314" textLength="801" lengthAdjust="spacingAndGlyphs" fill="#9399b2">─────────────────────────────────────────────────────────────────────────────────────────</text></g>
+<g class="k49 p"><text x="40" y="336" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#89dceb" font-weight="700">:8080</text><text x="85" y="336" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4">  api      </text><text x="184" y="336" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#9399b2">a1b2c3d4e5f6</text><text x="310" y="336" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#9399b2">container</text><text x="409" y="336" textLength="126" lengthAdjust="spacingAndGlyphs" fill="#f9e2af">all interfaces</text><text x="553" y="336" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#9399b2">nginx:1.27</text></g>
+<g class="k49 p"><text x="40" y="358" textLength="801" lengthAdjust="spacingAndGlyphs" fill="#9399b2">─────────────────────────────────────────────────────────────────────────────────────────</text></g>
+<g class="k49 p"><text x="22" y="380" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#9399b2">  1 in use</text></g>
+<g class="k49 p"><text x="22" y="402" textLength="126" lengthAdjust="spacingAndGlyphs" fill="#9399b2">  To free it: </text><text x="148" y="402" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#9399b2" font-weight="700">pk 8080</text></g>
+<g class="k50"><text x="22" y="424" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="409" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k51"><text x="22" y="424" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="424" textLength="18" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> p</text><rect class="caret" x="49" y="409" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k52"><text x="22" y="424" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="424" textLength="27" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk</text><rect class="caret" x="58" y="409" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k53"><text x="22" y="424" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="424" textLength="36" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk </text><rect class="caret" x="67" y="409" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k54"><text x="22" y="424" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="424" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk k</text><rect class="caret" x="76" y="409" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k55"><text x="22" y="424" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="424" textLength="54" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk ki</text><rect class="caret" x="85" y="409" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k56"><text x="22" y="424" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="424" textLength="63" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kil</text><rect class="caret" x="94" y="409" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k57"><text x="22" y="424" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="424" textLength="72" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kil </text><rect class="caret" x="103" y="409" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k58"><text x="22" y="424" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="424" textLength="81" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kil 5</text><rect class="caret" x="112" y="409" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k59"><text x="22" y="424" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="424" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kil 51</text><rect class="caret" x="121" y="409" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k60"><text x="22" y="424" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="424" textLength="99" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kil 517</text><rect class="caret" x="130" y="409" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k61"><text x="22" y="424" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="424" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kil 5173</text><rect class="caret" x="139" y="409" width="9" height="18" fill="#cdd6f4"/></g>
+<g class="k62"><text x="22" y="424" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><text x="31" y="424" textLength="108" lengthAdjust="spacingAndGlyphs" fill="#cdd6f4"> pk kil 5173</text></g>
+<g class="k62"><text x="22" y="446" textLength="387" lengthAdjust="spacingAndGlyphs" fill="#f38ba8">✖ Unknown word: &quot;kil&quot;. Did you mean &quot;kill&quot;?</text></g>
+<g class="k63"><text x="22" y="468" textLength="9" lengthAdjust="spacingAndGlyphs" fill="#a6e3a1">$</text><rect class="caret" x="40" y="453" width="9" height="18" fill="#cdd6f4"/></g>
+</svg>
